@@ -2,4 +2,13 @@
 <resources>
 
     <style name="Theme.Healthsync" parent="android:Theme.Material.Light.NoActionBar" />
+
+    <style name="Theme.Healthsync.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.Healthsync.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="Theme.Healthsync.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>
