@@ -13,7 +13,7 @@
         android:theme="@style/Theme.Healthsync"
         tools:targetApi="31">
         <activity
-            android:name=".PatientDashboard"
+            android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
