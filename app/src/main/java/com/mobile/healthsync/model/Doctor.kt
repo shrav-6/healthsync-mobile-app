@@ -21,8 +21,8 @@ data class Doctor(
     @set:PropertyName("email")
     var email: String = "",
 
-    @get:PropertyName("pasword")
-    @set:PropertyName("pasword")
+    @get:PropertyName("password")
+    @set:PropertyName("password")
     var password: String = ""
 ) : Serializable {
 
@@ -49,7 +49,7 @@ data class Doctor(
 
         @get:PropertyName("license_no")
         @set:PropertyName("license_no")
-        var license_no: Int = 0,
+        var license_no: String = "",
 
         @get:PropertyName("name")
         @set:PropertyName("name")
