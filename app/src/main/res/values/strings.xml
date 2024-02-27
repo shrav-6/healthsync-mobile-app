@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">healthsync</string>
+    <string name="doctorRegister"><b>Register as doctor?</b></string>
 </resources>
