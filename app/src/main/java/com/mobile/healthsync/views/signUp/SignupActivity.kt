@@ -10,10 +10,10 @@ import android.widget.ImageView
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
-import com.mobile.healthsync.views.signUp.uploadPatientToDatabase
+import com.mobile.healthsync.model.PatientDetails
+import com.mobile.healthsync.uploadToDatabase
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var imageViewProfile: ImageView
@@ -70,19 +70,18 @@ class SignupActivity : AppCompatActivity() {
                 email = email,
                 password = password,
                 patientCreated = "2/26/2024",
-                patientDetails = mapOf(
-                    "age" to age,
-                    "allergies" to allergies,
-                    "gender" to gender,
-                    "height" to height,
-                    "name" to name,
-                    "photo" to "null"
+                patientDetails = PatientDetails(age = age,
+                    allergies = allergies,
+                    gender = gender,
+                    height = height,
+                    name = name,
+                    photo = "null"
                 )
             )
 
             // upload in database
-            val dbObj = uploadPatientToDatabase()
-            dbObj.uploadPatient(newPatient)
+            val dbObj = uploadToDatabase()
+            dbObj.createPatient(newPatient)
         }
 
         registerDoctorButton.setOnClickListener {
