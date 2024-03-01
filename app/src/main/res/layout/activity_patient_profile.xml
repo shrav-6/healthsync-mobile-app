@@ -3,11 +3,12 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray">
 
     <!-- Edit Button -->
     <Button
-        android:id="@+id/editDoctor"
+        android:id="@+id/editPatient"
         android:layout_width="45dp"
         android:layout_height="45dp"
         android:layout_marginStart="344dp"
@@ -19,122 +20,153 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.022" />
 
-    <!-- Patient Profile Image -->
-    <ImageView
-        android:id="@+id/patientProfileImage"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_centerHorizontal="true"
-        android:contentDescription="@string/profile_image"
-        android:src="@drawable/user"
-        tools:ignore="MissingConstraints"
-        tools:layout_editor_absoluteX="130dp"
-        tools:layout_editor_absoluteY="105dp" />
-
-    <Button
-        android:id="@+id/test"
+    <!-- CardView -->
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientProfileImage"
+        app:cardCornerRadius="16dp"
+        android:layout_marginTop="20dp"
+        app:cardElevation="8dp"
+        app:layout_constraintTop_toBottomOf="@+id/editPatient"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:text="UPLOAD"/>
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.5">
 
-    <!-- Patient Name -->
-    <TextView
-        android:id="@+id/patientName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/test"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="16dp"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        android:text="John Doe" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="50dp">
 
-    <!-- Patient Email -->
-    <TextView
-        android:id="@+id/patientEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientName"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:textStyle=""
-        android:text="johndoe@gmail.com" />
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/doctorProfileImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:padding="5dp"
+                android:src="@drawable/default_doctor_image"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView"
+                app:strokeColor="@android:color/holo_purple"
+                app:strokeWidth="5dp" />
 
-    <!-- Patient Age -->
-    <TextView
-        android:id="@+id/patientAge"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientEmail"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:text="Age: 24" />
 
-    <!-- Patient Gender -->
-    <TextView
-        android:id="@+id/patientGender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientAge"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:text="Gender: Male" />
+           <Button
+                android:id="@+id/uploadPatientImage"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="UPLOAD"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_corner_input"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/doctorProfileImage" />
 
-    <!-- Patient Height-->
-    <TextView
-        android:id="@+id/patientHeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientGender"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:text="Height: 1.78 m" />
+        <!-- Patient Name -->
+        <TextView
+            android:id="@+id/patientName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/uploadPatientImage"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="16dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:text="John Doe" />
 
-    <!-- Patient Weight-->
-    <TextView
-        android:id="@+id/patientWeight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientHeight"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:text="Weight: 67 kg"/>
+        <!-- Patient Email -->
+        <TextView
+            android:id="@+id/patientEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientName"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:textStyle=""
+            android:text="johndoe@gmail.com" />
 
-    <!-- Patient Blood Type -->
-    <TextView
-        android:id="@+id/patientBloodType"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientWeight"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:text="Blood Type: AB" />
+        <!-- Patient Age -->
+        <TextView
+            android:id="@+id/patientAge"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientEmail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:text="Age: 24" />
 
-    <!-- Patient Allergies-->
-    <TextView
-        android:id="@+id/patient"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/patientBloodType"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginTop="6dp"
-        android:textSize="18sp"
-        android:text="Allergies: Dairy, Gluten..." />
+        <!-- Patient Gender -->
+        <TextView
+            android:id="@+id/patientGender"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientAge"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:text="Gender: Male" />
+
+        <!-- Patient Height-->
+        <TextView
+            android:id="@+id/patientHeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientGender"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:text="Height: 1.78 m" />
+
+        <!-- Patient Weight-->
+        <TextView
+            android:id="@+id/patientWeight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientHeight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:text="Weight: 67 kg"/>
+
+        <!-- Patient Blood Type -->
+        <TextView
+            android:id="@+id/patientBloodType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientWeight"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:text="Blood Type: AB+" />
+
+        <!-- Patient Allergies-->
+        <TextView
+            android:id="@+id/patient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/patientBloodType"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="6dp"
+            android:textSize="18sp"
+            android:text="Allergies: Dairy, Gluten..." />
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
