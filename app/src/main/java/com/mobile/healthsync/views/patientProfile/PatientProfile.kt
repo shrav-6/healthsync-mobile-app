@@ -1,7 +1,6 @@
 package com.mobile.healthsync.views.patientProfile
 
 import android.os.Bundle
-import android.widget.ArrayAdapter
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 

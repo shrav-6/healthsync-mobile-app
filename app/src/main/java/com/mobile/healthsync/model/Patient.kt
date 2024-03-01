@@ -1,11 +1,19 @@
 package com.mobile.healthsync.model;
 
 data class Patient(
-        val firstName: String = "",
-        val lastName: String = "",
-        val age: Int = 0,
-        val weight: Double = 0.0,
-        val height: Double = 0.0,
-        val gender: String = "",
-        val bloodType: String = ""
+        var email: String,
+        var password: String,
+        var patientCreated: String,
+        var patientDetails: PatientDetails
 )
+
+data class PatientDetails(
+        var age: String,
+        var allergies: String,
+        var gender: String,
+        var height: String,
+        var weight: String,
+        var name: String,
+        var photo: String
+)
+
