@@ -1,4 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--<resources>-->
+
+<!--    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" />-->
+
+<!--    <string-array name="gender_array">-->
+<!--        <item> Male </item>-->
+<!--        <item> Female </item>-->
+<!--        <item> Others </item>-->
+<!--    </string-array>-->
+<!--    -->
+<!--    <style name="Theme.Healthsync.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />-->
+
+<!--    <style name="Theme.Healthsync.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />-->
+
 <resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar" />
@@ -9,15 +23,8 @@
         <item> Others </item>
     </string-array>
 
-<<<<<<< HEAD
-    <style name="Theme.Healthsync.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
-
-    <style name="Theme.Healthsync.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
-
     <style name="circleImageView" parent="">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">50%</item>
     </style>
-=======
->>>>>>> develop
 </resources>
