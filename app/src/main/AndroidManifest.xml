@@ -16,6 +16,9 @@
             android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
+            android:name=".views.doctorProfile.DoctorProfile"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Doctor Profile Image -->
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/doctorProfileImage"
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:layout_marginTop="90dp"
+        android:padding="5dp"
+        android:src="@drawable/sample_doctor_img"
+        app:shapeAppearanceOverlay="@style/circleImageView"
+        app:strokeColor="@android:color/holo_blue_dark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:strokeWidth="5dp"
+        />
+
+    <!-- Doctor Name -->
+    <EditText
+        android:id="@+id/doctorName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/doctorProfileImage"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:text="Dr. John Doe" />
+
+    <!-- Doctor Specialization -->
+    <TextView
+        android:id="@+id/doctorSpecialization"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/doctorName"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="Cardiologist" />
+
+    <!-- Doctor Email -->
+    <TextView
+        android:id="@+id/doctorEmail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/doctorSpecialization"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:textSize="18sp"
+        android:text="janedoe@gmail.com" />
+
+<!--    &lt;!&ndash; Doctor Age &ndash;&gt;-->
+<!--    <TextView-->
+<!--        android:id="@+id/doctorAge"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/doctorSpecialization"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:textSize="18sp"-->
+<!--        android:text="janedoe@gmail.com" />-->
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
