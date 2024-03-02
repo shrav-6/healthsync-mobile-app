@@ -35,7 +35,7 @@ data class Patient(
 
                 @get:PropertyName("allergies")
                 @set:PropertyName("allergies")
-                var allergies: String = "",
+                var allergies: String? = null,
 
                 @get:PropertyName("gender")
                 @set:PropertyName("gender")
