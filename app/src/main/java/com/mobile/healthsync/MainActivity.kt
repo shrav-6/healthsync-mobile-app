@@ -3,6 +3,7 @@ package com.mobile.healthsync
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import com.mobile.healthsync.views.doctorProfile.DoctorProfile
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 
 class MainActivity : ComponentActivity() {
@@ -10,7 +11,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val intent = Intent(this, PatientDashboard::class.java)
+        val intent = Intent(this, DoctorProfile::class.java)
         startActivity(intent)
     }
 }

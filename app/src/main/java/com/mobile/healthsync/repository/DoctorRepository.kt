@@ -74,4 +74,24 @@ class DoctorRepository(private val context: Context) {
         // Show a toast message (you can replace this with your preferred error handling mechanism)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
+
+    fun getDoctorProfileData(doctorId: String?, callback: (Doctor?) -> Unit) {
+        db.collection("doctors").document(doctorId!!)
+            .get()
+            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document.exists()) {
+                        val doctor = document.toObject(Doctor::class.java)
+                        callback(doctor)
+                    } else {
+                        showToast("Doctor not found")
+                        callback(null)
+                    }
+                } else {
+                    showToast("Error fetching doctor data: ${task.exception?.message}")
+                    callback(null)
+                }
+            }
+    }
 }

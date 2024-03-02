@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/gray">
 
     <!-- Button to Edit Doctor Profile -->
     <Button
@@ -22,6 +23,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:cardCornerRadius="16dp"
+        android:layout_marginTop="20dp"
         app:cardElevation="8dp"
         app:layout_constraintTop_toBottomOf="@+id/editDoctor"
         app:layout_constraintTop_toTopOf="parent"
@@ -44,13 +46,13 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:padding="5dp"
-                android:src="@drawable/sample_doctor_img"
+                android:src="@drawable/doctor"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:shapeAppearanceOverlay="@style/circleImageView"
                 app:strokeColor="@android:color/holo_purple"
-                app:strokeWidth="5dp" />
+                app:strokeWidth="2dp" />
 
             <!-- Button to Upload Doctor Profile Image -->
             <Button
@@ -75,8 +77,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="16dp"
                 android:textSize="20sp"
-                android:textStyle="bold"
-                android:text="Dr. Jane Doe" />
+                android:textStyle="bold" />
 
             <!-- Doctor Specialization -->
             <TextView
@@ -88,8 +89,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
                 android:textSize="18sp"
-                android:textStyle="bold"
-                android:text="Cardiologist" />
+                android:textStyle="bold"/>
 
             <!-- Doctor Email -->
             <TextView
@@ -100,8 +100,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
-                android:textSize="18sp"
-                android:text="janedoe@gmail.com" />
+                android:textSize="18sp" />
 
             <!-- Doctor Age -->
             <TextView
@@ -112,8 +111,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
-                android:textSize="17sp"
-                android:text="Age: 35" />
+                android:textSize="17sp" />
 
             <!-- Doctor Gender -->
             <TextView
@@ -124,8 +122,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
-                android:textSize="17sp"
-                android:text="Gender: Female" />
+                android:textSize="17sp" />
 
             <!-- Doctor Consultation Fees-->
             <TextView
@@ -136,8 +133,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
-                android:textSize="17sp"
-                android:text="Consultation Fees: $ 150" />
+                android:textSize="17sp" />
 
             <!-- Doctor Experience-->
             <TextView
@@ -148,8 +144,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
-                android:textSize="17sp"
-                android:text="Years Of Experience: 5 years" />
+                android:textSize="17sp"/>
 
             <!-- Doctor Rating -->
             <TextView
@@ -160,8 +155,7 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 android:layout_marginTop="6dp"
-                android:textSize="17sp"
-                android:text="Average Ratings: 4.8 ⭐" />
+                android:textSize="17sp"/>
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
