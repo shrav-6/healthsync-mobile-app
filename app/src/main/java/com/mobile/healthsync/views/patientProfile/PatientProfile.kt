@@ -1,6 +1,8 @@
 package com.mobile.healthsync.views.patientProfile
 
+import android.content.Intent
 import android.os.Bundle
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +23,17 @@ class PatientProfile : AppCompatActivity() {
 
         patientRepository = PatientRepository(this)
 
-        val testId = "00KDbESIgVNTIDzyAP04"
+        val testId = "08L4kDnwQeAgI81GwP1U"
         patientRepository.getPatientData(testId) { patient ->
             if (patient != null) {
                 setPatientData(patient)
             }
+        }
+
+        val editButton: Button = findViewById(R.id.editPatient)
+        editButton.setOnClickListener{
+            val intent = Intent(this, EditPatientProfile::class.java)
+            startActivity(intent)
         }
     }
 

@@ -19,6 +19,9 @@
             android:name=".views.patientProfile.PatientProfile"
             android:exported="false" />
         <activity
+            android:name=".views.patientProfile.EditPatientProfile"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="healthsync"
