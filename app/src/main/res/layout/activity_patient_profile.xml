@@ -8,8 +8,8 @@
     <!-- Edit Button -->
     <Button
         android:id="@+id/editPatient"
-        android:layout_width="45dp"
-        android:layout_height="45dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:layout_marginStart="344dp"
         android:background="@drawable/edit"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -88,6 +88,18 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/patientName" />
+
+            <!-- Patient Points -->
+            <TextView
+                android:id="@+id/patientPoints"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/patientEmail" />
 
             <!-- Patient Age -->
             <TextView

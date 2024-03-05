@@ -1,9 +1,12 @@
 package com.mobile.healthsync.views.patientProfile
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 
@@ -15,7 +18,7 @@ import com.mobile.healthsync.repository.PatientRepository
 
 class PatientProfile : AppCompatActivity() {
 
-    private  lateinit var patientRepository: PatientRepository
+    private lateinit var patientRepository: PatientRepository
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +26,7 @@ class PatientProfile : AppCompatActivity() {
 
         patientRepository = PatientRepository(this)
 
-        val testId = "08L4kDnwQeAgI81GwP1U"
+        val testId = "00KDbESIgVNTIDzyAP04"
         patientRepository.getPatientData(testId) { patient ->
             if (patient != null) {
                 setPatientData(patient)
@@ -32,14 +35,18 @@ class PatientProfile : AppCompatActivity() {
 
         val editButton: Button = findViewById(R.id.editPatient)
         editButton.setOnClickListener{
+            Log.d("key", "patientID")
             val intent = Intent(this, EditPatientProfile::class.java)
+            intent.putExtra("patientID", testId);
             startActivity(intent)
         }
+
     }
 
     private fun setPatientData(patient: Patient) {
         val nameTextBox:TextView = findViewById(R.id.patientName)
         val emailTextBox: TextView = findViewById(R.id.patientEmail)
+        val pointsTextBox: TextView = findViewById(R.id.patientPoints)
         val ageTextBox:TextView = findViewById(R.id.patientAge)
         val genderTextBox: TextView = findViewById(R.id.patientGender)
         val heightTextBox:TextView = findViewById(R.id.patientHeight)
@@ -49,6 +56,11 @@ class PatientProfile : AppCompatActivity() {
 
         nameTextBox.text = patient.patientDetails.name
         emailTextBox.text = patient.email
+        pointsTextBox.text = buildString {
+            append("Points: ")
+            append(patient.points.toString())
+            append(" \uD83D\uDD36 \uD83D\uDC8E")
+        }
         ageTextBox.text = buildString {
             append("Age: ")
             append(patient.patientDetails.age.toString())
@@ -76,6 +88,7 @@ class PatientProfile : AppCompatActivity() {
 //            append("Dairy, Gluten...") // patient.patientDetails.allergies
 //        }
     }
+
 
 }
 

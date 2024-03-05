@@ -26,7 +26,11 @@ data class Patient(
 
         @get:PropertyName("patient_updated")
         @set:PropertyName("patient_updated")
-        var patientUpdated: String = ""
+        var patientUpdated: String = "",
+
+        @get:PropertyName("reward_points")
+        @set:PropertyName("reward_points")
+        var points: Int = 0
 ) : Serializable {
         data class PatientDetails(
                 @get:PropertyName("age")
@@ -55,7 +59,7 @@ data class Patient(
 
                 @get:PropertyName("photo")
                 @set:PropertyName("photo")
-                var photo: String? = null,
+                var photo: String? = null
         ) : Serializable
 }
 
