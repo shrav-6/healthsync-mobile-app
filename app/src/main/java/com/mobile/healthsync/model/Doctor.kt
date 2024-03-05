@@ -7,7 +7,8 @@ import java.io.Serializable
 data class Doctor(
     @get:PropertyName("availability")
     @set:PropertyName("availability")
-    var availability: Map<String, Map<String, String>>? = null,
+//    var availability: Map<String, Map<String, String>>? = null,
+    var availability: List<Map<String, Any>>? = null,
 
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")

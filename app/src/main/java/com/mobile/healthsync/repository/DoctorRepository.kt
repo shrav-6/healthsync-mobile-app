@@ -94,4 +94,27 @@ class DoctorRepository(private val context: Context) {
                 }
             }
     }
+
+    fun updateDoctorData(documentID: String, doctor: Doctor?) {
+//        val doctorId = doctor?.doctor_id.toString()
+        db.collection("doctors").document(documentID)
+            .get()
+            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document.exists()) {
+                        // Document found, parse data and update with Patient object
+                        if (doctor != null) {
+                            db.collection("doctors").document(documentID).set(doctor)
+                            showToast("Doctor Info Update Success")
+                        }
+                    } else {
+                        showToast("Doctor not found")
+                    }
+                } else {
+                    showToast("Error fetching doctor data: ${task.exception?.message}")
+                }
+            }
+    }
+
 }

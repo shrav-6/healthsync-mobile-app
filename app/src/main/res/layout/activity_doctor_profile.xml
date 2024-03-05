@@ -50,9 +50,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:shapeAppearanceOverlay="@style/circleImageView"
-                app:strokeColor="@android:color/holo_purple"
-                app:strokeWidth="2dp" />
+                app:shapeAppearanceOverlay="@style/circleImageView" />
 
             <!-- Button to Upload Doctor Profile Image -->
             <Button

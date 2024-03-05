@@ -1,35 +1,39 @@
 package com.mobile.healthsync.views.doctorProfile
 
 //import android.R
-import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.widget.ArrayAdapter
-import android.widget.GridView
+import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.mobile.healthsync.R
-import com.mobile.healthsync.adapters.DoctorAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 
 
 class DoctorProfile : AppCompatActivity() {
 
-    private  lateinit var doctorAdapter: DoctorAdapter
     private  lateinit var doctorRepository: DoctorRepository
-    private lateinit var doctorsProfile: Doctor
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        var sampleDoctorId = "01lZByxUbILOrFI8XTLq"
+//        var sampleDoctorId = "01lZByxUbILOrFI8XTLq"
+        var sampleDoctorId = "QMW1ZsIEcyRjqyLip0dP"
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(sampleDoctorId) { doctor ->
             if(doctor != null){
                 setDoctorProfileData(doctor)
             }
         }
+
+        val editButton: Button = findViewById(R.id.editDoctor)
+        editButton.setOnClickListener{
+            val intent = Intent(this, EditDoctorProfile::class.java)
+            intent.putExtra("doctorId", sampleDoctorId);
+            startActivity(intent)
+        }
+
     }
 
     private fun setDoctorProfileData(doctor: Doctor){
