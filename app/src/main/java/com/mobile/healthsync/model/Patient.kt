@@ -30,7 +30,7 @@ data class Patient(
 
         @get:PropertyName("reward_points")
         @set:PropertyName("reward_points")
-        var points: Int = 0
+        var rewardPoints: Int = 0
 ) : Serializable {
         data class PatientDetails(
                 @get:PropertyName("age")

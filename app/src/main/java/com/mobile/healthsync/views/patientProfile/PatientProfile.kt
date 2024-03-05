@@ -35,7 +35,7 @@ class PatientProfile : AppCompatActivity() {
 
         val editButton: Button = findViewById(R.id.editPatient)
         editButton.setOnClickListener{
-            Log.d("key", "patientID")
+//            Log.d("key", "patientID")
             val intent = Intent(this, EditPatientProfile::class.java)
             intent.putExtra("patientID", testId);
             startActivity(intent)
@@ -58,7 +58,7 @@ class PatientProfile : AppCompatActivity() {
         emailTextBox.text = patient.email
         pointsTextBox.text = buildString {
             append("Points: ")
-            append(patient.points.toString())
+            append(patient.rewardPoints.toString())
             append(" \uD83D\uDD36 \uD83D\uDC8E")
         }
         ageTextBox.text = buildString {

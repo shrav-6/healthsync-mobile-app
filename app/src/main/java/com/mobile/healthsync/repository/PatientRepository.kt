@@ -40,9 +40,9 @@ class PatientRepository(private val context: Context) {
             }
     }
 
-    fun updatePatientData(patient: Patient?) {
+    fun updatePatientData(documentID: String, patient: Patient?) {
         val patientID = patient?.patient_id.toString()
-        db.collection("patients").document(patientID)
+        db.collection("patients").document(documentID)
             .get()
             .addOnCompleteListener { task: Task<DocumentSnapshot> ->
                 if (task.isSuccessful) {
@@ -50,7 +50,7 @@ class PatientRepository(private val context: Context) {
                     if (document.exists()) {
                         // Document found, parse data and update with Patient object
                         if (patient != null) {
-                            db.collection("patients").document(patientID).set(patient)
+                            db.collection("patients").document(documentID).set(patient)
                             showToast("Patient Info Update Success")
                         }
                     } else {
