@@ -10,20 +10,16 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-<!--        &lt;!&ndash; Button to Save Doctor Profile &ndash;&gt;-->
-<!--        <Button-->
-<!--            android:id="@+id/cancel_Button"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="x"-->
-<!--            android:textColor="@color/white"-->
-<!--            android:textStyle="bold"-->
-<!--            android:background="@drawable/rounded_corner_input"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.95"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            tools:layout_editor_absoluteY="16dp"-->
-<!--            tools:ignore="MissingConstraints" />-->
+        <Button
+            android:id="@+id/closeButton"
+            android:layout_width="45dp"
+            android:layout_height="45dp"
+            android:layout_marginStart="344dp"
+            android:layout_marginTop="16dp"
+            android:background="@drawable/close"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:contentDescription="Close edit page for Patient Profile" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -45,20 +41,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:shapeAppearanceOverlay="@style/circleImageView" />
-
-                <Button
-                    android:id="@+id/uploadPatientImage"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="upload"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/rounded_corner_input"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.95"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteY="16dp"
-                    tools:ignore="MissingConstraints" />
 
                 <TextView
                     android:id="@+id/patientName"

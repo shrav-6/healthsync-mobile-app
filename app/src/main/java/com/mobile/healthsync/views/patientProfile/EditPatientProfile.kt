@@ -57,12 +57,6 @@ class EditPatientProfile : AppCompatActivity() {
             }
         }
 
-//        nameEditText.setText(patientInfo.patientDetails.name)
-//        ageEditText.setText(patientInfo.patientDetails.age.toString())
-//        heightEditText.setText(patientInfo.patientDetails.height.toString())
-//        weightEditText.setText(patientInfo.patientDetails.weight.toString())
-
-
         val genderSelection: Spinner = findViewById(R.id.pickPatientGender)
         ArrayAdapter.createFromResource(
             this, R.array.gender_array, android.R.layout.simple_spinner_item
@@ -91,6 +85,10 @@ class EditPatientProfile : AppCompatActivity() {
             handler.postDelayed({startActivity(intent)}, 1000)
         }
 
+        val closeButton: Button = findViewById(R.id.closeButton)
+        closeButton.setOnClickListener{
+            finish()
+        }
     }
 
     private fun getUpdatedInfo(patientID: Int): Patient {
