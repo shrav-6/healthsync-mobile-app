@@ -21,11 +21,13 @@ class EditDoctorProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_doctor_profile)
 
-        var sampleDoctorId = "QMW1ZsIEcyRjqyLip0dP"
+//        var sampleDoctorId = "QMW1ZsIEcyRjqyLip0dP"
+        val id = intent.getStringExtra("doctorId")
+        var currentDoctorProfileData = Doctor()
         doctorRepository = DoctorRepository(this)
-        doctorRepository.getDoctorProfileData(sampleDoctorId) { doctor ->
+        doctorRepository.getDoctorProfileData(id) { doctor ->
             if(doctor != null){
-                displayDoctorProfileData(doctor)
+                currentDoctorProfileData = displayDoctorProfileData(doctor)
             }
         }
 
@@ -36,21 +38,6 @@ class EditDoctorProfile : AppCompatActivity() {
         ).also { adapter ->
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             genderSelection.adapter = adapter
-        }
-
-        val id = intent.getStringExtra("doctorId")
-
-        val currentDoctorProfileData = Doctor()
-        doctorRepository.getDoctorProfileData(id) { doctor ->
-            if (doctor != null) {
-                currentDoctorProfileData.doctor_id = doctor.doctor_id
-                currentDoctorProfileData.availability = doctor.availability
-                currentDoctorProfileData.password = doctor.password
-                currentDoctorProfileData.doctor_info.avg_ratings = doctor.doctor_info.avg_ratings
-                currentDoctorProfileData.doctor_info.license_no = doctor.doctor_info.license_no
-                currentDoctorProfileData.doctor_info.license_expiry = doctor.doctor_info.license_expiry
-                currentDoctorProfileData.doctor_info.photo = doctor.doctor_info.photo
-            }
         }
 
         // Save changes
@@ -72,12 +59,11 @@ class EditDoctorProfile : AppCompatActivity() {
         // Close Edit Page
         val closeButton: Button = findViewById(R.id.closeEditPage)
         closeButton.setOnClickListener{
-            val intent = Intent(this, DoctorProfile::class.java)
-            startActivity(intent)
+            finish()
         }
     }
 
-    private fun displayDoctorProfileData(doctor: Doctor){
+    private fun displayDoctorProfileData(doctor: Doctor): Doctor{
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)
@@ -95,6 +81,8 @@ class EditDoctorProfile : AppCompatActivity() {
         // Setting the gender value from Firebase
         var genderIndex = getSpinnerIndex("gender", doctor.doctor_info.gender)
         doctorGenderDropdown.setSelection(genderIndex)
+
+        return doctor;
     }
 
     private fun getUpdatedDoctorInfo(updateDoctor: Doctor): Doctor {
