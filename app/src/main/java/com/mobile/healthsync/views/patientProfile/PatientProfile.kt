@@ -2,13 +2,18 @@ package com.mobile.healthsync.views.patientProfile
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.ShareActionProvider
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.imageview.ShapeableImageView
 
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.DoctorAdapter
@@ -19,6 +24,7 @@ import com.mobile.healthsync.repository.PatientRepository
 class PatientProfile : AppCompatActivity() {
 
     private lateinit var patientRepository: PatientRepository
+    private val PICK_IMAGE_REQUEST = 100
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +47,10 @@ class PatientProfile : AppCompatActivity() {
             startActivity(intent)
         }
 
+        val uploadButton: Button = findViewById(R.id.uploadPatientImage)
+        uploadButton.setOnClickListener{
+            selectImage()
+        }
     }
 
     private fun setPatientData(patient: Patient) {
@@ -87,6 +97,24 @@ class PatientProfile : AppCompatActivity() {
 //            append("Allergies: ")
 //            append("Dairy, Gluten...") // patient.patientDetails.allergies
 //        }
+    }
+    fun selectImage() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri: Uri = data.data!!
+            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
+            val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
+            imageView.setImageBitmap(bitmap)
+//            imageView.setImageURI(imageUri)
+        }
     }
 
 

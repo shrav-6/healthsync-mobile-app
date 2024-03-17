@@ -1,15 +1,21 @@
 package com.mobile.healthsync.views.patientProfile
 
+import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
+import android.provider.MediaStore
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Spinner
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import com.mobile.healthsync.R
+import com.mobile.healthsync.databinding.ActivityMainBinding
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.repository.PatientRepository
 import java.util.Calendar
@@ -84,6 +90,7 @@ class EditPatientProfile : AppCompatActivity() {
             val handler = Handler()
             handler.postDelayed({startActivity(intent)}, 1000)
         }
+
     }
 
     private fun getUpdatedInfo(patientID: Int): Patient {
@@ -118,5 +125,4 @@ class EditPatientProfile : AppCompatActivity() {
         )
         return newPatientInfo
     }
-
 }
