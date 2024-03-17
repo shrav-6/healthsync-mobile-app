@@ -1,6 +1,8 @@
 package com.mobile.healthsync.views.patientProfile
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Button
@@ -22,6 +24,38 @@ class EditPatientProfile : AppCompatActivity() {
         setContentView(R.layout.activity_edit_patient_profile)
 
         patientRepository = PatientRepository(this)
+        val nameEditText: EditText = findViewById(R.id.editPatientName)
+        val ageEditText: EditText = findViewById(R.id.editPatientAge)
+        val heightEditText: EditText = findViewById(R.id.editPatientHeight)
+        val weightEditText: EditText = findViewById(R.id.editPatientWeight)
+
+        // Get the value from the Intent
+        val id = intent.getStringExtra("patientID")
+        Log.d("observationkey", "$id")
+
+        val patientInfo = Patient()
+        patientRepository.getPatientData(id) { patient ->
+            if (patient != null) {
+                patientInfo.patient_id = patient.patient_id
+                patientInfo.patientUpdated = patient.patientUpdated
+                patientInfo.patientCreated = patient.patientCreated
+                patientInfo.patientDetails.name = patient.patientDetails.name
+                patientInfo.patientDetails.age = patient.patientDetails.age
+                patientInfo.patientDetails.height = patient.patientDetails.height
+                patientInfo.patientDetails.weight = patient.patientDetails.weight
+                patientInfo.patientDetails.gender = patient.patientDetails.gender
+                nameEditText.setText(patient.patientDetails.name)
+                ageEditText.setText(patient.patientDetails.age.toString())
+                heightEditText.setText(patient.patientDetails.height.toString())
+                weightEditText.setText(patient.patientDetails.weight.toString())
+            }
+        }
+
+//        nameEditText.setText(patientInfo.patientDetails.name)
+//        ageEditText.setText(patientInfo.patientDetails.age.toString())
+//        heightEditText.setText(patientInfo.patientDetails.height.toString())
+//        weightEditText.setText(patientInfo.patientDetails.weight.toString())
+
 
         val genderSelection: Spinner = findViewById(R.id.pickPatientGender)
         ArrayAdapter.createFromResource(
@@ -38,47 +72,21 @@ class EditPatientProfile : AppCompatActivity() {
             adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             bloodTypeSelection.adapter = adapter
         }
-
-        val nameEditText: EditText = findViewById(R.id.editPatientName)
-        val ageEditText: EditText = findViewById(R.id.editPatientAge)
-        val heightEditText: EditText = findViewById(R.id.editPatientHeight)
-        val weightEditText: EditText = findViewById(R.id.editPatientWeight)
-
-        // Get the value from the Intent
-        val id = intent.getStringExtra("patientID")
-        Log.d("observationkey", "$id")
-
-        val patientInfo = Patient()
-
-        patientRepository.getPatientData(id) { patient ->
-            if (patient != null) {
-                patientInfo.patient_id = patient.patient_id
-                patientInfo.patientUpdated = patient.patientUpdated
-                patientInfo.patientCreated = patient.patientCreated
-                patientInfo.patientDetails.name = patient.patientDetails.name
-                patientInfo.patientDetails.age = patient.patientDetails.age
-                patientInfo.patientDetails.height = patient.patientDetails.height
-                patientInfo.patientDetails.weight = patient.patientDetails.weight
-                patientInfo.patientDetails.gender = patient.patientDetails.gender
-            }
-        }
-
-        nameEditText.setText(patientInfo.patientDetails.name)
-        ageEditText.setText(patientInfo.patientDetails.age.toString())
-        heightEditText.setText(patientInfo.patientDetails.height.toString())
-        weightEditText.setText(patientInfo.patientDetails.weight.toString())
 //        genderSelection.setSelection(patientInfo.patientDetails.gender)
+
         val saveButton: Button = findViewById(R.id.savePatientProfile)
         saveButton.setOnClickListener{
             val updatedPatientInfo = getUpdatedInfo(patientInfo.patient_id)
             if (id != null) {
                 patientRepository.updatePatientData(id, updatedPatientInfo)
             }
+            val intent = Intent(this, PatientProfile::class.java)
+            val handler = Handler()
+            handler.postDelayed({startActivity(intent)}, 1000)
         }
     }
 
     private fun getUpdatedInfo(patientID: Int): Patient {
-
         val nameEditText: EditText = findViewById(R.id.editPatientName)
         val ageEditText: EditText = findViewById(R.id.editPatientAge)
         val heightEditText: EditText = findViewById(R.id.editPatientHeight)
@@ -108,7 +116,6 @@ class EditPatientProfile : AppCompatActivity() {
             "profile updated details",
             "${newPatientInfo.patient_id}, ${newPatientInfo.email}, ${newPatientInfo.patientCreated}, ${newPatientInfo.patientUpdated}, ${newPatientInfo.patientDetails.age}, ${newPatientInfo.patientDetails.gender}, ${newPatientInfo.patientDetails.weight}, ${newPatientInfo.patientDetails.height}"
         )
-
         return newPatientInfo
     }
 
