@@ -201,6 +201,37 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/labelDoctorExperience" />
 
+            <!-- Doctor Availability -->
+            <TextView
+                android:id="@+id/labelDoctorAvailability"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:text="Availability:"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editDoctorExperience" />
+
+<!--            <EditText-->
+<!--                android:id="@+id/editDoctorAvailability"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:hint="Enter your text here"-->
+<!--                android:textSize="20sp"-->
+<!--                app:layout_constraintEnd_toEndOf="parent"-->
+<!--                app:layout_constraintStart_toStartOf="parent"-->
+<!--                app:layout_constraintTop_toBottomOf="@+id/labelDoctorAvailability" />-->
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/availabilityRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/labelDoctorAvailability" />
+
             <!-- Button to Save Doctor Profile -->
             <Button
                 android:id="@+id/saveDoctorProfile"

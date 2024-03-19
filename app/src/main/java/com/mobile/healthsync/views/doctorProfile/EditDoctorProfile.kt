@@ -11,9 +11,12 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.adapters.AvailabilityAdapter
+import com.mobile.healthsync.model.DoctorProfile
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
@@ -24,9 +27,8 @@ class EditDoctorProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_doctor_profile)
 
-//        var sampleDoctorId = "QMW1ZsIEcyRjqyLip0dP"
         val id = intent.getStringExtra("doctorId")
-        var currentDoctorProfileData = Doctor()
+        var currentDoctorProfileData = DoctorProfile()
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(id) { doctor ->
             if(doctor != null){
@@ -66,7 +68,7 @@ class EditDoctorProfile : AppCompatActivity() {
         }
     }
 
-    private fun displayDoctorProfileData(doctor: Doctor): Doctor{
+    private fun displayDoctorProfileData(doctor: DoctorProfile): DoctorProfile {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)
@@ -85,12 +87,20 @@ class EditDoctorProfile : AppCompatActivity() {
         // Setting the gender value from Firebase
         var genderIndex = getSpinnerIndex("gender", doctor.doctor_info.gender)
         doctorGenderDropdown.setSelection(genderIndex)
+
+        // Getting image from firebase
         Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
+
+        //Getting availability from firebase
+        val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        val availabilityAdapter = AvailabilityAdapter(doctor.availability ?: emptyList())
+        recyclerView.adapter = availabilityAdapter
 
         return doctor;
     }
 
-    private fun getUpdatedDoctorInfo(updateDoctor: Doctor): Doctor {
+    private fun getUpdatedDoctorInfo(updateDoctor: DoctorProfile): DoctorProfile {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)
@@ -106,6 +116,40 @@ class EditDoctorProfile : AppCompatActivity() {
         updateDoctor.doctor_info.gender = "${doctorGenderDropdown.selectedItem}"
         updateDoctor.doctor_info.consultation_fees= "${doctorFeesEditText.text}".toDouble()
         updateDoctor.doctor_info.years_of_practice = "${doctorExperienceEditText.text}".toInt()
+
+        // Update doctor availability
+        val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
+        val availabilityAdapter = recyclerView.adapter as AvailabilityAdapter
+        val availabilityList = availabilityAdapter.getAvailabilityList()
+        for (i in availabilityList.indices) {
+            val viewHolder = recyclerView.findViewHolderForAdapterPosition(i) as AvailabilityAdapter.AvailabilityViewHolder
+            val startTimePicker = viewHolder.startTimePicker
+            val endTimePicker = viewHolder.endTimePicker
+            val checkBox = viewHolder.availabilityCheckbox
+
+            if (checkBox.isChecked) {
+                // If checkbox is checked, set start time and end time to null
+                availabilityList[i].startTime = "null"
+                availabilityList[i].endTime = "null"
+            } else {
+                // If checkbox is unchecked, set start time and end time as usual
+                val startTimeHour = if (startTimePicker.hour >= 12) startTimePicker.hour - 12 else startTimePicker.hour
+                val startTimeMinute = startTimePicker.minute
+                val startTimeAMPM = if (startTimePicker.hour >= 12) "PM" else "AM"
+                val startTimeString = String.format("%02d:%02d %s", startTimeHour, startTimeMinute, startTimeAMPM)
+
+                val endTimeHour = if (endTimePicker.hour >= 12) endTimePicker.hour - 12 else endTimePicker.hour
+                val endTimeMinute = endTimePicker.minute
+                val endTimeAMPM = if (endTimePicker.hour >= 12) "PM" else "AM"
+                val endTimeString = String.format("%02d:%02d %s", endTimeHour, endTimeMinute, endTimeAMPM)
+
+                availabilityList[i].startTime = startTimeString
+                availabilityList[i].endTime = endTimeString
+            }
+        }
+
+        // Update the availability list in the Doctor object
+        updateDoctor.availability = availabilityList
 
         return updateDoctor
     }

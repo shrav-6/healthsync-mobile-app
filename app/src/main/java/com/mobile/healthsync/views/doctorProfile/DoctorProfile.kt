@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.model.DoctorProfile
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
@@ -50,7 +50,7 @@ class DoctorProfile : AppCompatActivity() {
         }
     }
 
-    private fun setDoctorProfileData(doctor: Doctor){
+    private fun setDoctorProfileData(doctor: DoctorProfile){
         val doctorNameTextView:TextView = findViewById(R.id.doctorName)
         val doctorSpecializationTextView:TextView = findViewById(R.id.doctorSpecialization)
         val doctorEmailTextView:TextView = findViewById(R.id.doctorEmail)

@@ -8,14 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.DoctorAdapter
-import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.model.DoctorProfile
 import com.mobile.healthsync.repository.DoctorRepository
 
 class PatientDashboard : AppCompatActivity() {
 
     private  lateinit var doctorAdapter: DoctorAdapter
     private  lateinit var doctorRepository: DoctorRepository
-    private var doctorsList: MutableList<Doctor> = mutableListOf()
+    private var doctorsList: MutableList<DoctorProfile> = mutableListOf()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_dashboard)
@@ -50,9 +50,9 @@ class PatientDashboard : AppCompatActivity() {
         })
     }
 
-    private fun filterDoctorsList(query: String?): MutableList<Doctor>{
+    private fun filterDoctorsList(query: String?): MutableList<DoctorProfile>{
         // Implement your logic to filter the original list based on the query
-        var filteredList: MutableList<Doctor> = mutableListOf()
+        var filteredList: MutableList<DoctorProfile> = mutableListOf()
 
         for(doctor in doctorsList)
         {
@@ -68,7 +68,7 @@ class PatientDashboard : AppCompatActivity() {
         return filteredList
     }
 
-    fun updateDoctorsList(newList: MutableList<Doctor>) {
+    fun updateDoctorsList(newList: MutableList<DoctorProfile>) {
         var rvDoctorList = findViewById<RecyclerView>(R.id.rvDoctorsList)
 
         doctorAdapter = DoctorAdapter(newList);

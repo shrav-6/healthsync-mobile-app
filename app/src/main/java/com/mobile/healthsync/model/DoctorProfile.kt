@@ -4,11 +4,11 @@ import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
 
 
-data class Doctor(
+data class DoctorProfile(
     @get:PropertyName("availability")
     @set:PropertyName("availability")
 //    var availability: Map<String, Map<String, String>>? = null,
-    var availability: List<Map<String, Any>>? = null,
+    var availability: List<DoctorAvailability>? = null,
 
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
@@ -67,5 +67,19 @@ data class Doctor(
         @get:PropertyName("years_of_practice")
         @set:PropertyName("years_of_practice")
         var years_of_practice: Int = 0
+    ) : Serializable
+
+    data class DoctorAvailability(
+        @get:PropertyName("day_of_week")
+        @set:PropertyName("day_of_week")
+        var dayOfWeek: Int = 0,
+
+        @get:PropertyName("start_time")
+        @set:PropertyName("start_time")
+        var startTime: String = "",
+
+        @get:PropertyName("end_time")
+        @set:PropertyName("end_time")
+        var endTime: String = ""
     ) : Serializable
 }
