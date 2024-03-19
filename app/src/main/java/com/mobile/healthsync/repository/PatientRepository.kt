@@ -67,19 +67,18 @@ class PatientRepository(private val context: Context) {
 
     fun uploadPhotoToStorage(oldImageURL: String, newImageUri: Uri, documentID: String, callback: (String?) -> Unit) {
 
+        // Delete old image to Firebase Storage
         if (oldImageURL != "null") {
             val oldImageReference: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL)
             oldImageReference.delete().addOnSuccessListener {
                 // File deleted successfully
-                // You can handle any additional logic here
                 showToast("Old Image deleted successfully")
             }.addOnFailureListener {
-//                it?.message?.let { it1 -> showToast(it1) }
                 showToast("Failed to delete old image")
             }
         }
 
-        // Upload image to Firebase Storage
+        // Upload new image to Firebase Storage
         val storageReference = FirebaseStorage.getInstance().reference
         val imageReference = storageReference.child("patientProfileImages/${UUID.randomUUID()}")
         imageReference.putFile(newImageUri).addOnCompleteListener { uploadTask ->
@@ -90,7 +89,6 @@ class PatientRepository(private val context: Context) {
                 imageReference.downloadUrl.addOnSuccessListener { uri ->
                     val imageUrl = uri.toString()
                     // Now you can save this URL to Firebase Database or use it as needed
-                    //showToast(imageUrl)
                     updatePatientPhoto(documentID, imageUrl)
                     callback(imageUrl)
                 }.addOnFailureListener {
