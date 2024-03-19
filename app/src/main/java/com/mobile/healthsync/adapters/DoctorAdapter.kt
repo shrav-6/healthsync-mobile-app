@@ -46,10 +46,5 @@ class DoctorAdapter(
         return doctors.size
     }
 
-    fun updateDoctorsList(newList: List<Doctor>) {
-        doctors.clear()
-        doctors.addAll(newList)
-        notifyDataSetChanged()
-    }
 
 }
