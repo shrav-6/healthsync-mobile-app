@@ -15,10 +15,15 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.repository.PatientRepository
 
+/**
+ * Line 32 can be deleted and in Line 33 documentID could be set to the Intent Parameter value
+ **/
 class PatientProfile : AppCompatActivity() {
 
     private lateinit var patientRepository: PatientRepository
+    private val PICK_IMAGE_REQUEST = 100
     private var documentID: String = ""
+    private var imageURL: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,6 +33,7 @@ class PatientProfile : AppCompatActivity() {
 
         val testId = "00KDbESIgVNTIDzyAP04"
         documentID = testId
+
         patientRepository.getPatientData(testId) { patient ->
             if (patient != null) {
                 setPatientData(patient)
@@ -36,16 +42,15 @@ class PatientProfile : AppCompatActivity() {
 
         val editButton: Button = findViewById(R.id.editPatient)
         editButton.setOnClickListener{
-//            Log.d("key", "patientID")
             val intent = Intent(this, EditPatientProfile::class.java)
             intent.putExtra("patientID", testId);
             startActivity(intent)
         }
 
-//        val uploadButton: Button = findViewById(R.id.uploadPatientImage)
-//        uploadButton.setOnClickListener{
-//            selectImage()
-//        }
+        val uploadButton: Button = findViewById(R.id.uploadPatientImage)
+        uploadButton.setOnClickListener{
+            selectImage()
+        }
     }
 
     private fun setPatientData(patient: Patient) : Patient {
@@ -57,7 +62,7 @@ class PatientProfile : AppCompatActivity() {
         val heightTextBox:TextView = findViewById(R.id.patientHeight)
         val weightTextBox: TextView = findViewById(R.id.patientWeight)
         val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
-        val bloodTypeTextBox:TextView = findViewById(R.id.patientBloodType)
+//        val bloodTypeTextBox:TextView = findViewById(R.id.patientBloodType)
         val allergiesTextBox: TextView = findViewById(R.id.patientAllergies)
 
         nameTextBox.text = patient.patientDetails.name
@@ -65,7 +70,7 @@ class PatientProfile : AppCompatActivity() {
         pointsTextBox.text = buildString {
             append("Points: ")
             append(patient.rewardPoints.toString())
-            append(" \uD83D\uDD36 \uD83D\uDC8E")
+            append(" \uD83C\uDFC6")
         }
         ageTextBox.text = buildString {
             append("Age: ")
@@ -85,17 +90,48 @@ class PatientProfile : AppCompatActivity() {
             append(patient.patientDetails.weight.toString())
             append(" kg")
         }
-        Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView) //https://www.geeksforgeeks.org/how-to-use-picasso-image-loader-library-in-android/
+
+        //https://www.geeksforgeeks.org/how-to-use-picasso-image-loader-library-in-android/
+
+        if (patient.patientDetails.photo == "null") {
+            imageView.setImageResource(R.drawable.user)
+        } else {
+            Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView)
+        }
 
 //        bloodTypeTextBox.text = buildString {
 //            append("Blood Type: ")
-//            append("AB+") // patient.patientDetails.bloodType
+//            append(patient.patientDetails.bloodType)
 //        }
-//        allergiesTextBox.text = buildString {
-//            append("Allergies: ")
-//            append("Dairy, Gluten...") // patient.patientDetails.allergies
-//        }
+
+        allergiesTextBox.text = buildString {
+            append("Allergies: \n")
+            append(patient.patientDetails.allergies)
+        }
         return patient
+    }
+
+    private fun selectImage() {
+        val intent = Intent()
+        intent.type = "image/*"
+        intent.action = Intent.ACTION_GET_CONTENT
+        startActivityForResult(intent, PICK_IMAGE_REQUEST)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
+            val imageUri: Uri = data.data!!
+            val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
+            imageView.setImageURI(imageUri)
+
+            patientRepository.uploadPhotoToStorage(imageUri, documentID) {it
+                if (!it.isNullOrBlank()) {
+                    imageURL = it
+                }
+            }
+        }
     }
 }
 

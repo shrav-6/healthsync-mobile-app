@@ -77,7 +77,7 @@ class PatientRepository(private val context: Context) {
                 imageReference.downloadUrl.addOnSuccessListener { uri ->
                     val imageUrl = uri.toString()
                     // Now you can save this URL to Firebase Database or use it as needed
-                    showToast(imageUrl)
+                    //showToast(imageUrl)
                     updatePatientPhoto(documentID, imageUrl)
                     callback(imageUrl)
                 }.addOnFailureListener {
