@@ -100,8 +100,8 @@ class PatientRepository(private val context: Context) {
                     val document = task.result
                     if (document.exists()) {
                         // Document found, parse data and update with Patient object
-                        if (photoURL.isNullOrBlank()) {
-                            db.collection("patients").document(documentID).update("photo", photoURL)
+                        if (!photoURL.isNullOrBlank()) {
+                            db.collection("patients").document(documentID).update("patient_details.photo", photoURL)
                             showToast("Patient Photo Update Success")
                         }
                     } else {

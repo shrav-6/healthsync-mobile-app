@@ -7,8 +7,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.widget.Button
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.squareup.picasso.Picasso
 import com.google.android.material.imageview.ShapeableImageView
 
 import com.mobile.healthsync.R
@@ -18,7 +18,6 @@ import com.mobile.healthsync.repository.PatientRepository
 class PatientProfile : AppCompatActivity() {
 
     private lateinit var patientRepository: PatientRepository
-    private val PICK_IMAGE_REQUEST = 100
     private var documentID: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -43,13 +42,13 @@ class PatientProfile : AppCompatActivity() {
             startActivity(intent)
         }
 
-        val uploadButton: Button = findViewById(R.id.uploadPatientImage)
-        uploadButton.setOnClickListener{
-            selectImage()
-        }
+//        val uploadButton: Button = findViewById(R.id.uploadPatientImage)
+//        uploadButton.setOnClickListener{
+//            selectImage()
+//        }
     }
 
-    private fun setPatientData(patient: Patient) {
+    private fun setPatientData(patient: Patient) : Patient {
         val nameTextBox:TextView = findViewById(R.id.patientName)
         val emailTextBox: TextView = findViewById(R.id.patientEmail)
         val pointsTextBox: TextView = findViewById(R.id.patientPoints)
@@ -57,6 +56,7 @@ class PatientProfile : AppCompatActivity() {
         val genderTextBox: TextView = findViewById(R.id.patientGender)
         val heightTextBox:TextView = findViewById(R.id.patientHeight)
         val weightTextBox: TextView = findViewById(R.id.patientWeight)
+        val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
         val bloodTypeTextBox:TextView = findViewById(R.id.patientBloodType)
         val allergiesTextBox: TextView = findViewById(R.id.patientAllergies)
 
@@ -85,6 +85,8 @@ class PatientProfile : AppCompatActivity() {
             append(patient.patientDetails.weight.toString())
             append(" kg")
         }
+        Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView) //https://www.geeksforgeeks.org/how-to-use-picasso-image-loader-library-in-android/
+
 //        bloodTypeTextBox.text = buildString {
 //            append("Blood Type: ")
 //            append("AB+") // patient.patientDetails.bloodType
@@ -93,32 +95,8 @@ class PatientProfile : AppCompatActivity() {
 //            append("Allergies: ")
 //            append("Dairy, Gluten...") // patient.patientDetails.allergies
 //        }
+        return patient
     }
-    fun selectImage() {
-        val intent = Intent()
-        intent.type = "image/*"
-        intent.action = Intent.ACTION_GET_CONTENT
-        startActivityForResult(intent, PICK_IMAGE_REQUEST)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK && data != null && data.data != null) {
-            val imageUri: Uri = data.data!!
-            val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
-            val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
-            imageView.setImageURI(imageUri)
-
-            patientRepository.uploadPhotoToStorage(imageUri, documentID) {it
-//                if (!it.isNullOrBlank()) {
-//                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
-//                }
-            }
-        }
-    }
-
-
 }
 
 
