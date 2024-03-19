@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "679117999606",
+    "firebase_url": "https://healthsync-3712d-default-rtdb.firebaseio.com",
+    "project_id": "healthsync-3712d",
+    "storage_bucket": "healthsync-3712d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679117999606:android:303f67dbd32fe355410bd7",
+        "android_client_info": {
+          "package_name": "com.mobile.healthsync"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDUUiyz5PkFU6B_mKne_BwmZ68ioI9U8zw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

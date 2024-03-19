@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+    <string-array name="gender_array">
+        <item>Male</item>
+        <item>Female</item>
+        <item>Others</item>
+    </string-array>
+</resources>
