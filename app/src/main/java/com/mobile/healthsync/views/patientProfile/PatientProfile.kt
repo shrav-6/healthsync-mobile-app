@@ -5,26 +5,21 @@ import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
-import android.util.Log
 import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.ShareActionProvider
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 
 import com.mobile.healthsync.R
-import com.mobile.healthsync.adapters.DoctorAdapter
 import com.mobile.healthsync.model.Patient
-import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.repository.PatientRepository
 
 class PatientProfile : AppCompatActivity() {
 
     private lateinit var patientRepository: PatientRepository
     private val PICK_IMAGE_REQUEST = 100
+    private var documentID: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,6 +28,7 @@ class PatientProfile : AppCompatActivity() {
         patientRepository = PatientRepository(this)
 
         val testId = "00KDbESIgVNTIDzyAP04"
+        documentID = testId
         patientRepository.getPatientData(testId) { patient ->
             if (patient != null) {
                 setPatientData(patient)
@@ -112,8 +108,13 @@ class PatientProfile : AppCompatActivity() {
             val imageUri: Uri = data.data!!
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, imageUri)
             val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
-            imageView.setImageBitmap(bitmap)
-//            imageView.setImageURI(imageUri)
+            imageView.setImageURI(imageUri)
+
+            patientRepository.uploadPhotoToStorage(imageUri, documentID) {it
+//                if (!it.isNullOrBlank()) {
+//                    Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+//                }
+            }
         }
     }
 
