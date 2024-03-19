@@ -90,7 +90,7 @@ class PatientProfile : AppCompatActivity() {
             append(" kg")
         }
 
-        //https://www.geeksforgeeks.org/how-to-use-picasso-image-loader-library-in-android/
+        // https://www.geeksforgeeks.org/how-to-use-picasso-image-loader-library-in-android/
 
         if (patient.patientDetails.photo == "null") {
             imageView.setImageResource(R.drawable.user)
