@@ -30,54 +30,15 @@ class EditPatientProfile : AppCompatActivity() {
 
         patientRepository = PatientRepository(this)
 
-        val nameEditText: EditText = findViewById(R.id.editPatientName)
-        val ageEditText: EditText = findViewById(R.id.editPatientAge)
-        val heightEditText: EditText = findViewById(R.id.editPatientHeight)
-        val weightEditText: EditText = findViewById(R.id.editPatientWeight)
-        val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
-        val allergiesEditText: EditText = findViewById(R.id.editPatientAllergies)
-
-        val genderSelection: Spinner = findViewById(R.id.pickPatientGender)
-        val arrayAdapter1 = ArrayAdapter.createFromResource(
-            this, R.array.gender_array, android.R.layout.simple_spinner_item
-        ).also { adapter ->
-            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            genderSelection.adapter = adapter
-        }
-
-        // Get the document id value from the Intent
         val id = intent.getStringExtra("patientID")
         if (id != null) {
             documentID = id
         }
 
-        val currentPatientInfo = Patient()
+        var currentPatientInfo = Patient()
         patientRepository.getPatientData(documentID) { patient ->
             if (patient != null) {
-                // need to add email, password, points and created date
-                currentPatientInfo.patient_id = patient.patient_id
-                currentPatientInfo.patientUpdated = patient.patientUpdated
-                currentPatientInfo.patientDetails.name = patient.patientDetails.name
-                currentPatientInfo.patientDetails.age = patient.patientDetails.age
-                currentPatientInfo.patientDetails.height = patient.patientDetails.height
-                currentPatientInfo.patientDetails.weight = patient.patientDetails.weight
-                currentPatientInfo.patientDetails.gender = patient.patientDetails.gender
-                currentPatientInfo.patientDetails.photo = patient.patientDetails.photo
-                currentPatientInfo.patientDetails.allergies = patient.patientDetails.allergies
-
-                nameEditText.setText(patient.patientDetails.name)
-                ageEditText.setText(patient.patientDetails.age.toString())
-                heightEditText.setText(patient.patientDetails.height.toString())
-                weightEditText.setText(patient.patientDetails.weight.toString())
-                allergiesEditText.setText(patient.patientDetails.allergies)
-
-                genderSelection.setSelection(arrayAdapter1.getPosition(patient.patientDetails.gender))
-
-                if (patient.patientDetails.photo == "null") {
-                    imageView.setImageResource(R.drawable.user)
-                } else {
-                    Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView)
-                }
+                currentPatientInfo = setPatientInfoOnDisplay(patient)
             }
         }
 
@@ -105,6 +66,39 @@ class EditPatientProfile : AppCompatActivity() {
         closeButton.setOnClickListener{
             finish()
         }
+    }
+
+    private fun setPatientInfoOnDisplay(patient: Patient) : Patient {
+        val nameEditText: EditText = findViewById(R.id.editPatientName)
+        val ageEditText: EditText = findViewById(R.id.editPatientAge)
+        val heightEditText: EditText = findViewById(R.id.editPatientHeight)
+        val weightEditText: EditText = findViewById(R.id.editPatientWeight)
+        val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
+        val allergiesEditText: EditText = findViewById(R.id.editPatientAllergies)
+
+        val genderSelection: Spinner = findViewById(R.id.pickPatientGender)
+        val arrayAdapter1 = ArrayAdapter.createFromResource(
+            this, R.array.gender_array, android.R.layout.simple_spinner_item
+        ).also { adapter ->
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            genderSelection.adapter = adapter
+        }
+
+        nameEditText.setText(patient.patientDetails.name)
+        ageEditText.setText(patient.patientDetails.age.toString())
+        heightEditText.setText(patient.patientDetails.height.toString())
+        weightEditText.setText(patient.patientDetails.weight.toString())
+        allergiesEditText.setText(patient.patientDetails.allergies)
+
+        genderSelection.setSelection(arrayAdapter1.getPosition(patient.patientDetails.gender))
+
+        if (patient.patientDetails.photo == "null") {
+            imageView.setImageResource(R.drawable.user)
+        } else {
+            Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView)
+        }
+
+        return patient
     }
 
     private fun getUpdatedPatientInfo(patient: Patient): Patient {

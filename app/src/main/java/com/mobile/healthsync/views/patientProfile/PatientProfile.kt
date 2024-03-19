@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
@@ -83,7 +82,7 @@ class PatientProfile : AppCompatActivity() {
         heightTextBox.text = buildString {
             append("Height: ")
             append(patient.patientDetails.height.toString())
-            append(" m")
+            append(" cm")
         }
         weightTextBox.text = buildString {
             append("Weight: ")
