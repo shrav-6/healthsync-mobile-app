@@ -4,7 +4,7 @@ import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
 
 
-data class DoctorProfile(
+data class DoctorProfileModel(
     @get:PropertyName("availability")
     @set:PropertyName("availability")
 //    var availability: Map<String, Map<String, String>>? = null,

@@ -7,10 +7,10 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.recyclerview.widget.RecyclerView
-import com.mobile.healthsync.model.DoctorProfile
+import com.mobile.healthsync.model.DoctorProfileModel
 import com.mobile.healthsync.R
 
-class AvailabilityAdapter(private val availabilityList: List<DoctorProfile.DoctorAvailability>) : RecyclerView.Adapter<AvailabilityAdapter.AvailabilityViewHolder>() {
+class AvailabilityAdapter(private val availabilityList: List<DoctorProfileModel.DoctorAvailability>) : RecyclerView.Adapter<AvailabilityAdapter.AvailabilityViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvailabilityViewHolder {
         val availabilityView = LayoutInflater.from(parent.context).inflate(R.layout.doctor_availability_item, parent, false)
@@ -92,7 +92,7 @@ class AvailabilityAdapter(private val availabilityList: List<DoctorProfile.Docto
         val availabilityCheckbox: CheckBox = itemView.findViewById(R.id.availabilityCheckbox)
     }
 
-    fun getAvailabilityList(): List<DoctorProfile.DoctorAvailability> {
+    fun getAvailabilityList(): List<DoctorProfileModel.DoctorAvailability> {
         return availabilityList
     }
 }

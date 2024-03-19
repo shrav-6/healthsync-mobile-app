@@ -16,7 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AvailabilityAdapter
-import com.mobile.healthsync.model.DoctorProfile
+import com.mobile.healthsync.model.DoctorProfileModel
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
@@ -28,7 +28,7 @@ class EditDoctorProfile : AppCompatActivity() {
         setContentView(R.layout.activity_edit_doctor_profile)
 
         val id = intent.getStringExtra("doctorId")
-        var currentDoctorProfileData = DoctorProfile()
+        var currentDoctorProfileData = DoctorProfileModel()
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(id) { doctor ->
             if(doctor != null){
@@ -53,7 +53,7 @@ class EditDoctorProfile : AppCompatActivity() {
             if(id != null){
                 doctorRepository.updateDoctorData(id, updatedDoctorData)
             }
-            val intent = Intent(this, DoctorProfile::class.java)
+            val intent = Intent(this, DoctorProfileModel::class.java)
             // Giving time for firebase to update
             val handler = Handler()
             handler.postDelayed({
@@ -68,7 +68,7 @@ class EditDoctorProfile : AppCompatActivity() {
         }
     }
 
-    private fun displayDoctorProfileData(doctor: DoctorProfile): DoctorProfile {
+    private fun displayDoctorProfileData(doctor: DoctorProfileModel): DoctorProfileModel {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)
@@ -100,7 +100,7 @@ class EditDoctorProfile : AppCompatActivity() {
         return doctor;
     }
 
-    private fun getUpdatedDoctorInfo(updateDoctor: DoctorProfile): DoctorProfile {
+    private fun getUpdatedDoctorInfo(updateDoctor: DoctorProfileModel): DoctorProfileModel {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)

@@ -6,10 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.DoctorProfile
+import com.mobile.healthsync.model.DoctorProfileModel
 
 class DoctorAdapter(
-    private val doctors: MutableList<DoctorProfile>
+    private val doctors: MutableList<DoctorProfileModel>
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>()
 {
     class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -46,7 +46,7 @@ class DoctorAdapter(
         return doctors.size
     }
 
-    fun updateDoctorsList(newList: List<DoctorProfile>) {
+    fun updateDoctorsList(newList: List<DoctorProfileModel>) {
         doctors.clear()
         doctors.addAll(newList)
         notifyDataSetChanged()

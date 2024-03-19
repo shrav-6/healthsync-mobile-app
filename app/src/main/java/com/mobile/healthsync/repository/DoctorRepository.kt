@@ -8,7 +8,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.QuerySnapshot
-import com.mobile.healthsync.model.DoctorProfile
+import com.mobile.healthsync.model.DoctorProfileModel
 import java.util.UUID
 
 
@@ -31,7 +31,7 @@ class DoctorRepository(private val context: Context) {
                     val document = task.result
                     if (document.exists()) {
                         // Document found, parse data and populate Doctor object
-                        val doctor = document.toObject(DoctorProfile::class.java)
+                        val doctor = document.toObject(DoctorProfileModel::class.java)
                         doctor?.let { displayDoctorData(it) }
                     } else {
                         showToast("Doctor not found")
@@ -42,19 +42,19 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
-    fun getAllDoctors(callback: (MutableList<DoctorProfile>) -> Unit) {
+    fun getAllDoctors(callback: (MutableList<DoctorProfileModel>) -> Unit) {
         // Reference to the "doctors" collection
         db.collection("doctors")
             .get()
             .addOnCompleteListener { task: Task<QuerySnapshot> ->
                 if (task.isSuccessful) {
-                    val doctorsList = mutableListOf<DoctorProfile>()
+                    val doctorsList = mutableListOf<DoctorProfileModel>()
 
                     val documents = task.result
                     if (documents != null && !documents.isEmpty) {
                         // Documents found, parse data and add each Doctor object to the list
                         for (document in documents) {
-                            val doctor = document.toObject(DoctorProfile::class.java)
+                            val doctor = document.toObject(DoctorProfileModel::class.java)
                             doctor?.let { doctorsList.add(it) }
                         }
                     }
@@ -67,7 +67,7 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
-    private fun displayDoctorData(doctor: DoctorProfile) {
+    private fun displayDoctorData(doctor: DoctorProfileModel) {
         // Use the populated Doctor object as needed
         // For example, you can access doctor's information like:
         val doctorName: String = doctor.doctor_info.name
@@ -80,14 +80,14 @@ class DoctorRepository(private val context: Context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun getDoctorProfileData(doctorId: String?, callback: (DoctorProfile?) -> Unit) {
+    fun getDoctorProfileData(doctorId: String?, callback: (DoctorProfileModel?) -> Unit) {
         db.collection("doctors").document(doctorId!!)
             .get()
             .addOnCompleteListener { task: Task<DocumentSnapshot> ->
                 if (task.isSuccessful) {
                     val document = task.result
                     if (document.exists()) {
-                        val doctor = document.toObject(DoctorProfile::class.java)
+                        val doctor = document.toObject(DoctorProfileModel::class.java)
                         callback(doctor)
                     } else {
                         showToast("Doctor not found")
@@ -100,7 +100,7 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
-    fun updateDoctorData(documentID: String, doctor: DoctorProfile?) {
+    fun updateDoctorData(documentID: String, doctor: DoctorProfileModel?) {
 //        val doctorId = doctor?.doctor_id.toString()
         db.collection("doctors").document(documentID)
             .get()
