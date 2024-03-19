@@ -1,6 +1,7 @@
 package com.mobile.healthsync.views.doctorProfile
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
@@ -10,9 +11,11 @@ import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
+import com.squareup.picasso.Picasso
 
 class EditDoctorProfile : AppCompatActivity() {
 
@@ -71,6 +74,7 @@ class EditDoctorProfile : AppCompatActivity() {
         val doctorGenderDropdown: Spinner = findViewById(R.id.editDoctorGender)
         val doctorFeesEditText: EditText = findViewById(R.id.editDoctorFee)
         val doctorExperienceEditText: EditText = findViewById(R.id.editDoctorExperience)
+        val doctorImageView: ShapeableImageView = findViewById(R.id.doctorProfileImage)
 
         doctorNameEditText.setText(doctor.doctor_info.name)
         doctorSpecializationEditText.setText(doctor.doctor_info.doctor_speciality)
@@ -81,6 +85,7 @@ class EditDoctorProfile : AppCompatActivity() {
         // Setting the gender value from Firebase
         var genderIndex = getSpinnerIndex("gender", doctor.doctor_info.gender)
         doctorGenderDropdown.setSelection(genderIndex)
+        Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
 
         return doctor;
     }

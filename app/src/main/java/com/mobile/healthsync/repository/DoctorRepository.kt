@@ -1,12 +1,18 @@
 package com.mobile.healthsync.repository
 
 import android.content.Context
+import android.net.Uri
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.StorageReference
 import com.mobile.healthsync.model.Doctor
+import java.util.UUID
+
+
 
 
 class DoctorRepository(private val context: Context) {
@@ -113,6 +119,50 @@ class DoctorRepository(private val context: Context) {
                     }
                 } else {
                     showToast("Error fetching doctor data: ${task.exception?.message}")
+                }
+            }
+    }
+
+    fun uploadImageToFirebaseStorage(imageUri: Uri, documentID: String, callback: (String?) -> Unit) {
+        // Upload image to Firebase Storage
+        val storageReference = FirebaseStorage.getInstance().reference
+        val imageReference = storageReference.child("doctorImages/${UUID.randomUUID()}")
+        imageReference.putFile(imageUri).addOnCompleteListener { uploadTask ->
+            if (uploadTask.isSuccessful) {
+                // Image uploaded successfully
+                showToast("Image uploaded")
+                // Get the uploaded image URL
+                imageReference.downloadUrl.addOnSuccessListener { uri ->
+                    val imageUrl = uri.toString()
+                    updateDoctorImg(documentID, imageUrl)
+                    callback(imageUrl)
+                }.addOnFailureListener {
+                    uploadTask.exception?.message?.let { it1 -> showToast(it1) }
+                    callback("")
+                }
+            } else {
+                showToast("Image upload failed")
+                callback("")
+            }
+        }
+    }
+
+    private fun updateDoctorImg(documentID: String, photoURL: String?) {
+        db.collection("doctors").document(documentID)
+            .get()
+            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document.exists()) {
+                        if (!photoURL.isNullOrBlank()) {
+                            db.collection("doctors").document(documentID).update("doctor_info.photo", photoURL)
+                            showToast("Image updated")
+                        }
+                    } else {
+                        showToast("Doctor not found")
+                    }
+                } else {
+                    showToast("Error fetching doctor: ${task.exception?.message}")
                 }
             }
     }

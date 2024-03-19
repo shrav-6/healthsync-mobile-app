@@ -10,9 +10,13 @@ import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
+import com.squareup.picasso.Picasso
 
 
 class DoctorProfile : AppCompatActivity() {
+
+    private lateinit var doctorDocumentId: String;
+    private lateinit var doctorImg: String;
 
     private  lateinit var doctorRepository: DoctorRepository
     var imageUri: Uri? = null
@@ -23,19 +27,20 @@ class DoctorProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-//        var sampleDoctorId = "01lZByxUbILOrFI8XTLq"
-        var sampleDoctorId = "QMW1ZsIEcyRjqyLip0dP"
+//        doctorDocumentId = "gXyTqRO4nZuDpfOlNXpQ"
+        doctorDocumentId = "QMW1ZsIEcyRjqyLip0dP"
         doctorRepository = DoctorRepository(this)
-        doctorRepository.getDoctorProfileData(sampleDoctorId) { doctor ->
+        doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
             if(doctor != null){
                 setDoctorProfileData(doctor)
+                doctorImg = doctor.doctor_info.photo.toString()
             }
         }
 
         val editButton: Button = findViewById(R.id.editDoctor)
         editButton.setOnClickListener{
             val intent = Intent(this, EditDoctorProfile::class.java)
-            intent.putExtra("doctorId", sampleDoctorId);
+            intent.putExtra("doctorId", doctorDocumentId);
             startActivity(intent)
         }
 
@@ -54,6 +59,7 @@ class DoctorProfile : AppCompatActivity() {
         val doctorFeesTextView:TextView = findViewById(R.id.doctorFee)
         val doctorExperienceTextView:TextView = findViewById(R.id.doctorExperience)
         val doctorRatingTextView:TextView = findViewById(R.id.doctorRating)
+        val doctorImageView: ShapeableImageView = findViewById(R.id.doctorProfileImage)
 
         doctorNameTextView.text = "Dr. ${doctor.doctor_info.name}"
         doctorSpecializationTextView.text = doctor.doctor_info.doctor_speciality
@@ -63,6 +69,9 @@ class DoctorProfile : AppCompatActivity() {
         doctorFeesTextView.text = "Consultation Fees: \$${doctor.doctor_info.consultation_fees}"
         doctorExperienceTextView.text = "Years Of Experience: ${doctor.doctor_info.years_of_practice} years"
         doctorRatingTextView.text = "Average Ratings: ${doctor.doctor_info.avg_ratings} ⭐"
+//        doctorImageView.setImageURI(doctor.doctor_info.photo)
+
+        Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
     }
 
     private fun selectImage() {
@@ -78,6 +87,15 @@ class DoctorProfile : AppCompatActivity() {
             imageUri = data.data
             val imageView: ShapeableImageView = findViewById(R.id.doctorProfileImage)
             imageView.setImageURI(imageUri)
+
+            imageUri?.let {
+                doctorRepository.uploadImageToFirebaseStorage(it, doctorDocumentId) {it
+                    if (!it.isNullOrBlank()) {
+                        doctorImg = it
+                    }
+                }
+            }
+
         }
     }
 }
