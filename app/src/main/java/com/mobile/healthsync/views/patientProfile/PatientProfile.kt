@@ -95,6 +95,7 @@ class PatientProfile : AppCompatActivity() {
         if (patient.patientDetails.photo == "null") {
             imageView.setImageResource(R.drawable.user)
         } else {
+            imageURL = patient.patientDetails.photo.toString()
             Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView)
         }
 
@@ -125,7 +126,7 @@ class PatientProfile : AppCompatActivity() {
             val imageView: ShapeableImageView = findViewById(R.id.patientProfileImage)
             imageView.setImageURI(imageUri)
 
-            patientRepository.uploadPhotoToStorage(imageUri, documentID) {it
+            patientRepository.uploadPhotoToStorage(imageURL, imageUri, documentID) {it
                 if (!it.isNullOrBlank()) {
                     imageURL = it
                 }

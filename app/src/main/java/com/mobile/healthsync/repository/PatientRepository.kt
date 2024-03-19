@@ -7,6 +7,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import com.mobile.healthsync.model.Patient
 import java.util.UUID
 
@@ -64,12 +65,24 @@ class PatientRepository(private val context: Context) {
             }
     }
 
-    fun uploadPhotoToStorage(imageUri: Uri, documentID: String, callback: (String?) -> Unit) {
+    fun uploadPhotoToStorage(oldImageURL: String, newImageUri: Uri, documentID: String, callback: (String?) -> Unit) {
+
+        if (oldImageURL != "null") {
+            val oldImageReference: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL)
+            oldImageReference.delete().addOnSuccessListener {
+                // File deleted successfully
+                // You can handle any additional logic here
+                showToast("Old Image deleted successfully")
+            }.addOnFailureListener {
+//                it?.message?.let { it1 -> showToast(it1) }
+                showToast("Failed to delete old image")
+            }
+        }
 
         // Upload image to Firebase Storage
         val storageReference = FirebaseStorage.getInstance().reference
-        val imageReference = storageReference.child("images/${UUID.randomUUID()}")
-        imageReference.putFile(imageUri).addOnCompleteListener { uploadTask ->
+        val imageReference = storageReference.child("patientProfileImages/${UUID.randomUUID()}")
+        imageReference.putFile(newImageUri).addOnCompleteListener { uploadTask ->
             if (uploadTask.isSuccessful) {
                 // Image uploaded successfully
                 showToast("Image uploaded successfully")
