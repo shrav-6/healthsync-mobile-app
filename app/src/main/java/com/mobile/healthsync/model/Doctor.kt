@@ -11,7 +11,7 @@ data class Doctor(
 
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
-    var doctor_id: Int = 0,
+    var doctor_id: List<Any> = emptyList(),
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")
@@ -23,7 +23,9 @@ data class Doctor(
 
     @get:PropertyName("password")
     @set:PropertyName("password")
-    var password: String = ""
+    var password: String = "",
+
+    var doctor_speciality: String = "General Medicine"
 ) : Serializable {
 
     data class DoctorInfo(
@@ -58,10 +60,6 @@ data class Doctor(
         @get:PropertyName("photo")
         @set:PropertyName("photo")
         var photo: String? = null,
-
-        @get:PropertyName("speciality")
-        @set:PropertyName("speciality")
-        var doctor_speciality: String? = "General Medicine",
 
         @get:PropertyName("years_of_practice")
         @set:PropertyName("years_of_practice")
