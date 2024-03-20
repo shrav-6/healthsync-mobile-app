@@ -11,8 +11,9 @@ import android.util.Log
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import com.mobile.healthsync.R
+import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Patient
-import com.mobile.healthsync.model.PatientDetails
+import com.mobile.healthsync.model.Patient.PatientDetails
 import com.mobile.healthsync.uploadToDatabase
 
 class SignupActivity : AppCompatActivity() {
@@ -70,12 +71,17 @@ class SignupActivity : AppCompatActivity() {
                 email = email,
                 password = password,
                 patientCreated = "2/26/2024",
-                patientDetails = PatientDetails(age = age,
+                patient_id = 0,
+                patientUpdated = "2/26/2024",
+                rewardPoints = 0,
+                patientDetails = PatientDetails(
+                    age = age.toInt(),
                     allergies = allergies,
                     gender = gender,
-                    height = height,
+                    height = height.toInt(),
                     name = name,
-                    photo = "null"
+                    photo = "null",
+                    weight = weight.toInt()
                 )
             )
 
@@ -89,6 +95,4 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-
 }

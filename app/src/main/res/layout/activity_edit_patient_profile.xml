@@ -21,201 +21,203 @@
             app:layout_constraintTop_toTopOf="parent"
             android:contentDescription="Close edit page for Patient Profile" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:padding="50dp"
+            tools:ignore="MissingConstraints"
+            tools:layout_editor_absoluteX="-16dp"
+            tools:layout_editor_absoluteY="-3dp">
+
+            <!-- Patient Name -->
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/patientProfileImage"
+                android:layout_width="200dp"
+                android:layout_height="200dp"
+                android:layout_marginTop="25dp"
+                android:padding="5dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/user"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:shapeAppearanceOverlay="@style/circleImageView" />
+
+            <TextView
+                android:id="@+id/patientName"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="50dp"
-                tools:ignore="MissingConstraints">
+                android:layout_marginTop="16dp"
+                android:text="Name:"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/uploadPatientImage" />
 
-                <!-- Patient Name -->
-                <com.google.android.material.imageview.ShapeableImageView
-                    android:id="@+id/patientProfileImage"
-                    android:layout_width="200dp"
-                    android:layout_height="200dp"
-                    android:layout_marginTop="25dp"
-                    android:padding="5dp"
-                    android:src="@drawable/user"
-                    android:scaleType="centerCrop"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:shapeAppearanceOverlay="@style/circleImageView" />
+            <EditText
+                android:id="@+id/editPatientName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:hint="Enter your text here"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/patientName" />
 
-                <TextView
-                    android:id="@+id/patientName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Name:"
-                    android:textSize="20sp"
-                    android:textStyle="bold"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/uploadPatientImage" />
+            <!-- Patient Age -->
+            <TextView
+                android:id="@+id/patientAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Age:"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editPatientName" />
 
-                <EditText
-                    android:id="@+id/editPatientName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:hint="Enter your text here"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/patientName" />
+            <EditText
+                android:id="@+id/editPatientAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:hint="Enter your text here"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/patientAge" />
 
-                <!-- Patient Age -->
-                <TextView
-                    android:id="@+id/patientAge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Age:"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editPatientName" />
+            <!-- Patient Gender -->
+            <TextView
+                android:id="@+id/patientGender"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Gender:"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editPatientAge" />
 
-                <EditText
-                    android:id="@+id/editPatientAge"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:hint="Enter your text here"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/patientAge" />
+            <Spinner
+                android:id="@+id/pickPatientGender"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:layout_below="@id/patientGender"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp" />
 
-                <!-- Patient Gender -->
-                <TextView
-                    android:id="@+id/patientGender"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Gender:"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editPatientAge" />
+            <!-- Patient Height-->
+            <TextView
+                android:id="@+id/patientHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Height:"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/pickPatientGender" />
 
-                <Spinner
-                    android:id="@+id/pickPatientGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_below="@id/patientGender"
-                    android:layout_marginStart="16dp"
-                    android:layout_marginTop="16dp"
-                    android:layout_marginEnd="16dp"
-                    android:layout_marginBottom="16dp" />
+            <EditText
+                android:id="@+id/editPatientHeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:hint="Enter your text here"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/patientHeight" />
 
-                <!-- Patient Height-->
-                <TextView
-                    android:id="@+id/patientHeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Height:"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/pickPatientGender" />
+            <!-- Patient Weight-->
+            <TextView
+                android:id="@+id/patientWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Weight:"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editPatientHeight" />
 
-                <EditText
-                    android:id="@+id/editPatientHeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:hint="Enter your text here"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/patientHeight" />
+            <!-- Patient Weight-->
+            <EditText
+                android:id="@+id/editPatientWeight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:hint="Enter your text here"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/patientWeight" />
 
-                <!-- Patient Weight-->
-                <TextView
-                    android:id="@+id/patientWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Weight:"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editPatientHeight" />
+            <!--Patient Blood Type -->
+            <!--                            <TextView-->
+            <!--                                android:id="@+id/patientBloodType"-->
+            <!--                                android:layout_width="wrap_content"-->
+            <!--                                android:layout_height="wrap_content"-->
+            <!--                                android:layout_marginTop="6dp"-->
+            <!--                                android:text="Blood Type:"-->
+            <!--                                android:textSize="18sp"-->
+            <!--                                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                                app:layout_constraintTop_toBottomOf="@+id/editPatientWeight" />-->
 
-                <!-- Patient Weight-->
-                <EditText
-                    android:id="@+id/editPatientWeight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:hint="Enter your text here"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/patientWeight" />
+            <!--                            <Spinner-->
+            <!--                                android:id="@+id/pickPatientBloodType"-->
+            <!--                                android:layout_width="match_parent"-->
+            <!--                                android:layout_height="48dp"-->
+            <!--                                android:layout_below="@id/patientBloodType"-->
+            <!--                                android:layout_margin="16dp"-->
+            <!--                                android:layout_marginTop="174dp"-->
+            <!--                                android:layout_marginBottom="16dp"-->
+            <!--                                android:hint="Enter your text here"/>-->
 
-                <!-- Patient Blood Type -->
-<!--                <TextView-->
-<!--                    android:id="@+id/patientBloodType"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:layout_marginTop="6dp"-->
-<!--                    android:text="Blood Type:"-->
-<!--                    android:textSize="18sp"-->
-<!--                    app:layout_constraintEnd_toEndOf="parent"-->
-<!--                    app:layout_constraintStart_toStartOf="parent"-->
-<!--                    app:layout_constraintTop_toBottomOf="@+id/editPatientWeight" />-->
+            <TextView
+                android:id="@+id/patientAllergies"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="6dp"
+                android:text="Allergies:"
+                android:textSize="18sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editPatientWeight" />
 
-<!--                <Spinner-->
-<!--                    android:id="@+id/pickPatientBloodType"-->
-<!--                    android:layout_width="match_parent"-->
-<!--                    android:layout_height="48dp"-->
-<!--                    android:layout_below="@id/patientBloodType"-->
-<!--                    android:layout_margin="16dp"-->
-<!--                    android:layout_marginTop="174dp"-->
-<!--                    android:layout_marginBottom="16dp"-->
-<!--                    android:hint="Enter your text here"/>-->
+            <EditText
+                android:id="@+id/editPatientAllergies"
+                android:layout_width="wrap_content"
+                android:layout_height="120dp"
+                android:layout_marginTop="6dp"
+                android:hint="Enter your allergies here comma separated"
+                android:textSize="20sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/patientAllergies" />
 
-                <TextView
-                    android:id="@+id/patientAllergies"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="6dp"
-                    android:text="Blood Type:"
-                    android:textSize="18sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/editPatientWeight" />
-
-                <EditText
-                    android:id="@+id/editPatientAllergies"
-                    android:layout_width="wrap_content"
-                    android:layout_height="300dp"
-                    android:layout_marginTop="6dp"
-                    android:hint="Enter your allergies here comma separated"
-                    android:textSize="20sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/patientAllergies" />
-
-                <!-- Button to Save Doctor Profile -->
-                <Button
-                    android:id="@+id/savePatientProfile"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="SAVE"
-                    android:textColor="@color/white"
-                    android:textStyle="bold"
-                    android:background="@drawable/rounded_corner_input"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.95"
-                    app:layout_constraintStart_toStartOf="parent"
-                    tools:layout_editor_absoluteY="16dp"
-                    tools:ignore="MissingConstraints" />
-            </LinearLayout>
+            <!-- Button to Save Doctor Profile -->
+            <Button
+                android:id="@+id/savePatientProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_corner_input"
+                android:text="SAVE"
+                android:textColor="@color/white"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.95"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="16dp" />
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
