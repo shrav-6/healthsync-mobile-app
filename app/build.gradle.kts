@@ -77,4 +77,7 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation("com.wdullaer:materialdatetimepicker:4.2.3")
+    implementation("com.google.firebase:firebase-database-ktx:20.0.3")
+    implementation("com.google.code.gson:gson:2.9.0")
 }

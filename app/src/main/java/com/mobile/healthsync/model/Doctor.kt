@@ -14,7 +14,7 @@ data class Doctor(
 
     @get:PropertyName("availability")
     @set:PropertyName("availability")
-    var availability: Map<String, Map<String, String>>? = null,
+    var availability: List<Map<String,String>>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")

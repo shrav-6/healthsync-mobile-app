@@ -22,12 +22,10 @@ class MainActivity : ComponentActivity() {
     fun getDoctor() : Doctor
     {
         val doctor = Doctor(
-            doctor_id = 123,
-            availability = mapOf(
-                "Monday" to mapOf("morning" to "9:00 AM - 12:00 PM", "afternoon" to "2:00 PM - 5:00 PM"),
-                "Tuesday" to mapOf("morning" to "9:00 AM - 12:00 PM", "afternoon" to "2:00 PM - 5:00 PM"),
-                // Add availability for other days as needed
-            ),
+            doctor_id = 663,
+            availability = listOf(
+                mapOf("start_time" to "9:00 AM", "end_time" to "2:00 PM", "slot_id" to "1"),
+                mapOf("start_time" to "12:00 PM", "end_time" to "5:00 PM", "slot_id" to "1")),
             doctor_info = Doctor.DoctorInfo(
                 age = 35,
                 avg_ratings = 4.5,

@@ -6,7 +6,10 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.model.Slot
 
 
 class DoctorRepository(private val context: Context) {
@@ -33,6 +36,36 @@ class DoctorRepository(private val context: Context) {
                     }
                 } else {
                     showToast("Error fetching doctor data: ${task.exception?.message}")
+                }
+            }
+    }
+
+    fun getDoctorAvailability(doctor_id: Int, callback: (MutableList<Slot>) -> Unit)
+    {
+        var slotsList = mutableListOf<Slot>()
+        db.collection("doctors")
+            .whereEqualTo("doctor_id", doctor_id)
+            .get()
+            .addOnCompleteListener{
+                    task: Task<QuerySnapshot> ->
+                if (task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        val document = documents.documents[0]
+                        val availability = document.get("availability")
+                        for(avail in (availability as List<*>))
+                        {
+                            if (avail is Map<*, *>) {
+                                // Assuming your map contains the keys 'slot_id', 'start_time', and 'end_time'
+                                val slotId = (avail["slot_id"] as? Number)?.toInt() ?: 0 // Safe cast to Number then to Int
+                                val startTime = avail["start_time"] as? String ?: "" // Safe cast to String
+                                val endTime = avail["end_time"] as? String ?: "" // Safe cast to String
+                                val slot = Slot(slotId, startTime, endTime)
+                                slotsList.add(slot)
+                            }
+                        }
+                        callback(slotsList)
+                    }
                 }
             }
     }

@@ -2,6 +2,7 @@ package com.mobile.healthsync.views.patientDashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.Parcelable
 import android.widget.Button
 import android.widget.TextView
 
@@ -16,7 +17,6 @@ class DoctorInfoActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_info)
         val doctor = intent.extras?.getParcelable<Doctor>("doctor")
-        println(doctor)
 
         // Set doctor details to views
         findViewById<TextView>(R.id.tvDoctorName).text = doctor?.doctor_info?.name
@@ -36,7 +36,8 @@ class DoctorInfoActivity : ComponentActivity() {
         // Implement the actual booking logic here, possibly involving a network request
         // For now, we'll just print a log or show a toast
 
-        intent  = Intent(this, BookingActivity::class.java)
+        intent  = Intent(this, BookingTestActivity::class.java)
+        intent.putExtra("doctor_id",doctor?.doctor_id)
         startActivity(intent)
     }
 }
