@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">healthsync</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
+    <string name="total_amount">Total Amount: $%1$.2f</string>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 
