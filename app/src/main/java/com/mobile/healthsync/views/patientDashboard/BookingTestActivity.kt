@@ -1,11 +1,14 @@
 package com.mobile.healthsync.views.patientDashboard
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.util.TypedValue
 import android.widget.Button
 import android.widget.TextView
+import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,7 +33,24 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
 
     private lateinit var appointmentRepository : AppointmentRepository;
     private lateinit var doctorRepository: DoctorRepository
-    private var doctor_id by Delegates.notNull<Int>()
+    private lateinit var adapter: SlotAdapter
+    private var doctor_id : Int = -1
+    private var patient_id : Int = -1
+    private var slot_id : Int = -1
+
+
+    private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+        if (result.resultCode == 1) {
+            // Payment is complete
+            Toast.makeText(this, "Payment Complete", Toast.LENGTH_SHORT).show()
+            //create appointment record
+            finish()
+        }
+        else if(result.resultCode == 0) {
+            // Payment failed
+            Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show()
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.Q)
     @SuppressLint("ResourceAsColor")//dont know what this is? used for setting colour
@@ -40,11 +60,18 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
 
         appointmentRepository = AppointmentRepository(this)
         doctorRepository = DoctorRepository(this)
-        doctor_id = intent.extras?.getInt("doctor_id")!!
+        doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
+        patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+
+        val now = Calendar.getInstance()
+        val format = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+        val formattedDate = format.format(now.time)
+        val dateTextView = findViewById<TextView>(R.id.editdate)
+        dateTextView.text = formattedDate
+        updateslots(formattedDate)
 
         var searchdatebtn = findViewById<Button>(R.id.searchdate)
         searchdatebtn.setOnClickListener {
-            val now = Calendar.getInstance()
             val datepicker = DatePickerDialog.newInstance(
                 this,
                 now.get(Calendar.YEAR),
@@ -60,12 +87,31 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
             later.add(Calendar.MONTH, 3)
             datepicker.maxDate = later
         }
-        val now = Calendar.getInstance()
-        val format = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
-        val formattedDate = format.format(now.time)
-        val dateTextView = findViewById<TextView>(R.id.editdate)
-        dateTextView.text = formattedDate
-        updateslots(formattedDate)
+
+        var submitbtn = findViewById<Button>(R.id.bookbutton)
+        submitbtn.setOnClickListener{
+            if(this.adapter.isSlotselected())
+            {
+                var selectedSlotText: TextView = this.adapter.getselectetSlotText()
+                var selectedSlot : Slot = this.adapter.getselectedSlot()
+                this.slot_id = selectedSlot.slot_id
+
+                bookAppointment();//after payment is finished /cancelled it comes back here
+            }
+            else
+            {
+                Toast.makeText(this, "Slot is not selected!", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+    }
+
+    private fun bookAppointment() {
+//        val intent :Intent = Intent(this, PaymentActivity::class.java)
+//        intent.putExtra("doctor_id", this.doctor_id)
+//        intent.putExtra("patient_id", this.patient_id)
+//        intent.putExtra("slot_id", this.slot_id)
+//        startForResult.launch(intent)
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
@@ -90,15 +136,12 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
 
     fun updateslots(selectedDate : String)
     {
-        // If you want to print the formatted date string
         var appointmentlist = mutableListOf<Appointment>()
         var slotlist = mutableListOf<Slot>()
         appointmentRepository.getAppointments(doctor_id,selectedDate){ retrievedAppointments ->
             appointmentlist = retrievedAppointments
-            println("Testingaaaa" +appointmentlist)
             doctorRepository.getDoctorAvailability(doctor_id){ retrievedslots ->
                 slotlist = retrievedslots
-                println("Testingaaaa Testingaaaa" +slotlist)
                 for(appointment in appointmentlist)
                 {
                     var slot_id = appointment.slot_id
@@ -119,7 +162,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
                 val spacingInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
                 recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
                 //create expenselist of user using SQLLite
-                val adapter = SlotAdapter(slotlist)
+                this.adapter = SlotAdapter(slotlist, this)
                 recyclerView.adapter = adapter
 
             }

@@ -1,5 +1,6 @@
 package com.mobile.healthsync.adapters
 
+import android.app.Activity
 import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
@@ -9,10 +10,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Slot
 
-class SlotAdapter(val slotList : MutableList<Slot>): RecyclerView.Adapter<SlotAdapter.SlotViewHolder>() {
+class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): RecyclerView.Adapter<SlotAdapter.SlotViewHolder>() {
+
+    private lateinit var selectedSlotText : TextView
+    private lateinit var selectedSlot : Slot
 
     inner class SlotViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
-        private lateinit var selectedSlot : TextView
         var slottext : TextView = itemView.findViewById(R.id.slotitem)
         init {
             //sets up the edit button on the individual expense
@@ -21,10 +24,11 @@ class SlotAdapter(val slotList : MutableList<Slot>): RecyclerView.Adapter<SlotAd
                 {
                     if(::selectedSlot.isInitialized)
                     {
-                        selectedSlot.setBackgroundColor(itemView.resources.getColor(android.R.color.transparent))
+                        selectedSlotText.setBackgroundColor(itemView.resources.getColor(android.R.color.transparent))
                     }
                     slottext.setBackgroundColor(itemView.resources.getColor(R.color.black))
-                    selectedSlot = slottext
+                    selectedSlotText = slottext
+                    selectedSlot = slotList[adapterPosition]
                 }
             }
         }
@@ -32,10 +36,6 @@ class SlotAdapter(val slotList : MutableList<Slot>): RecyclerView.Adapter<SlotAd
         fun isValid(slot : Slot) : Boolean
         {
             return (if(slot.isBooked()) false else true)
-        }
-        fun getselectetSlot(): TextView
-        {
-            return selectedSlot
         }
 
     }
@@ -54,6 +54,20 @@ class SlotAdapter(val slotList : MutableList<Slot>): RecyclerView.Adapter<SlotAd
         if(slotList[position].isBooked()){
             holder.slottext.setBackgroundColor(holder.itemView.resources.getColor(R.color.black))
         }
+    }
+
+    fun isSlotselected():Boolean
+    {
+        return if(::selectedSlot.isInitialized) true else false
+    }
+
+    fun getselectetSlotText(): TextView
+    {
+        return this.selectedSlotText
+    }
+
+    fun getselectedSlot() : Slot {
+        return this.selectedSlot
     }
 }
 
