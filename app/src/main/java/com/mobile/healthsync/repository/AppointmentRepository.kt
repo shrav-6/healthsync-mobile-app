@@ -42,4 +42,26 @@ class AppointmentRepository(private val context: Context) {
                 callback(appointmentlist)
             }
     }
+
+    fun makeAppointments(doctor_id: Int, patient_id: Int, slot_id: Int, appointment_status: Boolean, payment_id: Int, date: String) {
+
+        val appointment = hashMapOf(
+            "doctor_id" to doctor_id,
+            "patient_id" to patient_id,
+            "slot_id" to slot_id,
+            "appointment_status" to appointment_status,
+            "payment_id" to payment_id,
+            "date" to date
+        )
+        db.collection("appointments")
+            .add(appointment)
+            .addOnSuccessListener { documentReference ->
+                println("DocumentSnapshot added with ID: ${documentReference.id}")
+                showToast("Booking Complete")
+            }
+            .addOnFailureListener { e ->
+                println("DocumentSnapshot addeition failed")
+                showToast("Booking Incomplete due to Technical errors")
+            }
+    }
 }

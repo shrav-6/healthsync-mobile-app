@@ -37,6 +37,8 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
     private var doctor_id : Int = -1
     private var patient_id : Int = -1
     private var slot_id : Int = -1
+    private var payment_id : Int = -1
+    private lateinit var date : String
 
 
     private val startForResult = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -44,12 +46,21 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
             // Payment is complete
             Toast.makeText(this, "Payment Complete", Toast.LENGTH_SHORT).show()
             //create appointment record
+            val data: Intent? = result.data
+            payment_id = result.data?.getIntExtra("payment_id", -1) ?: -1
+            makeAppointment()
             finish()
         }
         else if(result.resultCode == 0) {
             // Payment failed
             Toast.makeText(this, "Payment Failed", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun makeAppointment() {
+        // create a new appointment inside firebase
+        var appointment_status = true
+        appointmentRepository.makeAppointments(doctor_id,patient_id,slot_id,appointment_status,payment_id,this.date)
     }
 
     @RequiresApi(Build.VERSION_CODES.Q)
@@ -68,6 +79,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
         val formattedDate = format.format(now.time)
         val dateTextView = findViewById<TextView>(R.id.editdate)
         dateTextView.text = formattedDate
+        this.date = formattedDate
         updateslots(formattedDate)
 
         var searchdatebtn = findViewById<Button>(R.id.searchdate)
@@ -78,14 +90,15 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
                 now.get(Calendar.MONTH),
                 now.get(Calendar.DAY_OF_MONTH)
             )
-            datepicker.show(supportFragmentManager, "Datepickerdialog")
             datepicker.setVersion(DatePickerDialog.Version.VERSION_2);
             datepicker.accentColor = R.color.purple_200
 
             datepicker.minDate = now
             var later = Calendar.getInstance()
-            later.add(Calendar.MONTH, 3)
+            later.add(Calendar.MONTH, 2)
             datepicker.maxDate = later
+
+            datepicker.show(supportFragmentManager, "Datepickerdialog")
         }
 
         var submitbtn = findViewById<Button>(R.id.bookbutton)
@@ -107,11 +120,11 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
     }
 
     private fun bookAppointment() {
-//        val intent :Intent = Intent(this, PaymentActivity::class.java)
-//        intent.putExtra("doctor_id", this.doctor_id)
-//        intent.putExtra("patient_id", this.patient_id)
-//        intent.putExtra("slot_id", this.slot_id)
-//        startForResult.launch(intent)
+        val intent :Intent = Intent(this, BookingActivity::class.java)
+        intent.putExtra("doctor_id", this.doctor_id)
+        intent.putExtra("patient_id", this.patient_id)
+        intent.putExtra("slot_id", this.slot_id)
+        startForResult.launch(intent)
     }
 
     override fun onDateSet(view: DatePickerDialog?, year: Int, monthOfYear: Int, dayOfMonth: Int) {
@@ -129,6 +142,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
         // Now you can use formattedDate
         val dateTextView = findViewById<TextView>(R.id.editdate)
         dateTextView.text = formattedDate
+        this.date = formattedDate
 
         updateslots(formattedDate)
 
