@@ -42,17 +42,22 @@ class CheckoutActivity : AppCompatActivity() {
         setContentView(R.layout.activity_checkout)
 
         // Retrieve passed intent data
+        totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 1500.00)
+        println("TOTAL AMOUNT: "+totalAmount.toString())
 //        patientId = intent.getStringExtra("PATIENT_ID") ?: "default_patient_id"
 //        appointmentId = intent.getStringExtra("APPOINTMENT_ID") ?: "default_appointment_id"
 //        doctorId = intent.getStringExtra("DOCTOR_ID") ?: "default_doctor_id"
+
 //        patientId = intent.getIntExtra("PATIENT_ID", -1)
 //        appointmentId = intent.getIntExtra("APPOINTMENT_ID", -1)
 //        doctorId = intent.getIntExtra("DOCTOR_ID", -1)
 
         PaymentConfiguration.init(this, PUBLISH_KEY)
+
+
+        fetchAppointmentAndPatientDetails(appointmentId, doctorId, patientId)
         getCustomerID()
         setupViews()
-        fetchAppointmentAndPatientDetails(appointmentId, doctorId, patientId)
 
         paymentSheet = PaymentSheet(this, ::onPaymentSheetResult)
     }
@@ -213,16 +218,17 @@ class CheckoutActivity : AppCompatActivity() {
                 if(res.isSuccessful && res.body()!=null){
                     ephemeralKey= res.body()!!.id
                     println("EPHEMERAL KEY: $ephemeralKey")
-                    getPaymentIntent(customerID, ephemeralKey, (totalAmount*100).toString())
+                    val tamount=(totalAmount.toDouble()*100).toString()
+                    getPaymentIntent(customerID, ephemeralKey, tamount)
                 }
             }
         }
     }
 
-    private fun getPaymentIntent(customerID: String, ephemeralKey: String, totalAmount: String) {
+    private fun getPaymentIntent(customerID: String, ephemeralKey: String, totalAmountToPay: String) {
         lifecycleScope.launch(Dispatchers.IO){
 
-            val res= apiInterface.getPaymentIntent(customerID, totalAmount)
+            val res= apiInterface.getPaymentIntent(customerID, totalAmount.toString())
             withContext(Dispatchers.Main){
                 println("INSIDE DISPATCHER")
                 println(res.raw())
