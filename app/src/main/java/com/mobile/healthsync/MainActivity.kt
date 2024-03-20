@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
+import com.mobile.healthsync.views.patientProfile.PatientProfile
 import com.mobile.healthsync.views.signUp.SignupActivity
 
 class MainActivity : ComponentActivity() {

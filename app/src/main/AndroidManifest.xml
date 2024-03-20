@@ -17,6 +17,12 @@
             android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
+            android:name=".views.patientProfile.PatientProfile"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientProfile.EditPatientProfile"
+            android:exported="false" />
+        <activity
             android:name=".views.signUp.SignupActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />

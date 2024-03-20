@@ -7,4 +7,21 @@
         <item>Female</item>
         <item>Others</item>
     </string-array>
+
+    <string-array name="bloodType_array">
+        <item> O+ </item>
+        <item> O- </item>
+        <item> A+ </item>
+        <item> A- </item>
+        <item> B+ </item>
+        <item> B- </item>
+        <item> AB+ </item>
+        <item> AB- </item>
+    </string-array>
+
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>
