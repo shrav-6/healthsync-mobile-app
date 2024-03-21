@@ -40,6 +40,26 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
+    fun getDoctor(doctor_id: Int, callback: (Doctor?) -> Unit) {
+        db.collection("doctors")
+            .whereEqualTo("doctor_id",doctor_id)
+            .get()
+            .addOnCompleteListener {
+                    task: Task<QuerySnapshot> ->
+                if(task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        val document = documents.documents[0]
+                        val doctor = document.toObject(Doctor::class.java)
+                        callback(doctor)
+                    }
+                }
+                else {
+                    showToast("Doctor not found")
+                }
+            }
+    }
+
     fun getDoctorAvailability(doctor_id: Int, callback: (MutableList<Slot>) -> Unit)
     {
         var slotsList = mutableListOf<Slot>()

@@ -10,13 +10,18 @@ import androidx.activity.ComponentActivity
 
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.repository.DoctorRepository
 
 class DoctorInfoActivity : ComponentActivity() {
 
+    private var doctorRepository: DoctorRepository
+
+    init {
+        doctorRepository = DoctorRepository(this)
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_info)
-
 
         var patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
         var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1

@@ -74,7 +74,7 @@ class AppointmentRepository(private val context: Context) {
                         val appointment = document.toObject(Appointment::class.java)
                         appointment.appointment_status = true
                         appointment.payment_id = payment_id
-                        db.collection("patients").document(document.id)
+                        db.collection("appointments").document(document.id)
                             .set(appointment)
                             .addOnSuccessListener {
                                 println("Appointment updated successfully")
