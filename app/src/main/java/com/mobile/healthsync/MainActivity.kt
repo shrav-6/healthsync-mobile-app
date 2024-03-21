@@ -16,6 +16,8 @@ class MainActivity : ComponentActivity() {
 
         val intent = Intent(this, DoctorInfoActivity::class.java)
         intent.putExtra("doctor",getDoctor() as Parcelable)
+        intent.putExtra("patient_id",784)
+        intent.putExtra("doctor_id",663)
         startActivity(intent)
     }
 

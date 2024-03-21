@@ -16,28 +16,38 @@ class DoctorInfoActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_info)
-        val doctor = intent.extras?.getParcelable<Doctor>("doctor")
+
+
+        var patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+        var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
+
+        //get doctor details:toDo
+        var doctor = intent.extras?.getParcelable<Doctor>("doctor")
 
         // Set doctor details to views
-        findViewById<TextView>(R.id.tvDoctorName).text = doctor?.doctor_info?.name
-        findViewById<TextView>(R.id.tvSpecialization).text = "Specialization:  ${doctor?.doctor_info?.doctor_speciality}"
-        findViewById<TextView>(R.id.tvExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"
-        findViewById<TextView>(R.id.tvAvailableSlots).text = "Available Slots: ${doctor?.availability}"
-        findViewById<TextView>(R.id.tvReviews).text = "Reviews: "
+        fillDocotorDetails(doctor)
 
         // Handle book appointment action
         findViewById<Button>(R.id.btnBookAppointment).setOnClickListener {
-            bookAppointment(doctor, patient = 123)
+            bookAppointment(doctor_id, patient_id)
         }
     }
 
-    private fun bookAppointment(doctor: Doctor?, patient: Int) {
-        // Placeholder for booking appointment logic
-        // Implement the actual booking logic here, possibly involving a network request
-        // For now, we'll just print a log or show a toast
+    private fun fillDocotorDetails(doctor: Doctor?) {
+        findViewById<TextView>(R.id.tvDoctorName).text = doctor?.doctor_info?.name
+        findViewById<TextView>(R.id.tvSpecialization).text = "Specialization:  ${doctor?.doctor_info?.doctor_speciality}"
+        findViewById<TextView>(R.id.tvExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"
+        //find reviews and add them:toDo
+        findViewById<TextView>(R.id.tvReviews).text = "Reviews: "
 
+        //add a recyclerView for slots:toDo
+        findViewById<TextView>(R.id.tvAvailableSlots).text = "Available Slots: ${doctor?.availability}"
+    }
+
+    private fun bookAppointment(doctor_id: Int, patient_id: Int) {
         intent  = Intent(this, BookingTestActivity::class.java)
-        intent.putExtra("doctor_id",doctor?.doctor_id)
+        intent.putExtra("doctor_id",doctor_id)
+        intent.putExtra("patient_id",patient_id)
         startActivity(intent)
     }
 }

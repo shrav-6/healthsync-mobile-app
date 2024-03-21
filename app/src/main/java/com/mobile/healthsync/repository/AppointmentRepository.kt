@@ -1,8 +1,10 @@
 package com.mobile.healthsync.repository
 
 import android.content.Context
+import android.text.BoringLayout
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
+import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.mobile.healthsync.model.Appointment
@@ -16,14 +18,14 @@ class AppointmentRepository(private val context: Context) {
     }
 
     private fun showToast(message: String) {
-        // Show a toast message (you can replace this with your preferred error handling mechanism)
+        // Show a toast message
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
     fun getAppointments(doctor_id: Int, datestr: String,callback: (MutableList<Appointment>) -> Unit)
     {
         val appointmentlist = mutableListOf<Appointment>()
-        val task = db.collection("appointments")
+        db.collection("appointments")
             .whereEqualTo("doctor_id", doctor_id)
             .whereEqualTo("date", datestr).get()
             .addOnCompleteListener { task: Task<QuerySnapshot> ->
@@ -43,25 +45,49 @@ class AppointmentRepository(private val context: Context) {
             }
     }
 
-    fun makeAppointments(doctor_id: Int, patient_id: Int, slot_id: Int, appointment_status: Boolean, payment_id: Int, date: String) {
+    fun createAppointment(doctor_id: Int, patient_id: Int, slot_id: Int, date: String,callback: () -> Unit){
 
-        val appointment = hashMapOf(
-            "doctor_id" to doctor_id,
-            "patient_id" to patient_id,
-            "slot_id" to slot_id,
-            "appointment_status" to appointment_status,
-            "payment_id" to payment_id,
-            "date" to date
-        )
+        val appointment = Appointment(-1,doctor_id, patient_id,date,slot_id)
         db.collection("appointments")
             .add(appointment)
             .addOnSuccessListener { documentReference ->
                 println("DocumentSnapshot added with ID: ${documentReference.id}")
                 showToast("Booking Complete")
+                callback()
             }
             .addOnFailureListener { e ->
                 println("DocumentSnapshot addeition failed")
                 showToast("Booking Incomplete due to Technical errors")
+            }
+    }
+
+    fun fixAppointment(doctor_id: Int, datestr: String, slot_id: Int, payment_id: Int) {
+        db.collection("appointments")
+            .whereEqualTo("doctor_id", doctor_id)
+            .whereEqualTo("date", datestr)
+            .whereEqualTo("slot_id",slot_id).get()
+            .addOnCompleteListener { task: Task<QuerySnapshot> ->
+                if (task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        val document = documents.elementAt(0)
+                        val appointment = document.toObject(Appointment::class.java)
+                        appointment.appointment_status = true
+                        appointment.payment_id = payment_id
+                        db.collection("patients").document(document.id)
+                            .set(appointment)
+                            .addOnSuccessListener {
+                                println("Appointment updated successfully")
+                            }
+                            .addOnFailureListener { e ->
+                                println("Error updating appointment: ${e.localizedMessage}")
+                                showToast("Technical Errors during Payment Update: ${task.exception?.message}")
+                            }
+                    }
+                }
+                else {
+                    showToast("Technical Errors during Payment Update: ${task.exception?.message}")
+                }
             }
     }
 }

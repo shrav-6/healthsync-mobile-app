@@ -18,26 +18,22 @@ class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): Re
     inner class SlotViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var slottext : TextView = itemView.findViewById(R.id.slotitem)
         init {
-            //sets up the edit button on the individual expense
+            //sets up the edit button on the individual slot
             slottext.setOnClickListener(){
-                if(isValid(slotList[adapterPosition]))
-                {
+                if(isValid(slotList[adapterPosition])) {
                     if(::selectedSlot.isInitialized)
                     {
                         selectedSlotText.setBackgroundColor(itemView.resources.getColor(android.R.color.transparent))
                     }
-                    slottext.setBackgroundColor(itemView.resources.getColor(R.color.black))
+                    slottext.setBackgroundColor(itemView.resources.getColor(R.color.mdtp_accent_color))
                     selectedSlotText = slottext
                     selectedSlot = slotList[adapterPosition]
                 }
             }
         }
-
-        fun isValid(slot : Slot) : Boolean
-        {
+        private fun isValid(slot : Slot) : Boolean {
             return (if(slot.isBooked()) false else true)
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlotViewHolder {
@@ -52,18 +48,12 @@ class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): Re
     override fun onBindViewHolder(holder: SlotViewHolder, position: Int) {
         holder.slottext.setText(slotList[position].start_time + " - "+ slotList[position].end_time)
         if(slotList[position].isBooked()){
-            holder.slottext.setBackgroundColor(holder.itemView.resources.getColor(R.color.black))
+            holder.slottext.setBackgroundColor(activity.resources.getColor(R.color.black))
         }
     }
 
-    fun isSlotselected():Boolean
-    {
+    fun isSlotselected():Boolean {
         return if(::selectedSlot.isInitialized) true else false
-    }
-
-    fun getselectetSlotText(): TextView
-    {
-        return this.selectedSlotText
     }
 
     fun getselectedSlot() : Slot {
@@ -85,7 +75,8 @@ class GridSpacingItemDecoration(private val spanCount: Int, private val spacing:
                 outRect.top = spacing
             }
             outRect.bottom = spacing // item bottom
-        } else {
+        }
+        else {
             outRect.left = column * spacing / spanCount
             outRect.right = spacing - (column + 1) * spacing / spanCount
             if (position >= spanCount) {
