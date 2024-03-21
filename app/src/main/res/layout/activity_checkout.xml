@@ -45,10 +45,18 @@
                 android:layout_marginTop="8dp"/>
 
             <TextView
-                android:id="@+id/tvAmount"
+                android:id="@+id/tvConsultationFee"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Amount: [Placeholder]"
+                android:text="Consultation Fee: [Placeholder]"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvTotalPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Points: [Placeholder]"
                 android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
                 android:layout_marginTop="8dp"/>
 

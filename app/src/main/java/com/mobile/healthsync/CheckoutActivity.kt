@@ -16,6 +16,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import com.google.firebase.firestore.FirebaseFirestore
+import java.text.DecimalFormat
+import java.util.Random
+import android.content.Intent
+import android.app.AlertDialog
+
+
 
 
 class CheckoutActivity : AppCompatActivity() {
@@ -27,8 +33,9 @@ class CheckoutActivity : AppCompatActivity() {
 
     private lateinit var tvDoctorName: TextView
     private lateinit var tvDateTime: TextView
-    private lateinit var tvAmount: TextView
-    private lateinit var tvTotalAmount: TextView
+    private lateinit var tvTotalPoints: TextView
+    private lateinit var tvTotalAmount: TextView //tvConsultationFee
+    private lateinit var tvConsultationFee: TextView
     private var amount: Double = 0.0
     private var totalAmount: Double = 0.0
     private var rewardPoints: Long = 0
@@ -36,14 +43,16 @@ class CheckoutActivity : AppCompatActivity() {
     private var appointmentId: Int = 663 // Placeholder
     private var doctorId: Int = 663 // Placeholder
     private var app_date: String = "Date" // Placeholder
+    private var discountAmount: Double = 0.0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
 
         // Retrieve passed intent data
-        totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 1500.00)
-        println("TOTAL AMOUNT: "+totalAmount.toString())
+//        totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 15.00)
+//        amount= totalAmount
+//        println("TOTAL AMOUNT: "+totalAmount.toString())
 //        patientId = intent.getStringExtra("PATIENT_ID") ?: "default_patient_id"
 //        appointmentId = intent.getStringExtra("APPOINTMENT_ID") ?: "default_appointment_id"
 //        doctorId = intent.getStringExtra("DOCTOR_ID") ?: "default_doctor_id"
@@ -65,8 +74,9 @@ class CheckoutActivity : AppCompatActivity() {
     private fun setupViews() {
         tvDoctorName = findViewById(R.id.tvDoctorName)
         tvDateTime = findViewById(R.id.tvDateTime)
-        tvAmount = findViewById(R.id.tvAmount)
+        tvTotalPoints = findViewById(R.id.tvTotalPoints)
         tvTotalAmount = findViewById(R.id.tvTotalAmount)
+        tvConsultationFee = findViewById(R.id.tvConsultationFee)
         val btnRedeemPoints = findViewById<Button>(R.id.btnRedeemPoints)
         val buttonPay = findViewById<Button>(R.id.buttonPay)
 
@@ -93,6 +103,7 @@ class CheckoutActivity : AppCompatActivity() {
             .addOnSuccessListener { patients ->
                 for (patientDoc in patients) {
                     rewardPoints = patientDoc.getLong("reward_points") ?: 0
+                    tvTotalPoints.text = "Total Points: $rewardPoints"
                     // Optionally update the UI or a variable to reflect the patient's reward points
                 }
             }.addOnFailureListener { e ->
@@ -105,8 +116,9 @@ class CheckoutActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { appointments ->
                 for (appointmentDoc in appointments) {
-                    val appointmentDate = appointmentDoc.getString("date")
-                    tvDateTime.text = "Date & Time: $appointmentDate"
+                    val appointmentDate = appointmentDoc.getString("timestamp")
+                    val appointmentStart = appointmentDoc.getString("start_time")
+                    tvDateTime.text = "Date & Time: $appointmentDate $appointmentStart"
                 }
             }.addOnFailureListener { e ->
                 Log.e("CheckoutActivity", "Error fetching appointment details", e)
@@ -124,9 +136,10 @@ class CheckoutActivity : AppCompatActivity() {
                     val consultationFee = (doctorInfo?.get("consultation_fees") as Number?)?.toDouble() ?: 0.0
 
                     tvDoctorName.text = "Doctor: $doctorName"
-                    tvAmount.text = "Amount: $$consultationFee"
+
                     amount = consultationFee
                     totalAmount = consultationFee
+                    tvConsultationFee.text = "Consultation Fee: $$amount"
                     tvTotalAmount.text = "Total Amount: $$totalAmount"
                 }
             }.addOnFailureListener { e ->
@@ -138,8 +151,53 @@ class CheckoutActivity : AppCompatActivity() {
 
 
     private fun redeemPoints() {
-        // Placeholder function. Implement points redemption logic.
+        val pointsNeededForDiscount = 100
+        val discountPer100Points = 5.0
+        val redeemablePoints = rewardPoints - (rewardPoints % pointsNeededForDiscount) // Points to the nearest 100
+        val discountAmount = (redeemablePoints / pointsNeededForDiscount) * discountPer100Points
+
+        if (redeemablePoints >= pointsNeededForDiscount) {
+            totalAmount -= discountAmount
+            rewardPoints -= redeemablePoints // Deduct only redeemable points
+
+            // Update UI
+            tvTotalAmount.text = "Total Amount: $${String.format("%.2f", totalAmount)}"
+            tvTotalPoints.text = "Points Used: $redeemablePoints - New Balance: $rewardPoints"
+
+            // Update Firestore with new points balance
+            updatePatientRewardPoints(rewardPoints)
+            getPaymentIntent(customerID, ephemeralKey, formatDoubleToStringWithoutDecimal(totalAmount*100))
+
+            Toast.makeText(this, "Discount Applied: $$discountAmount", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(this, "Insufficient points for discount. 100 points needed.", Toast.LENGTH_SHORT).show()
+        }
     }
+
+
+    private fun updatePatientRewardPoints(newRewardPoints: Long) {
+        val db = FirebaseFirestore.getInstance()
+        // Assuming patient_id uniquely identifies the document
+        db.collection("patients")
+            .whereEqualTo("patient_id", patientId)
+            .get()
+            .addOnSuccessListener { querySnapshot ->
+                if (!querySnapshot.isEmpty) {
+                    val documentSnapshot = querySnapshot.documents[0]
+                    db.collection("patients").document(documentSnapshot.id)
+                        .update("reward_points", newRewardPoints)
+                        .addOnSuccessListener {
+                            Log.d("CheckoutActivity", "Patient reward points updated successfully.")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("CheckoutActivity", "Error updating patient reward points.", e)
+                        }
+                }
+            }
+    }
+
+
+
 
 
 
@@ -218,7 +276,7 @@ class CheckoutActivity : AppCompatActivity() {
                 if(res.isSuccessful && res.body()!=null){
                     ephemeralKey= res.body()!!.id
                     println("EPHEMERAL KEY: $ephemeralKey")
-                    val tamount=(totalAmount.toDouble()*100).toString()
+                    val tamount=formatDoubleToStringWithoutDecimal(totalAmount*100)
                     getPaymentIntent(customerID, ephemeralKey, tamount)
                 }
             }
@@ -228,7 +286,7 @@ class CheckoutActivity : AppCompatActivity() {
     private fun getPaymentIntent(customerID: String, ephemeralKey: String, totalAmountToPay: String) {
         lifecycleScope.launch(Dispatchers.IO){
 
-            val res= apiInterface.getPaymentIntent(customerID, totalAmount.toString())
+            val res= apiInterface.getPaymentIntent(customerID, totalAmountToPay)
             withContext(Dispatchers.Main){
                 println("INSIDE DISPATCHER")
                 println(res.raw())
@@ -244,14 +302,133 @@ class CheckoutActivity : AppCompatActivity() {
 
     }
 
+    fun formatDoubleToStringWithoutDecimal(value: Double): String {
+        val formatter = DecimalFormat("0.#") // Define a pattern to show at least one digit before the decimal point
+        return formatter.format(value)
+    }
+
     fun onPaymentSheetResult(paymentSheetResult: PaymentSheetResult) {
         // implemented in the next steps
         if(paymentSheetResult is PaymentSheetResult.Completed){
             Toast.makeText(this, "Payment DONE", Toast.LENGTH_SHORT).show()
+            updateAppointmentStatus(appointmentId)
+            createPaymentRecordAndLinkToAppointment(appointmentId, patientId, totalAmount)
+            // Optionally show a success dialog or navigate to another screen
+            showSuccessMessage()
         }
         if(paymentSheetResult is PaymentSheetResult.Canceled){
             Toast.makeText(this, "Payment CANCELED", Toast.LENGTH_SHORT).show()
         }
+        if(paymentSheetResult is PaymentSheetResult.Failed){
+            Toast.makeText(this, "Payment Failed: ${paymentSheetResult.error}", Toast.LENGTH_SHORT).show()
+        }
     }
+
+    private fun updateAppointmentStatus(appointmentId: Int) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("appointments")
+            .whereEqualTo("appointment_id", appointmentId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    db.collection("appointments").document(document.id)
+                        .update("appointment_status", true)
+                        .addOnSuccessListener {
+                            Log.d("CheckoutActivity", "Appointment status updated successfully.")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("CheckoutActivity", "Error updating appointment status.", e)
+                        }
+                }
+            }
+    }
+
+    private fun createPaymentRecordAndLinkToAppointment(appointmentId: Int, patientId: Int, amountPaid: Double) {
+        val db = FirebaseFirestore.getInstance()
+        val uniquePaymentId = generateUniquePaymentId() // Generate a unique payment ID
+        val paymentData = hashMapOf(
+            "amount_paid" to "$${String.format("%.2f", amountPaid)}",
+            "email_notification" to false,
+            "payment_id" to uniquePaymentId,
+            "payment_status" to true,
+            "timestamp" to System.currentTimeMillis().toString()
+        )
+
+        db.collection("payments").add(paymentData)
+            .addOnSuccessListener { documentReference ->
+                Log.d("CheckoutActivity", "Payment record created successfully with ID: $uniquePaymentId")
+                linkPaymentIdToAppointment(uniquePaymentId, appointmentId) // Use the generated unique payment ID
+                addRewardPoints(patientId, 20)  // Assuming 20 points are added for each successful payment.
+            }
+            .addOnFailureListener { e ->
+                Log.e("CheckoutActivity", "Error creating payment record.", e)
+            }
+    }
+
+
+    private fun linkPaymentIdToAppointment(paymentId: Int, appointmentId: Int) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("appointments")
+            .whereEqualTo("appointment_id", appointmentId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    db.collection("appointments").document(document.id)
+                        .update("payment_id", paymentId)
+                        .addOnSuccessListener {
+                            Log.d("CheckoutActivity", "Linked payment ID $paymentId to appointment successfully.")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("CheckoutActivity", "Error linking payment ID $paymentId.", e)
+                        }
+                }
+            }
+    }
+
+
+    private fun addRewardPoints(patientId: Int, pointsToAdd: Long) {
+        val db = FirebaseFirestore.getInstance()
+        db.collection("patients")
+            .whereEqualTo("patient_id", patientId)
+            .get()
+            .addOnSuccessListener { documents ->
+                for (document in documents) {
+                    val currentPoints = document.getLong("reward_points") ?: 0
+                    val newPoints = currentPoints + pointsToAdd
+                    db.collection("patients").document(document.id)
+                        .update("reward_points", newPoints)
+                        .addOnSuccessListener {
+                            Log.d("CheckoutActivity", "Reward points added successfully.")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("CheckoutActivity", "Error adding reward points.", e)
+                        }
+                }
+            }
+    }
+
+    private fun generateUniquePaymentId(): Int {
+        val timestampPart = (System.currentTimeMillis() % 100000).toInt() // Last 5 digits of the current timestamp
+        val randomPart = Random().nextInt(900) + 100 // Ensures a 3-digit random number
+        return timestampPart * 1000 + randomPart // Combines both parts
+    }
+
+    private fun showSuccessMessage() {
+        AlertDialog.Builder(this)
+            .setTitle("Payment Successful")
+            .setMessage("Your appointment has been booked successfully, and you earned 20 reward points!")
+            .setPositiveButton("OK") { dialog, which ->
+                // Redirect to MainActivity
+                val intent = Intent(this, MainActivity::class.java)
+                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                startActivity(intent)
+            }
+            .setCancelable(false) // Prevent dialog dismissal on back press
+            .show()
+    }
+
+
+
+
 
 }
