@@ -38,7 +38,7 @@ class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): Re
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SlotViewHolder {
-        val v = LayoutInflater.from(parent.context).inflate(R.layout.slot_layout,parent, false)
+        val v = LayoutInflater.from(parent.context).inflate(R.layout.bookingslot_layout,parent, false)
         return SlotViewHolder(v)
     }
 

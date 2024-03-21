@@ -6,14 +6,21 @@ import android.widget.Button
 import android.widget.TextView
 
 import androidx.activity.ComponentActivity
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 
 import com.mobile.healthsync.R
+import com.mobile.healthsync.adapters.AppointmentSlotAdapter
+import com.mobile.healthsync.adapters.RatingsAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
+import com.mobile.healthsync.repository.ReviewRepository
 
 class DoctorInfoActivity : ComponentActivity() {
 
     private var doctorRepository: DoctorRepository
+    private var reviewRepository: ReviewRepository = ReviewRepository()
 
     init {
         doctorRepository = DoctorRepository(this)
@@ -41,11 +48,17 @@ class DoctorInfoActivity : ComponentActivity() {
         findViewById<TextView>(R.id.tvDoctorName).text = doctor?.doctor_info?.name
         findViewById<TextView>(R.id.tvSpecialization).text = "Specialization:  ${doctor?.doctor_info?.doctor_speciality}"
         findViewById<TextView>(R.id.tvExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"
-        //find reviews and add them:toDo
-        findViewById<TextView>(R.id.tvReviews).text = "Reviews: "
 
-        //add a recyclerView for slots:toDo
-        findViewById<TextView>(R.id.tvAvailableSlots).text = "Available Slots: ${doctor?.availability}"
+        val availableslots = findViewById<RecyclerView>(R.id.tvAvailableSlots)
+        availableslots.layoutManager = GridLayoutManager(this, 3)
+        availableslots.adapter = AppointmentSlotAdapter(doctor?.availability)
+
+        reviewRepository.getReviews(doctor!!.doctor_id , { reviewlist ->
+            val reviews = findViewById<RecyclerView>(R.id.tvReviews)
+            reviews.adapter = RatingsAdapter(reviewlist)
+            reviews.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
+        })
+
     }
 
     private fun bookAppointment(doctor_id: Int, patient_id: Int) {
