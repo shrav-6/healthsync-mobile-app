@@ -5,8 +5,6 @@ import com.google.firebase.firestore.PropertyName
 import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
-
-@Parcelize
 data class Doctor(
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
@@ -14,7 +12,7 @@ data class Doctor(
 
     @get:PropertyName("availability")
     @set:PropertyName("availability")
-    var availability: List<Map<String,String>>? = null,
+    var availability: List<Slot>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")
@@ -27,7 +25,7 @@ data class Doctor(
     @get:PropertyName("password")
     @set:PropertyName("password")
     var password: String = ""
-) : Serializable, Parcelable {
+) : Serializable {
 
     data class DoctorInfo(
         @get:PropertyName("age")

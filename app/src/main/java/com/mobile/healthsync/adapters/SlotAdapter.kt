@@ -48,7 +48,7 @@ class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): Re
     override fun onBindViewHolder(holder: SlotViewHolder, position: Int) {
         holder.slottext.setText(slotList[position].start_time + " - "+ slotList[position].end_time)
         if(slotList[position].isBooked()){
-            holder.slottext.setBackgroundColor(activity.resources.getColor(R.color.black))
+            holder.slottext.setBackgroundColor(activity.resources.getColor(R.color.purple_200))
         }
     }
 

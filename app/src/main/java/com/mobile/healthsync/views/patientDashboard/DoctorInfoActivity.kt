@@ -27,10 +27,10 @@ class DoctorInfoActivity : ComponentActivity() {
         var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
 
         //get doctor details:toDo
-        var doctor = intent.extras?.getParcelable<Doctor>("doctor")
-
-        // Set doctor details to views
-        fillDocotorDetails(doctor)
+        doctorRepository.getDoctor(doctor_id, { doctor ->
+            // Set doctor details to views
+            fillDocotorDetails(doctor)
+        })
 
         // Handle book appointment action
         findViewById<Button>(R.id.btnBookAppointment).setOnClickListener {

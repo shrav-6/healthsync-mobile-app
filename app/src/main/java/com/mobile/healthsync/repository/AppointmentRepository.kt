@@ -1,7 +1,6 @@
 package com.mobile.healthsync.repository
 
 import android.content.Context
-import android.text.BoringLayout
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentReference

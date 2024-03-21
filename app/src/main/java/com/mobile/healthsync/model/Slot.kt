@@ -1,8 +1,9 @@
 package com.mobile.healthsync.model
 
 import com.mobile.healthsync.views.patientDashboard.BookingTestActivity
+import java.io.Serializable
 
-data class Slot(var slot_id: Int =0, var start_time: String ="", var end_time : String="") {
+data class Slot(var slot_id: Int = 0, var start_time: String ="", var end_time : String="") : Serializable{
 
     private var isbooked:Boolean = false;
     fun setAsBooked() {

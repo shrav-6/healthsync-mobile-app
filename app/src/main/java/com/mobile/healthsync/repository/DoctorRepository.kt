@@ -71,16 +71,10 @@ class DoctorRepository(private val context: Context) {
                 if (task.isSuccessful) {
                     val documents = task.result
                     if (documents != null && !documents.isEmpty) {
-                        val document = documents.documents[0]
-                        val availability = document.get("availability")
-                        for(avail in (availability as List<*>))
-                        {
-                            if (avail is Map<*, *>) {
-                                // Assuming your map contains the keys 'slot_id', 'start_time', and 'end_time'
-                                val slotId = (avail["slot_id"] as? Number)?.toInt() ?: 0 // Safe cast to Number then to Int
-                                val startTime = avail["start_time"] as? String ?: "" // Safe cast to String
-                                val endTime = avail["end_time"] as? String ?: "" // Safe cast to String
-                                val slot = Slot(slotId, startTime, endTime)
+                        val doctor = documents.documents[0].toObject(Doctor::class.java)
+                        for(slot in doctor?.availability!!) {
+                            if(slot is Slot)
+                            {
                                 slotsList.add(slot)
                             }
                         }

@@ -35,10 +35,9 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
 
     private var doctor_id : Int = -1
     private var slot_id :Int = -1
-    private var date : String
+    private lateinit var date : String
     private lateinit var adapter: SlotAdapter
     init {
-        this.date = fillInitialValues()
         //initialising helper classes
         this.appointmentRepository = AppointmentRepository(this)
         this.doctorRepository = DoctorRepository(this)
@@ -49,6 +48,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
 
         this.doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
         val patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+        this.date = fillInitialValues()
 
         var searchdatebtn = findViewById<Button>(R.id.searchdate)
         searchdatebtn.setOnClickListener {
@@ -125,7 +125,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
             doctorRepository.getDoctorAvailability(doctor_id){ retrievedslots ->
                 for(appointment in retrievedAppointments) {
                     for(slot in retrievedslots) {
-                        if(slot.slot_id == appointment.slot_id) {
+                        if(appointment.appointment_status == true && slot.slot_id == appointment.slot_id) {
                             slot.setAsBooked()
                             break
                         }
