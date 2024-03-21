@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.DoctorProfileModel
+import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
@@ -28,7 +28,7 @@ class DoctorProfile : AppCompatActivity() {
         setContentView(R.layout.activity_doctor_profile)
 
 //        doctorDocumentId = "gXyTqRO4nZuDpfOlNXpQ"
-        doctorDocumentId = "QMW1ZsIEcyRjqyLip0dP"
+        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
             if(doctor != null){
@@ -50,7 +50,7 @@ class DoctorProfile : AppCompatActivity() {
         }
     }
 
-    private fun setDoctorProfileData(doctor: DoctorProfileModel){
+    private fun setDoctorProfileData(doctor: Doctor){
         val doctorNameTextView:TextView = findViewById(R.id.doctorName)
         val doctorSpecializationTextView:TextView = findViewById(R.id.doctorSpecialization)
         val doctorEmailTextView:TextView = findViewById(R.id.doctorEmail)
@@ -71,7 +71,12 @@ class DoctorProfile : AppCompatActivity() {
         doctorRatingTextView.text = "Average Ratings: ${doctor.doctor_info.avg_ratings} ⭐"
 //        doctorImageView.setImageURI(doctor.doctor_info.photo)
 
-        Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
+        // Getting image from firebase
+        if (doctor.doctor_info.photo == "null") {
+            doctorImageView.setImageResource(R.drawable.default_doctor_image)
+        } else {
+            Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
+        }
     }
 
     private fun selectImage() {

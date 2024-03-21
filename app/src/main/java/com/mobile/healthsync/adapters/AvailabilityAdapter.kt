@@ -7,10 +7,11 @@ import android.widget.CheckBox
 import android.widget.TextView
 import android.widget.TimePicker
 import androidx.recyclerview.widget.RecyclerView
-import com.mobile.healthsync.model.DoctorProfileModel
+import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.R
+import com.mobile.healthsync.model.Slot
 
-class AvailabilityAdapter(private val availabilityList: List<DoctorProfileModel.DoctorAvailability>) : RecyclerView.Adapter<AvailabilityAdapter.AvailabilityViewHolder>() {
+class AvailabilityAdapter(private val availabilityList: List<Slot>) : RecyclerView.Adapter<AvailabilityAdapter.AvailabilityViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AvailabilityViewHolder {
         val availabilityView = LayoutInflater.from(parent.context).inflate(R.layout.doctor_availability_item, parent, false)
@@ -19,18 +20,21 @@ class AvailabilityAdapter(private val availabilityList: List<DoctorProfileModel.
 
     override fun onBindViewHolder(holder: AvailabilityViewHolder, position: Int) {
         val availability = availabilityList[position]
-        val startTimeString = availability.startTime
-        val endTimeString = availability.endTime
+        val startTimeString = availability.start_time
+        val endTimeString = availability.end_time
 
-        when (position) {
-            0 -> holder.dayOfWeekTextView.text = "Monday"
-            1 -> holder.dayOfWeekTextView.text = "Tuesday"
-            2 -> holder.dayOfWeekTextView.text = "Wednesday"
-            3 -> holder.dayOfWeekTextView.text = "Thursday"
-            4 -> holder.dayOfWeekTextView.text = "Friday"
+        holder.dayOfWeekTextView.text = when (position) {
+            0 -> "Monday"
+            1 -> "Tuesday"
+            2 -> "Wednesday"
+            3 -> "Thursday"
+            4 -> "Friday"
+            5 -> "Saturday"
+            6 -> "Sunday"
+            else -> ""
         }
 
-        if (startTimeString == "null" || endTimeString == "null"){
+        if (startTimeString == "null" || endTimeString == "null" || startTimeString == "NA" || endTimeString == "NA"){
             holder.availabilityCheckbox.visibility = View.VISIBLE
             holder.availabilityCheckbox.isChecked = true
             holder.startTimeLabel.visibility = View.GONE
@@ -92,7 +96,8 @@ class AvailabilityAdapter(private val availabilityList: List<DoctorProfileModel.
         val availabilityCheckbox: CheckBox = itemView.findViewById(R.id.availabilityCheckbox)
     }
 
-    fun getAvailabilityList(): List<DoctorProfileModel.DoctorAvailability> {
+    fun getAvailabilityList(): List<Slot> {
         return availabilityList
     }
+
 }

@@ -1,18 +1,18 @@
 package com.mobile.healthsync.model
 
+import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
+//import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
-
-data class DoctorProfileModel(
-    @get:PropertyName("availability")
-    @set:PropertyName("availability")
-//    var availability: Map<String, Map<String, String>>? = null,
-    var availability: List<DoctorAvailability>? = null,
-
+data class Doctor(
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
     var doctor_id: Int = 0,
+
+    @get:PropertyName("availability")
+    @set:PropertyName("availability")
+    var availability: List<Slot>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")
@@ -67,19 +67,5 @@ data class DoctorProfileModel(
         @get:PropertyName("years_of_practice")
         @set:PropertyName("years_of_practice")
         var years_of_practice: Int = 0
-    ) : Serializable
-
-    data class DoctorAvailability(
-        @get:PropertyName("day_of_week")
-        @set:PropertyName("day_of_week")
-        var dayOfWeek: Int = 0,
-
-        @get:PropertyName("start_time")
-        @set:PropertyName("start_time")
-        var startTime: String = "",
-
-        @get:PropertyName("end_time")
-        @set:PropertyName("end_time")
-        var endTime: String = ""
     ) : Serializable
 }

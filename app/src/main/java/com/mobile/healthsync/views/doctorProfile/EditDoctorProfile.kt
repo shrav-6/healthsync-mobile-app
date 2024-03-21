@@ -10,13 +10,14 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AvailabilityAdapter
-import com.mobile.healthsync.model.DoctorProfileModel
+import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
@@ -28,7 +29,7 @@ class EditDoctorProfile : AppCompatActivity() {
         setContentView(R.layout.activity_edit_doctor_profile)
 
         val id = intent.getStringExtra("doctorId")
-        var currentDoctorProfileData = DoctorProfileModel()
+        var currentDoctorProfileData = Doctor()
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(id) { doctor ->
             if(doctor != null){
@@ -53,7 +54,7 @@ class EditDoctorProfile : AppCompatActivity() {
             if(id != null){
                 doctorRepository.updateDoctorData(id, updatedDoctorData)
             }
-            val intent = Intent(this, DoctorProfileModel::class.java)
+            val intent = Intent(this, DoctorProfile::class.java)
             // Giving time for firebase to update
             val handler = Handler()
             handler.postDelayed({
@@ -68,7 +69,7 @@ class EditDoctorProfile : AppCompatActivity() {
         }
     }
 
-    private fun displayDoctorProfileData(doctor: DoctorProfileModel): DoctorProfileModel {
+    private fun displayDoctorProfileData(doctor: Doctor): Doctor {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)
@@ -89,7 +90,11 @@ class EditDoctorProfile : AppCompatActivity() {
         doctorGenderDropdown.setSelection(genderIndex)
 
         // Getting image from firebase
-        Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
+        if (doctor.doctor_info.photo == "null") {
+            doctorImageView.setImageResource(R.drawable.default_doctor_image)
+        } else {
+            Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
+        }
 
         //Getting availability from firebase
         val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
@@ -100,7 +105,7 @@ class EditDoctorProfile : AppCompatActivity() {
         return doctor;
     }
 
-    private fun getUpdatedDoctorInfo(updateDoctor: DoctorProfileModel): DoctorProfileModel {
+    private fun getUpdatedDoctorInfo(updateDoctor: Doctor): Doctor {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
         val doctorEmailTextView: TextView = findViewById(R.id.editDoctorEmail)
@@ -129,8 +134,8 @@ class EditDoctorProfile : AppCompatActivity() {
 
             if (checkBox.isChecked) {
                 // If checkbox is checked, set start time and end time to null
-                availabilityList[i].startTime = "null"
-                availabilityList[i].endTime = "null"
+                availabilityList[i].start_time = "NA"
+                availabilityList[i].end_time = "NA"
             } else {
                 // If checkbox is unchecked, set start time and end time as usual
                 val startTimeHour = if (startTimePicker.hour >= 12) startTimePicker.hour - 12 else startTimePicker.hour
@@ -143,8 +148,29 @@ class EditDoctorProfile : AppCompatActivity() {
                 val endTimeAMPM = if (endTimePicker.hour >= 12) "PM" else "AM"
                 val endTimeString = String.format("%02d:%02d %s", endTimeHour, endTimeMinute, endTimeAMPM)
 
-                availabilityList[i].startTime = startTimeString
-                availabilityList[i].endTime = endTimeString
+                // Validating start time and end time range
+                val startTimeInMinutes = startTimeHour * 60 + startTimeMinute
+                val endTimeInMinutes = endTimeHour * 60 + endTimeMinute
+                // If start time is smaller than end time
+                if (startTimeInMinutes < endTimeInMinutes) {
+                    availabilityList[i].start_time = startTimeString
+                    availabilityList[i].end_time = endTimeString
+                } else {
+                    availabilityList[i].start_time = "NA"
+                    availabilityList[i].end_time = "NA"
+                    val day = when (i) {
+                        0 -> "Monday"
+                        1 -> "Tuesday"
+                        2 -> "Wednesday"
+                        3 -> "Thursday"
+                        4 -> "Friday"
+                        5 -> "Saturday"
+                        6 -> "Sunday"
+                        else -> ""
+                    }
+                    val message = "Start time cannot be greater than end time for $day"
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
             }
         }
 
