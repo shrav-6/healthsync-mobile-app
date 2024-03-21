@@ -7,6 +7,5 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="mdtp_accent_color">#009688</color>
-    <color name="mdtp_accent_color_dark">#00796b</color>
+    <color name="gray">#EFEEF0</color>
 </resources>
