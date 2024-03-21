@@ -1,4 +1,4 @@
-package com.mobile.healthsync.views.patientDashboard
+package com.mobile.healthsync.views.patientBooking
 
 import android.content.Intent
 import android.os.Bundle
@@ -10,7 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.adapters.SlotAdapter
+import com.mobile.healthsync.adapters.BookSlotAdapter
 import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
@@ -33,7 +33,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
     private var doctor_id : Int = -1
     private var slot_id :Int = -1
     private lateinit var date : String
-    private lateinit var adapter: SlotAdapter
+    private lateinit var adapter: BookSlotAdapter
     init {
         //initialising helper classes
         this.appointmentRepository = AppointmentRepository(this)
@@ -130,7 +130,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
                 }
 
                 val recyclerView = findViewById<RecyclerView>(R.id.slots)
-                this.adapter = SlotAdapter(retrievedslots,this@BookingInfoActivity)
+                this.adapter = BookSlotAdapter(retrievedslots,this@BookingInfoActivity)
 
                 recyclerView.adapter = this.adapter
                 recyclerView.layoutManager = GridLayoutManager( this@BookingInfoActivity,2)

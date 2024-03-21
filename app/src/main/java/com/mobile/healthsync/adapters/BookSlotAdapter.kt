@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Slot
 
-class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): RecyclerView.Adapter<SlotAdapter.SlotViewHolder>() {
+class BookSlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): RecyclerView.Adapter<BookSlotAdapter.SlotViewHolder>() {
 
     private lateinit var selectedSlotCard : CardView
     private lateinit var selectedSlot : Slot
@@ -26,7 +26,7 @@ class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): Re
                     {
                         selectedSlotCard.setBackgroundColor(itemView.resources.getColor(android.R.color.transparent))
                     }
-                    slotcard.setBackgroundColor(itemView.resources.getColor(R.color.mdtp_accent_color))
+                    slotcard.setBackgroundColor(itemView.resources.getColor(R.color.teal_200))
                     selectedSlotCard = slotcard
                     selectedSlot = slotList[adapterPosition]
                 }

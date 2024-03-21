@@ -44,7 +44,7 @@ class SignupDoctorActivity : AppCompatActivity() {
             val consulation_fees = findViewById<EditText>(R.id.editTextConsulationFees).text.toString().toDouble()
 
             //create doctor object
-            val newDoctor = Doctor(null, emptyList(), Doctor.DoctorInfo(
+            val newDoctor = Doctor(-1, emptyList(), Doctor.DoctorInfo(
                 age = age,
                 avg_ratings = 0.0,
                 consultation_fees = consulation_fees,

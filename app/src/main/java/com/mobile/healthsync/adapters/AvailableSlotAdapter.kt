@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Slot
 
-class AppointmentSlotAdapter(val slotList: List<Slot>?) : RecyclerView.Adapter<AppointmentSlotAdapter.AppointmentSlotViewHolder>() {
+class AvailableSlotAdapter(val slotList: List<Slot>?) : RecyclerView.Adapter<AvailableSlotAdapter.AppointmentSlotViewHolder>() {
 
     inner class AppointmentSlotViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var slottext : TextView = itemView.findViewById(R.id.appointmentslot)

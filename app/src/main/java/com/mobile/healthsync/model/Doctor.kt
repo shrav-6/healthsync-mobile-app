@@ -8,7 +8,7 @@ import java.io.Serializable
 data class Doctor(
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
-    var doctor_id: List<Any> = emptyList(),
+    var doctor_id: Int = -1,
 
     @get:PropertyName("availability")
     @set:PropertyName("availability")

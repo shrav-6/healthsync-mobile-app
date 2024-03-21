@@ -1,18 +1,37 @@
 package com.mobile.healthsync.adapters
 
+import android.app.Activity
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
 
 class DoctorAdapter(
-    private val doctors: MutableList<Doctor>
+    private val doctors: MutableList<Doctor>,
+    var patient_id: Int,
+    var activity: Activity
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>()
 {
-    class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    inner class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+    {
+        var bookaptbtn: Button = itemView.findViewById(R.id.bookAppointmentButton)
+        init {
+
+            bookaptbtn.setOnClickListener(){
+                val intent  = Intent(activity, BookingInfoActivity::class.java)
+                intent.putExtra("doctor_id",doctors[adapterPosition].doctor_id)
+                intent.putExtra("patient_id",patient_id)
+                activity.startActivity(intent)
+            }
+        }
+
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoctorViewHolder {
         return DoctorViewHolder(

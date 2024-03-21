@@ -19,7 +19,7 @@
             android:paddingBottom="10sp"/>
 
         <TextView
-            android:id="@+id/tvDoctorName"
+            android:id="@+id/infodoctoctorName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -28,7 +28,7 @@
             android:textStyle="bold" />
 
         <Button
-            android:id="@+id/btnBookAppointment"
+            android:id="@+id/infoBookAppointmentbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Book Appointment"
@@ -42,7 +42,7 @@
             android:orientation="horizontal">
 
             <TextView
-                android:id="@+id/tvSpecialization"
+                android:id="@+id/infoSpecialization"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -51,7 +51,7 @@
                 android:text="Specialization: Cardiology"/>
 
             <TextView
-                android:id="@+id/tvExperience"
+                android:id="@+id/infoExperience"
                 android:layout_width="0dp"
                 android:textStyle="bold"
                 android:layout_height="wrap_content"
@@ -62,7 +62,7 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tvAvailableSlots"
+            android:id="@+id/infoAvailableSlots"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -78,7 +78,7 @@
 
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/tvReviews"
+            android:id="@+id/infoReviews"
             android:layout_width="350dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

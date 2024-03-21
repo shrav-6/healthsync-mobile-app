@@ -16,12 +16,14 @@ class PatientDashboard : AppCompatActivity() {
     private  lateinit var doctorAdapter: DoctorAdapter
     private  lateinit var doctorRepository: DoctorRepository
     private var doctorsList: MutableList<Doctor> = mutableListOf()
+    private var patient_id : Int = -1
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_dashboard)
 
-        doctorRepository = DoctorRepository(this)
+        this.patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
 
+        doctorRepository = DoctorRepository(this)
         doctorRepository.getAllDoctors { retrievedDoctorsList ->
             doctorsList = retrievedDoctorsList
 
@@ -71,7 +73,7 @@ class PatientDashboard : AppCompatActivity() {
     fun updateDoctorsList(newList: MutableList<Doctor>) {
         var rvDoctorList = findViewById<RecyclerView>(R.id.rvDoctorsList)
 
-        doctorAdapter = DoctorAdapter(newList);
+        doctorAdapter = DoctorAdapter(newList,patient_id,this);
 
         rvDoctorList.adapter = doctorAdapter
         rvDoctorList.layoutManager = LinearLayoutManager(this)

@@ -11,11 +11,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
 import com.mobile.healthsync.R
-import com.mobile.healthsync.adapters.AppointmentSlotAdapter
+import com.mobile.healthsync.adapters.AvailableSlotAdapter
 import com.mobile.healthsync.adapters.RatingsAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.repository.ReviewRepository
+import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
 
 class DoctorInfoActivity : ComponentActivity() {
 
@@ -39,22 +40,22 @@ class DoctorInfoActivity : ComponentActivity() {
         })
 
         // Handle book appointment action
-        findViewById<Button>(R.id.btnBookAppointment).setOnClickListener {
+        findViewById<Button>(R.id.infoBookAppointmentbtn).setOnClickListener {
             bookAppointment(doctor_id, patient_id)
         }
     }
 
     private fun fillDocotorDetails(doctor: Doctor?) {
-        findViewById<TextView>(R.id.tvDoctorName).text = doctor?.doctor_info?.name
-        findViewById<TextView>(R.id.tvSpecialization).text = "Specialization:  ${doctor?.doctor_info?.doctor_speciality}"
-        findViewById<TextView>(R.id.tvExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"
+        findViewById<TextView>(R.id.infodoctoctorName).text = doctor?.doctor_info?.name
+        findViewById<TextView>(R.id.infoSpecialization).text = "Specialization:  ${doctor?.doctor_speciality}"
+        findViewById<TextView>(R.id.infoExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"
 
-        val availableslots = findViewById<RecyclerView>(R.id.tvAvailableSlots)
+        val availableslots = findViewById<RecyclerView>(R.id.infoAvailableSlots)
         availableslots.layoutManager = GridLayoutManager(this, 3)
-        availableslots.adapter = AppointmentSlotAdapter(doctor?.availability)
+        availableslots.adapter = AvailableSlotAdapter(doctor?.availability)
 
         reviewRepository.getReviews(doctor!!.doctor_id , { reviewlist ->
-            val reviews = findViewById<RecyclerView>(R.id.tvReviews)
+            val reviews = findViewById<RecyclerView>(R.id.infoReviews)
             reviews.adapter = RatingsAdapter(reviewlist)
             reviews.layoutManager = LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false)
         })
@@ -62,7 +63,7 @@ class DoctorInfoActivity : ComponentActivity() {
     }
 
     private fun bookAppointment(doctor_id: Int, patient_id: Int) {
-        intent  = Intent(this, BookingInfoActivity::class.java)
+        val intent  = Intent(this, BookingInfoActivity::class.java)
         intent.putExtra("doctor_id",doctor_id)
         intent.putExtra("patient_id",patient_id)
         startActivity(intent)

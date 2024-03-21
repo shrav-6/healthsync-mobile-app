@@ -1,4 +1,4 @@
-package com.mobile.healthsync.views.patientDashboard
+package com.mobile.healthsync.views.patientBooking
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,7 +6,10 @@ import android.os.Bundle
 import android.widget.Button
 import com.mobile.healthsync.R
 import java.util.Calendar
-
+/*
+ * Just for testing purpose. Should add these code inside Payment Page.
+ * @Mohammad : toDo
+ */
 class TestActivity : AppCompatActivity() {
 
     private val SUCCESS: Int = 1
