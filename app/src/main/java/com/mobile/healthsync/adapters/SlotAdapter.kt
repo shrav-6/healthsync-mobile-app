@@ -1,32 +1,33 @@
 package com.mobile.healthsync.adapters
 
 import android.app.Activity
-import android.graphics.Rect
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Slot
 
 class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): RecyclerView.Adapter<SlotAdapter.SlotViewHolder>() {
 
-    private lateinit var selectedSlotText : TextView
+    private lateinit var selectedSlotCard : CardView
     private lateinit var selectedSlot : Slot
 
     inner class SlotViewHolder(itemView: View): RecyclerView.ViewHolder(itemView){
         var slottext : TextView = itemView.findViewById(R.id.slotitem)
+        var slotcard : CardView = itemView.findViewById(R.id.slotcard)
         init {
             //sets up the edit button on the individual slot
-            slottext.setOnClickListener(){
+            slotcard.setOnClickListener(){
                 if(isValid(slotList[adapterPosition])) {
                     if(::selectedSlot.isInitialized)
                     {
-                        selectedSlotText.setBackgroundColor(itemView.resources.getColor(android.R.color.transparent))
+                        selectedSlotCard.setBackgroundColor(itemView.resources.getColor(android.R.color.transparent))
                     }
-                    slottext.setBackgroundColor(itemView.resources.getColor(R.color.mdtp_accent_color))
-                    selectedSlotText = slottext
+                    slotcard.setBackgroundColor(itemView.resources.getColor(R.color.mdtp_accent_color))
+                    selectedSlotCard = slotcard
                     selectedSlot = slotList[adapterPosition]
                 }
             }
@@ -58,30 +59,5 @@ class SlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): Re
 
     fun getselectedSlot() : Slot {
         return this.selectedSlot
-    }
-}
-
-class GridSpacingItemDecoration(private val spanCount: Int, private val spacing: Int, private val includeEdge: Boolean) : RecyclerView.ItemDecoration() {
-
-    override fun getItemOffsets(outRect: Rect, view: View, parent: RecyclerView, state: RecyclerView.State) {
-        val position = parent.getChildAdapterPosition(view) // item position
-        val column = position % spanCount // item column
-
-        if (includeEdge) {
-            outRect.left = spacing - column * spacing / spanCount
-            outRect.right = (column + 1) * spacing / spanCount
-
-            if (position < spanCount) { // top edge
-                outRect.top = spacing
-            }
-            outRect.bottom = spacing // item bottom
-        }
-        else {
-            outRect.left = column * spacing / spanCount
-            outRect.right = spacing - (column + 1) * spacing / spanCount
-            if (position >= spanCount) {
-                outRect.top = spacing // item top
-            }
-        }
     }
 }

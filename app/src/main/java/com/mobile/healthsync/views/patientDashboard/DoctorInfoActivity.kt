@@ -2,7 +2,6 @@ package com.mobile.healthsync.views.patientDashboard
 
 import android.content.Intent
 import android.os.Bundle
-import android.os.Parcelable
 import android.widget.Button
 import android.widget.TextView
 
@@ -50,7 +49,7 @@ class DoctorInfoActivity : ComponentActivity() {
     }
 
     private fun bookAppointment(doctor_id: Int, patient_id: Int) {
-        intent  = Intent(this, BookingTestActivity::class.java)
+        intent  = Intent(this, BookingInfoActivity::class.java)
         intent.putExtra("doctor_id",doctor_id)
         intent.putExtra("patient_id",patient_id)
         startActivity(intent)

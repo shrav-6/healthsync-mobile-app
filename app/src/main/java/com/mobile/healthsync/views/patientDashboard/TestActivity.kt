@@ -1,16 +1,13 @@
 package com.mobile.healthsync.views.patientDashboard
 
-import android.app.DatePickerDialog
-import android.app.TimePickerDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.Doctor
 import java.util.Calendar
 
-class BookingActivity : AppCompatActivity() {
+class TestActivity : AppCompatActivity() {
 
     private val SUCCESS: Int = 1
     private val FAILURE:  Int = 0
@@ -18,7 +15,7 @@ class BookingActivity : AppCompatActivity() {
     private var bookingSlot : Calendar = Calendar.getInstance()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_booking)
+        setContentView(R.layout.activity_test)
 
         var cancellpay = findViewById<Button>(R.id.paymentfailure)
         var donepay = findViewById<Button>(R.id.paymentsuccess)

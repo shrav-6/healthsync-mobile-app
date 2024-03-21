@@ -13,10 +13,10 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".views.patientDashboard.BookingTestActivity"
+            android:name=".views.patientDashboard.BookingInfoActivity"
             android:exported="false" />
         <activity
-            android:name=".views.patientDashboard.BookingActivity"
+            android:name=".views.patientDashboard.TestActivity"
             android:exported="false" />
         <activity
             android:name=".views.patientDashboard.DoctorInfoActivity"

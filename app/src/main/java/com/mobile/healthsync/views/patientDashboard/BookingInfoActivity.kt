@@ -2,7 +2,6 @@ package com.mobile.healthsync.views.patientDashboard
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.TypedValue
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
@@ -11,9 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.adapters.GridSpacingItemDecoration
 import com.mobile.healthsync.adapters.SlotAdapter
-import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
@@ -23,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
+class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
 
     private val SUCCESS :Int = 1
     private val FAILURE :Int = 0
@@ -44,7 +41,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_booking_test)
+        setContentView(R.layout.activity_booking)
 
         this.doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
         val patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
@@ -86,7 +83,7 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
         return formattedDate
     }
     private fun handleBooking(patient_id: Int) {
-        val intent :Intent = Intent(this, BookingActivity::class.java)
+        val intent :Intent = Intent(this, TestActivity::class.java)
         intent.putExtra("doctor_id", this.doctor_id)
         intent.putExtra("patient_id", patient_id)
         intent.putExtra("slot_id", this.slot_id)
@@ -133,11 +130,10 @@ class BookingTestActivity : AppCompatActivity(),OnDateSetListener {
                 }
 
                 val recyclerView = findViewById<RecyclerView>(R.id.slots)
-                recyclerView.layoutManager = GridLayoutManager(this,2, GridLayoutManager.VERTICAL,false)
-                val spacingInPixels = TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10f, resources.displayMetrics).toInt()
-                recyclerView.addItemDecoration(GridSpacingItemDecoration(2, spacingInPixels, true))
-                this.adapter = SlotAdapter(retrievedslots, this)
-                recyclerView.adapter = adapter
+                this.adapter = SlotAdapter(retrievedslots,this@BookingInfoActivity)
+
+                recyclerView.adapter = this.adapter
+                recyclerView.layoutManager = GridLayoutManager( this@BookingInfoActivity,2)
             }
         }
     }
