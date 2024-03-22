@@ -10,8 +10,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.StorageReference
-import com.mobile.healthsync.model.Doctor
 import java.util.UUID
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import com.mobile.healthsync.model.Doctor
+import com.mobile.healthsync.model.Slot
+
 
 class DoctorRepository(private val context: Context) {
     private val db: FirebaseFirestore
@@ -37,6 +41,50 @@ class DoctorRepository(private val context: Context) {
                     }
                 } else {
                     showToast("Error fetching doctor data: ${task.exception?.message}")
+                }
+            }
+    }
+
+    fun getDoctor(doctor_id: Int, callback: (Doctor?) -> Unit) {
+        db.collection("doctors")
+            .whereEqualTo("doctor_id",doctor_id)
+            .get()
+            .addOnCompleteListener {
+                    task: Task<QuerySnapshot> ->
+                if(task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        val document = documents.documents[0]
+                        val doctor = document.toObject(Doctor::class.java)
+                        callback(doctor)
+                    }
+                }
+                else {
+                    showToast("Doctor not found")
+                }
+            }
+    }
+
+    fun getDoctorAvailability(doctor_id: Int, callback: (MutableList<Slot>) -> Unit)
+    {
+        var slotsList = mutableListOf<Slot>()
+        db.collection("doctors")
+            .whereEqualTo("doctor_id", doctor_id)
+            .get()
+            .addOnCompleteListener{
+                    task: Task<QuerySnapshot> ->
+                if (task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        val doctor = documents.documents[0].toObject(Doctor::class.java)
+                        for(slot in doctor?.availability!!) {
+                            if(slot is Slot)
+                            {
+                                slotsList.add(slot)
+                            }
+                        }
+                        callback(slotsList)
+                    }
                 }
             }
     }

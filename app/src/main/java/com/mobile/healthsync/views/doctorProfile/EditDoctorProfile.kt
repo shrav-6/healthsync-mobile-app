@@ -80,7 +80,7 @@ class EditDoctorProfile : AppCompatActivity() {
         val doctorImageView: ShapeableImageView = findViewById(R.id.doctorProfileImage)
 
         doctorNameEditText.setText(doctor.doctor_info.name)
-        doctorSpecializationEditText.setText(doctor.doctor_info.doctor_speciality)
+        doctorSpecializationEditText.setText(doctor.doctor_speciality)
         doctorEmailTextView.text = doctor.email
         doctorAgeEditText.setText(doctor.doctor_info.age.toString())
         doctorFeesEditText.setText(doctor.doctor_info.consultation_fees.toString())
@@ -115,7 +115,7 @@ class EditDoctorProfile : AppCompatActivity() {
         val doctorExperienceEditText: EditText = findViewById(R.id.editDoctorExperience)
 
         updateDoctor.doctor_info.name = "${doctorNameEditText.text}"
-        updateDoctor.doctor_info.doctor_speciality = "${doctorSpecializationEditText.text}"
+        updateDoctor.doctor_speciality = "${doctorSpecializationEditText.text}"
         updateDoctor.email = "${doctorEmailTextView.text}"
         updateDoctor.doctor_info.age = "${doctorAgeEditText.text}".toInt()
         updateDoctor.doctor_info.gender = "${doctorGenderDropdown.selectedItem}"

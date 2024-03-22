@@ -61,7 +61,7 @@ class DoctorProfile : AppCompatActivity() {
         val doctorImageView: ShapeableImageView = findViewById(R.id.doctorProfileImage)
 
         doctorNameTextView.text = "Dr. ${doctor.doctor_info.name}"
-        doctorSpecializationTextView.text = doctor.doctor_info.doctor_speciality
+        doctorSpecializationTextView.text = doctor.doctor_speciality
         doctorEmailTextView.text = doctor.email
         doctorAgeTextView.text = "Age: ${doctor.doctor_info.age}"
         doctorGenderTextView.text = "Gender: ${doctor.doctor_info.gender}"
