@@ -2,17 +2,16 @@ package com.mobile.healthsync.repository
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.StorageReference
 import com.mobile.healthsync.model.Doctor
 import java.util.UUID
-
-
-
 
 class DoctorRepository(private val context: Context) {
     private val db: FirebaseFirestore
@@ -122,7 +121,18 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
-    fun uploadImageToFirebaseStorage(imageUri: Uri, documentID: String, callback: (String?) -> Unit) {
+    fun uploadImageToFirebaseStorage(oldImageURL: String, imageUri: Uri, documentID: String, callback: (String?) -> Unit) {
+
+        // Delete old image to Firebase Storage
+        if (oldImageURL != "null") {
+            val oldImageReference: StorageReference = FirebaseStorage.getInstance().getReferenceFromUrl(oldImageURL)
+            oldImageReference.delete().addOnSuccessListener {
+                Log.d("Delete old image from db","Old Image deleted successfully")
+            }.addOnFailureListener {
+                Log.d("Delete old image from db","Failed to delete old image")
+            }
+        }
+
         // Upload image to Firebase Storage
         val storageReference = FirebaseStorage.getInstance().reference
         val imageReference = storageReference.child("doctorImages/${UUID.randomUUID()}")

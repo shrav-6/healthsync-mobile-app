@@ -15,20 +15,19 @@ import com.squareup.picasso.Picasso
 
 class DoctorProfile : AppCompatActivity() {
 
-    private lateinit var doctorDocumentId: String;
-    private lateinit var doctorImg: String;
+    private lateinit var doctorDocumentId: String
+    private lateinit var doctorImg: String
+    private var imageURL: String = ""
 
     private  lateinit var doctorRepository: DoctorRepository
     var imageUri: Uri? = null
-//    var storageReference: StorageReference? = null
-//    var progressDialog: ProgressDialog? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-//        doctorDocumentId = "gXyTqRO4nZuDpfOlNXpQ"
-        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
+        doctorDocumentId = "QMW1ZsIEcyRjqyLip0dP"
+//        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
             if(doctor != null){
@@ -69,12 +68,13 @@ class DoctorProfile : AppCompatActivity() {
         doctorFeesTextView.text = "Consultation Fees: \$${doctor.doctor_info.consultation_fees}"
         doctorExperienceTextView.text = "Years Of Experience: ${doctor.doctor_info.years_of_practice} years"
         doctorRatingTextView.text = "Average Ratings: ${doctor.doctor_info.avg_ratings} ⭐"
-//        doctorImageView.setImageURI(doctor.doctor_info.photo)
 
         // Getting image from firebase
         if (doctor.doctor_info.photo == "null") {
+            imageURL = "null"
             doctorImageView.setImageResource(R.drawable.default_doctor_image)
         } else {
+            imageURL = doctor.doctor_info.photo.toString()
             Picasso.get().load(Uri.parse(doctor.doctor_info.photo)).into(doctorImageView)
         }
     }
@@ -94,13 +94,12 @@ class DoctorProfile : AppCompatActivity() {
             imageView.setImageURI(imageUri)
 
             imageUri?.let {
-                doctorRepository.uploadImageToFirebaseStorage(it, doctorDocumentId) {it
+                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, doctorDocumentId) {it
                     if (!it.isNullOrBlank()) {
                         doctorImg = it
                     }
                 }
             }
-
         }
     }
 }

@@ -134,21 +134,24 @@ class EditDoctorProfile : AppCompatActivity() {
 
             if (checkBox.isChecked) {
                 // If checkbox is checked, set start time and end time to null
-                availabilityList[i].start_time = "NA"
-                availabilityList[i].end_time = "NA"
+                availabilityList[i].start_time = "null"
+                availabilityList[i].end_time = "null"
             } else {
                 // If checkbox is unchecked, set start time and end time as usual
-                val startTimeHour = if (startTimePicker.hour >= 12) startTimePicker.hour - 12 else startTimePicker.hour
+                var startTimeHour = if (startTimePicker.hour >= 12) startTimePicker.hour - 12 else startTimePicker.hour
                 val startTimeMinute = startTimePicker.minute
                 val startTimeAMPM = if (startTimePicker.hour >= 12) "PM" else "AM"
                 val startTimeString = String.format("%02d:%02d %s", startTimeHour, startTimeMinute, startTimeAMPM)
 
-                val endTimeHour = if (endTimePicker.hour >= 12) endTimePicker.hour - 12 else endTimePicker.hour
+                var endTimeHour = if (endTimePicker.hour >= 12) endTimePicker.hour - 12 else endTimePicker.hour
                 val endTimeMinute = endTimePicker.minute
                 val endTimeAMPM = if (endTimePicker.hour >= 12) "PM" else "AM"
                 val endTimeString = String.format("%02d:%02d %s", endTimeHour, endTimeMinute, endTimeAMPM)
 
                 // Validating start time and end time range
+                startTimeHour += if (startTimeAMPM == "PM") 12 else 0
+                endTimeHour += if (endTimeAMPM == "PM") 12 else 0
+
                 val startTimeInMinutes = startTimeHour * 60 + startTimeMinute
                 val endTimeInMinutes = endTimeHour * 60 + endTimeMinute
                 // If start time is smaller than end time
