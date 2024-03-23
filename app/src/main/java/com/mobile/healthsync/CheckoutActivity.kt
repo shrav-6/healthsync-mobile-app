@@ -318,6 +318,10 @@ class CheckoutActivity : AppCompatActivity() {
         }
         if(paymentSheetResult is PaymentSheetResult.Failed){
             Toast.makeText(this, "Payment Failed: ${paymentSheetResult.error}", Toast.LENGTH_SHORT).show()
+            val returnIntent = Intent()
+            returnIntent.putExtra("status", "Operation failure")
+            setResult(0, returnIntent)
+            finish()
         }
     }
 
@@ -415,10 +419,10 @@ class CheckoutActivity : AppCompatActivity() {
             .setTitle("Payment Successful")
             .setMessage("Your appointment has been booked successfully, and you earned 20 reward points!")
             .setPositiveButton("OK") { dialog, which ->
-                // Redirect to MainActivity
-//                val intent = Intent(this, MainActivity::class.java)
-//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-//                startActivity(intent)
+                val returnIntent = Intent()
+                returnIntent.putExtra("status", "Operation Success")
+                returnIntent.putExtra("payment_id", 1)
+                setResult(1, returnIntent)
                 finish()
             }
             .setCancelable(false) // Prevent dialog dismissal on back press
