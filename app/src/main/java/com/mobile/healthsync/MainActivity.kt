@@ -4,6 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
+import com.mobile.healthsync.services.AlarmScheduler
+import com.mobile.healthsync.services.AlarmScheduler2
+import com.mobile.healthsync.services.MyAlarmReceiver
 import com.mobile.healthsync.views.signUp.SignupActivity
 
 class MainActivity : ComponentActivity() {
@@ -19,5 +22,10 @@ class MainActivity : ComponentActivity() {
             )
             startActivity(intent)
         }, 3000)
+        // Create an instance of AlarmScheduler and schedule the alarm
+        val alarmScheduler = AlarmScheduler(this)
+        alarmScheduler.scheduleAlarm()
+        val alarmScheduler2 = AlarmScheduler2(this)
+        alarmScheduler2.scheduleAlarm()
     }
 }

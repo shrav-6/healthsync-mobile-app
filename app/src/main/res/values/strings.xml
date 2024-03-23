@@ -93,4 +93,8 @@
     <string name="action_settings">Settings</string>
     <string name="profile_image">Upload</string>
     <string name="doctorRegister"><b>Register as doctor?</b></string>
+    <string name="basic_notification_channel_id" translatable="false">channel1</string>
+    <string name="reminder_notification_channel_id" translatable="false">channel2</string>
+
+
 </resources>
