@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
+
 import com.mobile.healthsync.views.signUp.SignupActivity
 
 class MainActivity : ComponentActivity() {
@@ -19,5 +20,6 @@ class MainActivity : ComponentActivity() {
             )
             startActivity(intent)
         }, 3000)
+
     }
 }
