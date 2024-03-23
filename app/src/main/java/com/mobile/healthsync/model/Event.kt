@@ -12,9 +12,9 @@ data class Event(
     @set:PropertyName("datePublished")
     var datePublished: String = "",
 
-    @get:PropertyName("decription")
-    @set:PropertyName("decription")
-    var decription: String = "",
+    @get:PropertyName("description")
+    @set:PropertyName("description")
+    var description: String = "",
 
     @get:PropertyName("eventAddress")
     @set:PropertyName("eventAddress")
