@@ -3,7 +3,7 @@ package com.mobile.healthsync.model;
 import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
 
-data class Events(
+data class Event(
     @get:PropertyName("contactInfo")
     @set:PropertyName("contactInfo")
     var contactInfo: String = "",
@@ -12,12 +12,12 @@ data class Events(
     @set:PropertyName("datePublished")
     var datePublished: String = "",
 
-    @get:PropertyName("description")
-    @set:PropertyName("description")
-    var description: String = "",
+    @get:PropertyName("decription")
+    @set:PropertyName("decription")
+    var decription: String = "",
 
-    @get:PropertyName("patient_details")
-    @set:PropertyName("patient_details")
+    @get:PropertyName("eventAddress")
+    @set:PropertyName("eventAddress")
     var eventAddress: String = "",
 
     @get:PropertyName("eventID")
