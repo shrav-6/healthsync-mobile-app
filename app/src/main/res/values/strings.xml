@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">healthsync</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="large_text">
@@ -91,6 +91,7 @@
         "when a user tries to pick up one of cards.\n\n"
     </string>
     <string name="action_settings">Settings</string>
+    <string name="doctor_profile_image">Doctor profile image</string>
     <string name="profile_image">Upload</string>
     <string name="doctorRegister"><b>Register as doctor?</b></string>
 </resources>
