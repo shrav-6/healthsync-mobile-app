@@ -49,17 +49,14 @@ class CheckoutActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkout)
 
-        // Retrieve passed intent data
-//        totalAmount = intent.getDoubleExtra("TOTAL_AMOUNT", 15.00)
-//        amount= totalAmount
-//        println("TOTAL AMOUNT: "+totalAmount.toString())
+
 //        patientId = intent.getStringExtra("PATIENT_ID") ?: "default_patient_id"
 //        appointmentId = intent.getStringExtra("APPOINTMENT_ID") ?: "default_appointment_id"
 //        doctorId = intent.getStringExtra("DOCTOR_ID") ?: "default_doctor_id"
 
-//        patientId = intent.getIntExtra("PATIENT_ID", -1)
-//        appointmentId = intent.getIntExtra("APPOINTMENT_ID", -1)
-//        doctorId = intent.getIntExtra("DOCTOR_ID", -1)
+        patientId = intent.getIntExtra("patient_id", -1)
+        appointmentId = intent.getIntExtra("appointment_id", -1)
+        doctorId = intent.getIntExtra("doctor_id", -1)
 
         PaymentConfiguration.init(this, PUBLISH_KEY)
 
@@ -116,7 +113,7 @@ class CheckoutActivity : AppCompatActivity() {
             .get()
             .addOnSuccessListener { appointments ->
                 for (appointmentDoc in appointments) {
-                    val appointmentDate = appointmentDoc.getString("timestamp")
+                    val appointmentDate = appointmentDoc.getString("date")
                     val appointmentStart = appointmentDoc.getString("start_time")
                     tvDateTime.text = "Date & Time: $appointmentDate $appointmentStart"
                 }
@@ -419,9 +416,10 @@ class CheckoutActivity : AppCompatActivity() {
             .setMessage("Your appointment has been booked successfully, and you earned 20 reward points!")
             .setPositiveButton("OK") { dialog, which ->
                 // Redirect to MainActivity
-                val intent = Intent(this, MainActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
+//                val intent = Intent(this, MainActivity::class.java)
+//                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+//                startActivity(intent)
+                finish()
             }
             .setCancelable(false) // Prevent dialog dismissal on back press
             .show()

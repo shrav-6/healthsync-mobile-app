@@ -4,6 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:theme="@style/PaymentTheme"
+    style="@style/PaymentTheme"
     android:padding="16dp"
     tools:context=".CheckoutActivity">
 

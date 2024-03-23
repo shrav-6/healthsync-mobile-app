@@ -1,24 +1,22 @@
 package com.mobile.healthsync.model
 
+import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
+import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
-
 data class Doctor(
-    @get:PropertyName("availability")
-    @set:PropertyName("availability")
-    // var availability: Map<String, Map<String, String>>? = null,
-    var availability: ArrayList<AvailabilitySlot>? = null,
-
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
-    var doctor_id: Int = 0,
+    var doctor_id: Int = -1,
+
+    @get:PropertyName("availability")
+    @set:PropertyName("availability")
+    var availability: List<Slot>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")
     var doctor_info: DoctorInfo = DoctorInfo(),
-
-
 
     @get:PropertyName("email")
     @set:PropertyName("email")
@@ -26,7 +24,9 @@ data class Doctor(
 
     @get:PropertyName("password")
     @set:PropertyName("password")
-    var password: String = ""
+    var password: String = "",
+
+    var doctor_speciality: String = "General Medicine"
 ) : Serializable {
 
     data class DoctorInfo(
@@ -62,35 +62,8 @@ data class Doctor(
         @set:PropertyName("photo")
         var photo: String? = null,
 
-
-        @get:PropertyName("speciality")
-        @set:PropertyName("speciality")
-        var doctor_speciality: String? = "General Medicine",
-
         @get:PropertyName("years_of_practice")
         @set:PropertyName("years_of_practice")
         var years_of_practice: Int = 0
     ) : Serializable
-
-    data class
-    AvailabilitySlot
-
-        (
-        @get:PropertyName("slot_id")
-        @set:PropertyName("slot_id")
-        var slot_id: Int =0,
-
-        @get:PropertyName("start_time")
-        @set:PropertyName("start_time")
-        var start_time: String = "",
-
-        @get:PropertyName("end_time")
-        @set:PropertyName("end_time")
-        var end_time: String = ""
-
-                ) : Serializable
-
-
-
 }
-
