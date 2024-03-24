@@ -5,7 +5,11 @@ import android.content.Intent
 import android.content.IntentSender
 import com.google.android.gms.location.LocationRequest
 import android.location.Location
+import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.RelativeLayout
@@ -32,6 +36,9 @@ import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
+import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.mobile.healthsync.R
@@ -69,6 +76,66 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
         Places.initialize(this@MapActivity, getString(R.string.google_map_api_key))
         placesClient = Places.createClient(this@MapActivity)
         val token : AutocompleteSessionToken = AutocompleteSessionToken.newInstance()
+
+        materialSearchBar.setOnSearchActionListener( object : MaterialSearchBar.OnSearchActionListener {
+            override fun onSearchStateChanged(enabled: Boolean) {
+
+            }
+            override fun onSearchConfirmed(text: CharSequence?) {
+                startSearch(text.toString(),true, null,true)
+            }
+            override fun onButtonClicked(buttonCode: Int) {
+                if(buttonCode == MaterialSearchBar.BUTTON_NAVIGATION) {
+                    //opening or closing a navigation drawer.
+                }
+                else if(buttonCode == MaterialSearchBar.BUTTON_BACK) {
+                    materialSearchBar.closeSearch()
+                }
+            }
+        })
+
+        materialSearchBar.addTextChangeListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // Empty implementation
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val predictionrequest : FindAutocompletePredictionsRequest = FindAutocompletePredictionsRequest.builder()
+                    .setCountry("ca")
+                    .setTypeFilter(TypeFilter.ADDRESS)
+                    .setSessionToken(token)
+                    .setQuery(s.toString())
+                    .build()
+
+                placesClient.findAutocompletePredictions(predictionrequest).addOnCompleteListener( object : OnCompleteListener<FindAutocompletePredictionsResponse> {
+                    override fun onComplete(task: Task<FindAutocompletePredictionsResponse>) {
+                        if(task.isSuccessful){
+                            val predictionResp : FindAutocompletePredictionsResponse = task.getResult()
+                            if(predictionResp != null) {
+                                predictionlist = predictionResp.autocompletePredictions
+                                val suggestionlist =  mutableListOf<String>()
+                                for(predictionItem in predictionlist) {
+                                    suggestionlist.add(predictionItem.getFullText(null).toString())
+                                }
+                                materialSearchBar.updateLastSuggestions(suggestionlist)
+                                if(!materialSearchBar.isSuggestionsVisible) {
+                                    materialSearchBar.showSuggestionsList()
+                                }
+                            }
+                        }
+                        else {
+                            Log.i("mytag","prediction fetching task unsuccessful")
+                        }
+                    }
+
+                })
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Empty implementation
+            }
+
+        })
     }
 
     @SuppressLint("MissingPermission")
