@@ -44,9 +44,9 @@ class AppointmentRepository(private val context: Context) {
             }
     }
 
-    fun createAppointment(doctor_id: Int, patient_id: Int, slot_id: Int, date: String,callback: () -> Unit){
+    fun createAppointment(doctor_id: Int, patient_id: Int, slot_id: Int, date: String,start_time : String, callback: () -> Unit){
 
-        val appointment = Appointment(-1,doctor_id, patient_id,date,slot_id)
+        val appointment = Appointment(-1,doctor_id, patient_id,date,slot_id,start_time)
         db.collection("appointments")
             .add(appointment)
             .addOnSuccessListener { documentReference ->

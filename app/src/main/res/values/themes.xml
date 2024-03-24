@@ -3,6 +3,8 @@
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+    <style name="PaymentTheme" parent="Theme.Material3.Light.NoActionBar"/>
+
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>

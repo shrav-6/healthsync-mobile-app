@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.CheckoutActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.BookSlotAdapter
 import com.mobile.healthsync.model.Slot
@@ -32,6 +33,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
 
     private var doctor_id : Int = -1
     private var slot_id :Int = -1
+    private var start_time: String = ""
     private lateinit var date : String
     private lateinit var adapter: BookSlotAdapter
     init {
@@ -68,6 +70,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
             if(this.adapter.isSlotselected()) {
                 var selectedSlot : Slot = this.adapter.getselectedSlot()
                 this.slot_id = selectedSlot.slot_id
+                this.start_time = selectedSlot.start_time
                 handleBooking(patient_id);
             }
             else {
@@ -83,21 +86,22 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
         return formattedDate
     }
     private fun handleBooking(patient_id: Int) {
-        val intent :Intent = Intent(this, TestActivity::class.java)
+        val intent :Intent = Intent(this, CheckoutActivity::class.java)
         intent.putExtra("doctor_id", this.doctor_id)
         intent.putExtra("patient_id", patient_id)
-        intent.putExtra("slot_id", this.slot_id)
-        intent.putExtra("date",date)
+
+        intent.putExtra("appointment_id",-1)
+
         appointmentRepository.createAppointment(
-            this.doctor_id,patient_id,this.slot_id,date,{
+            this.doctor_id,patient_id,this.slot_id,date, this.start_time,{
                 updateAfterPayment.launch(intent) })
     }
 
     private val updateAfterPayment = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == this.SUCCESS) { // Payment is complete
             println("Payment Complete")
-            val payment_id = result.data?.getIntExtra("payment_id", -1) ?: -1
-            appointmentRepository.fixAppointment(this.doctor_id,this.date,this.slot_id,payment_id)
+            //val payment_id = result.data?.getIntExtra("payment_id", -1) ?: -1
+            //appointmentRepository.fixAppointment(this.doctor_id,this.date,this.slot_id,payment_id)
             finish()
         }
         else if(result.resultCode == this.FAILURE) { // Payment failed
