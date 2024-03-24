@@ -4,12 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
-<<<<<<< HEAD
-import com.mobile.healthsync.views.events.EventsActivity
-=======
-
 import com.mobile.healthsync.views.signUp.SignupActivity
->>>>>>> develop
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,6 +19,5 @@ class MainActivity : ComponentActivity() {
             )
             startActivity(intent)
         }, 3000)
-
     }
 }
