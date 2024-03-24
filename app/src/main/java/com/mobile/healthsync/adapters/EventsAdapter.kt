@@ -4,10 +4,10 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.mobile.healthsync.views.fragments.DonationFragment
-import com.mobile.healthsync.views.fragments.FundraisersFragment
-import com.mobile.healthsync.views.fragments.InfoSessionFragment
-import com.mobile.healthsync.views.fragments.VolunteerFragment
+import com.mobile.healthsync.views.events.fragments.DonationFragment
+import com.mobile.healthsync.views.events.fragments.FundraisersFragment
+import com.mobile.healthsync.views.events.fragments.InfoSessionFragment
+import com.mobile.healthsync.views.events.fragments.VolunteerFragment
 
 
 class EventsAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle): FragmentStateAdapter(fragmentManager,lifecycle) {
