@@ -9,7 +9,7 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.EventsAdapter
 
 class EventsActivity : AppCompatActivity() {
-    private val eventsTabs = arrayOf("Info Sessions", "Donation", "Fundraisers", "Volunteer")
+    private val eventsTabs = arrayOf("Info Sessions", "Donations", "Fundraiser", "Volunteer")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_events)

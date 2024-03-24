@@ -9,12 +9,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.EventTypeAdapter
-import com.mobile.healthsync.model.Event
 import com.mobile.healthsync.repository.EventsRepository
 
 class VolunteerFragment : Fragment() {
     private lateinit var eventsRepository: EventsRepository
-    private var listOfEvents = listOf<Event>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View {
@@ -26,11 +24,10 @@ class VolunteerFragment : Fragment() {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        eventsRepository.getEventsBySpecificField("type", "donation") {it
-            listOfEvents = it
+        eventsRepository.getEventsBySpecificField("type", "volunteer") {list ->
+            recyclerView.adapter = EventTypeAdapter(list)
         }
 
-        recyclerView.adapter = EventTypeAdapter(listOfEvents)
         return view
     }
 }
