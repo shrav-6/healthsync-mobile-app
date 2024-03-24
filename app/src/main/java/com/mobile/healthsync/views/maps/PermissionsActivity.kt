@@ -31,7 +31,7 @@ class PermissionsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_permissions)
 
         if(ContextCompat.checkSelfPermission(this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){
-            startActivity(Intent(this@PermissionsActivity,TestActivity::class.java))
+            startActivity(Intent(this@PermissionsActivity,MapActivity::class.java))
             finish()
             return
         }
@@ -43,7 +43,7 @@ class PermissionsActivity : AppCompatActivity() {
                 .withPermission(Manifest.permission.ACCESS_FINE_LOCATION)
                 .withListener( object : PermissionListener {
                     override fun onPermissionGranted(response: PermissionGrantedResponse?) {
-                        startActivity(Intent(this@PermissionsActivity, TestActivity::class.java))
+                        startActivity(Intent(this@PermissionsActivity, MapActivity::class.java))
                         finish()
 
                     }

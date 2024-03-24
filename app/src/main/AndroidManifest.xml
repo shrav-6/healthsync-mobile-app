@@ -27,6 +27,9 @@
         android:name=".views.maps.MapingActivity"
         android:exported="false" />
     <activity
+        android:name=".views.maps.MapActivity"
+        android:exported="false" />
+    <activity
         android:name=".views.maps.PermissionsActivity"
         android:exported="false" />
     <activity
