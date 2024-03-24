@@ -8,4 +8,7 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#EFEEF0</color>
+    <color name="mapcolorPrimary">#35b64f</color>
+    <color name="mapcolorPrimaryDark">#289b35</color>
+    <color name="mapaccentcolor">#ff4081</color>
 </resources>
