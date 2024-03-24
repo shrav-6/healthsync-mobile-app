@@ -7,14 +7,17 @@ import com.google.android.gms.location.LocationRequest
 import android.location.Location
 import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
+import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationCallback
@@ -36,11 +39,15 @@ import com.google.android.gms.tasks.Task
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.AutocompletePrediction
 import com.google.android.libraries.places.api.model.AutocompleteSessionToken
+import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.model.TypeFilter
+import com.google.android.libraries.places.api.net.FetchPlaceRequest
+import com.google.android.libraries.places.api.net.FetchPlaceResponse
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.mancj.materialsearchbar.MaterialSearchBar
+import com.mancj.materialsearchbar.adapter.SuggestionsAdapter
 import com.mobile.healthsync.R
 import java.lang.Exception
 
@@ -134,6 +141,58 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             override fun afterTextChanged(s: Editable?) {
                 // Empty implementation
             }
+        })
+
+        materialSearchBar.setSuggestionsClickListener(object : SuggestionsAdapter.OnItemViewClickListener{
+            override fun OnItemClickListener(position: Int, v: View?) {
+                if(position >= predictionlist.size) {
+                    return
+                }
+                val selectedPrediction : AutocompletePrediction = predictionlist.get(position)
+                val suggestion : String = materialSearchBar.lastSuggestions.get(position).toString()
+                materialSearchBar.text = suggestion
+
+                Handler().postDelayed(object :Runnable {
+                    override fun run() {
+                        materialSearchBar.clearSuggestions()
+                    }
+                }, 1000)
+
+                val imm : InputMethodManager  = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+                if(imm != null) {
+                    imm.hideSoftInputFromWindow(materialSearchBar.windowToken,InputMethodManager.HIDE_IMPLICIT_ONLY)
+                    val placeID : String = selectedPrediction.placeId
+                    val placeFields : List<Place.Field>  = listOf(Place.Field.LAT_LNG)
+
+                    val fetchplaceReq : FetchPlaceRequest = FetchPlaceRequest.builder(placeID, placeFields).build()
+                    placesClient.fetchPlace(fetchplaceReq).addOnSuccessListener(object : OnSuccessListener<FetchPlaceResponse> {
+                        override fun onSuccess(fetchplaceResp: FetchPlaceResponse?) {
+                            val place : Place = fetchplaceResp!!.place
+                            Log.i("mytag", "place found: " + place.name)
+                            val latlng :LatLng   = place.latLng
+                            if(latlng != null) {
+                                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,DEFAULT_ZOOM))
+                            }
+                        }
+
+                    }).addOnFailureListener( object : OnFailureListener{
+                        override fun onFailure(ex: Exception) {
+                            if(ex is ApiException) {
+                                val apiException : ApiException = ex as ApiException
+                                apiException.printStackTrace()
+                                val statusCode: Int = apiException.getStatusCode()
+                                Log.i("mytag", "place not found: " + ex.message)
+                                Log.i("mytag", "status code: " + statusCode)
+                            }
+                        }
+
+                    })
+                }
+            }
+
+            override fun OnItemDeleteListener(position: Int, v: View?) {
+                //Empty implementation
+            }
 
         })
     }
@@ -179,6 +238,18 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                         siex.printStackTrace()
                     }
                 }
+            }
+        })
+
+        mMap.setOnMyLocationButtonClickListener( object : GoogleMap.OnMyLocationButtonClickListener {
+            override fun onMyLocationButtonClick(): Boolean {
+                if(materialSearchBar.isSuggestionsVisible) {
+                    materialSearchBar.clearSuggestions()
+                }
+                if(materialSearchBar.isSearchOpened) {
+                    materialSearchBar.closeSearch()
+                }
+                return false
             }
         })
     }
