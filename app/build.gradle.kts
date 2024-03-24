@@ -76,6 +76,7 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
@@ -86,7 +87,6 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     implementation("com.wdullaer:materialdatetimepicker:4.2.3")
     implementation("com.google.code.gson:gson:2.9.0")
 }

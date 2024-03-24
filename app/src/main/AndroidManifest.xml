@@ -32,6 +32,12 @@
             android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
+            android:name=".views.doctorProfile.DoctorProfile"
+            android:exported="false" />
+        <activity
+            android:name=".views.doctorProfile.EditDoctorProfile"
+            android:exported="false" />
+        <activity
             android:name=".views.patientProfile.PatientProfile"
             android:exported="false" />
         <activity
@@ -39,6 +45,10 @@
             android:exported="false" />
         <activity
             android:name=".views.signUp.SignupActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".views.signUp.SignupDoctorActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
@@ -52,5 +62,7 @@
             </intent-filter>
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
 </manifest>
