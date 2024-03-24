@@ -8,6 +8,10 @@ data class Event(
     @set:PropertyName("contactInfo")
     var contactInfo: String = "",
 
+    @get:PropertyName("dateAndTime")
+    @set:PropertyName("dateAndTime")
+    var dateAndTime: String = "",
+
     @get:PropertyName("datePublished")
     @set:PropertyName("datePublished")
     var datePublished: String = "",
@@ -15,10 +19,6 @@ data class Event(
     @get:PropertyName("description")
     @set:PropertyName("description")
     var description: String = "",
-
-    @get:PropertyName("eventAddress")
-    @set:PropertyName("eventAddress")
-    var eventAddress: String = "",
 
     @get:PropertyName("eventID")
     @set:PropertyName("eventID")
@@ -28,9 +28,17 @@ data class Event(
     @set:PropertyName("eventName")
     var eventName: String = "",
 
+    @get:PropertyName("locationAndVenue")
+    @set:PropertyName("locationAndVenue")
+    var locationAndVenue: String = "",
+
     @get:PropertyName("meetingLink")
     @set:PropertyName("meetingLink")
     var meetingLink: String = "",
+
+    @get:PropertyName("organizer")
+    @set:PropertyName("organizer")
+    var organizer: String = "",
 
     @get:PropertyName("status")
     @set:PropertyName("status")

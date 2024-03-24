@@ -4,7 +4,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.lifecycle.Lifecycle
 import androidx.viewpager2.adapter.FragmentStateAdapter
-import com.mobile.healthsync.views.fragments.DonationsFragment
+import com.mobile.healthsync.views.fragments.DonationFragment
 import com.mobile.healthsync.views.fragments.FundraisersFragment
 import com.mobile.healthsync.views.fragments.InfoSessionFragment
 import com.mobile.healthsync.views.fragments.VolunteerFragment
@@ -18,7 +18,7 @@ class EventsAdapter (fragmentManager: FragmentManager, lifecycle: Lifecycle): Fr
     override fun createFragment(position: Int): Fragment {
         when(position){
             0 -> return InfoSessionFragment()
-            1 -> return DonationsFragment()
+            1 -> return DonationFragment()
             2 -> return FundraisersFragment()
         }
         return VolunteerFragment()
