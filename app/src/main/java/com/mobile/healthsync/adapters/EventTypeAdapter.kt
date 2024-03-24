@@ -18,12 +18,18 @@ class EventTypeAdapter(private val events: List<Event>) : RecyclerView.Adapter<E
 
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val currentEvent = events[position]
+
         if (currentEvent.status == "cancelled" || currentEvent.status == "closed" ) {
             holder.itemView.isEnabled = false
-            currentEvent.eventName.plus("\uD83D\uDEAB")
+            holder.info.text = "Not Available \uD83D\uDEAB"
         }
+        else {
+            holder.info.text = "👆 Click for more information"
+        }
+
         // Setting the values to display on the Recycle Item View
         holder.eventTitle.text = currentEvent.eventName
+        holder.eventDate.text = currentEvent.datePublished
 
         when (currentEvent.type) {
             "donation" -> holder.image.setImageResource(R.drawable.donation)

@@ -4,8 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="150dp"
     android:layout_margin="8dp"
-    app:cardBackgroundColor="@color/white"
-    app:cardCornerRadius="8dp">
+    app:cardBackgroundColor="@color/magnolia"
+    app:cardCornerRadius="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -44,7 +44,7 @@
                 android:id="@+id/info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="👆 Click for more information"
+                android:text=""
                 android:textColor="@color/orchid"
                 android:textSize="16sp" />
         </LinearLayout>
