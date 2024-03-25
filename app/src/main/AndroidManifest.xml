@@ -13,13 +13,24 @@
         android:theme="@style/Theme.Healthsync"
         tools:targetApi="31">
         <activity
+            android:name=".MyApplication"
+            android:label="@string/app_name"
+            android:exported="false" />
+        <activity
             android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
+            android:exported="false"
             android:label="@string/app_name"
             android:theme="@style/Theme.Healthsync">
+
+        </activity>
+        <activity
+            android:name=".views.patientDashboard.DoctorDashboard"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
