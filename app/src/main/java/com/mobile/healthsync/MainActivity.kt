@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import com.mobile.healthsync.services.AlarmScheduler
 import com.mobile.healthsync.services.AlarmScheduler2
 import com.mobile.healthsync.services.MyAlarmReceiver
+
 import com.mobile.healthsync.views.signUp.SignupActivity
 
 class MainActivity : ComponentActivity() {
@@ -27,5 +28,6 @@ class MainActivity : ComponentActivity() {
         alarmScheduler.scheduleAlarm()
         val alarmScheduler2 = AlarmScheduler2(this)
         alarmScheduler2.scheduleAlarm()
+
     }
 }
