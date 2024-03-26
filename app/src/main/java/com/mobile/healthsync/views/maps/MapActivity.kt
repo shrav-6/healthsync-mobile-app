@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.IntentSender
 import com.google.android.gms.location.LocationRequest
 import android.location.Location
-import android.media.MediaPlayer.OnCompletionListener
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
