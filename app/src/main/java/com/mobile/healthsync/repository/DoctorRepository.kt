@@ -6,10 +6,8 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
+import com.mobile.healthsync.model.Availability
 import com.mobile.healthsync.model.Doctor
-import com.mobile.healthsync.model.Slot
 
 
 class DoctorRepository(private val context: Context) {
@@ -60,9 +58,9 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
-    fun getDoctorAvailability(doctor_id: Int, callback: (MutableList<Slot>) -> Unit)
+    fun getDoctorAvailability(doctor_id: Int, callback: (MutableMap<String,Availability>) -> Unit)
     {
-        var slotsList = mutableListOf<Slot>()
+        var availabilityMap = mutableMapOf<String,Availability>()
         db.collection("doctors")
             .whereEqualTo("doctor_id", doctor_id)
             .get()
@@ -72,13 +70,13 @@ class DoctorRepository(private val context: Context) {
                     val documents = task.result
                     if (documents != null && !documents.isEmpty) {
                         val doctor = documents.documents[0].toObject(Doctor::class.java)
-                        for(slot in doctor?.availability!!) {
-                            if(slot is Slot)
+                        doctor?.availability?.forEach { (day, availability) ->
+                            if(day is String && availability is Availability)
                             {
-                                slotsList.add(slot)
+                                availabilityMap.put(day,availability)
                             }
                         }
-                        callback(slotsList)
+                        callback(availabilityMap)
                     }
                 }
             }

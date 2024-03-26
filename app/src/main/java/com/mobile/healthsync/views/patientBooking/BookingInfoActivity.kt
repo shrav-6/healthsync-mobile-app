@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.BookSlotAdapter
+import com.mobile.healthsync.model.Availability
 import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
@@ -18,6 +19,7 @@ import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
+import java.util.Date
 import java.util.Locale
 
 class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
@@ -25,7 +27,8 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
     private val SUCCESS :Int = 1
     private val FAILURE :Int = 0
     private val now = Calendar.getInstance()
-    private val format = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    private val dateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+    val dayFormat = SimpleDateFormat("EEEE", Locale.getDefault())
 
     private var appointmentRepository : AppointmentRepository;
     private var doctorRepository: DoctorRepository
@@ -76,7 +79,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
         }
     }
     private fun fillInitialValues() : String{
-        val formattedDate = format.format(now.time)
+        val formattedDate = dateFormat.format(now.time)
         val dateTextView = findViewById<TextView>(R.id.editdate)
         dateTextView.text = formattedDate
         updateslots(formattedDate)
@@ -111,7 +114,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
         selectDate.set(Calendar.MONTH, monthOfYear)
         selectDate.set(Calendar.DAY_OF_MONTH, dayOfMonth)
         // Apply the format to the date
-        val formattedDate = format.format(selectDate.time)
+        val formattedDate = dateFormat.format(selectDate.time)
         val dateTextView = findViewById<TextView>(R.id.editdate)
         dateTextView.text = formattedDate
         this.date = formattedDate
@@ -119,21 +122,29 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
     }
     fun updateslots(selectedDate : String) {
         appointmentRepository.getAppointments(doctor_id,selectedDate){ retrievedAppointments ->
-            doctorRepository.getDoctorAvailability(doctor_id){ retrievedslots ->
+            doctorRepository.getDoctorAvailability(doctor_id){ retrieved_availabiltiy ->
+                val date: Date = dateFormat.parse(selectedDate) ?: Date()
+                val week : String = dayFormat.format(date)
+                var day_availability : Availability? = retrieved_availabiltiy.get(week)
+                val is_available = day_availability?.is_available
+
                 for(appointment in retrievedAppointments) {
-                    for(slot in retrievedslots) {
+                    for(slot in day_availability?.slots!!) {
                         if(appointment.appointment_status == true && slot.slot_id == appointment.slot_id) {
                             slot.setAsBooked()
                             break
                         }
                     }
                 }
+                if(is_available == true) {
+                    val recyclerView = findViewById<RecyclerView>(R.id.slots)
+                    this.adapter = BookSlotAdapter(day_availability?.slots!!,this@BookingInfoActivity)
 
-                val recyclerView = findViewById<RecyclerView>(R.id.slots)
-                this.adapter = BookSlotAdapter(retrievedslots,this@BookingInfoActivity)
+                    recyclerView.adapter = this.adapter
+                    recyclerView.layoutManager = GridLayoutManager( this@BookingInfoActivity,2)
 
-                recyclerView.adapter = this.adapter
-                recyclerView.layoutManager = GridLayoutManager( this@BookingInfoActivity,2)
+                }
+
             }
         }
     }
