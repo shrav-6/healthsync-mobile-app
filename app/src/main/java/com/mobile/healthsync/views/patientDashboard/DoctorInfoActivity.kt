@@ -18,7 +18,6 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AvailableSlotAdapter
 import com.mobile.healthsync.adapters.RatingsAdapter
 import com.mobile.healthsync.model.Doctor
-import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.repository.ReviewRepository
 import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
@@ -67,7 +66,7 @@ class DoctorInfoActivity : ComponentActivity() {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selected_day = parent?.getItemAtPosition(position).toString()
                 val availability = availabity_map?.get(selected_day)
-                if(availability?.is_available!!)
+                if(availability != null && availability?.is_available!!)
                 {
                     availableslots.adapter = AvailableSlotAdapter(availability.slots)
                 }
