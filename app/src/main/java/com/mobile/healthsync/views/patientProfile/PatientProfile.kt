@@ -9,6 +9,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.squareup.picasso.Picasso
 import com.google.android.material.imageview.ShapeableImageView
+import com.mobile.healthsync.BaseActivity
 
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
@@ -17,7 +18,7 @@ import com.mobile.healthsync.repository.PatientRepository
 /**
  * Line 32 can be deleted and in Line 33 documentID could be set to the Intent Parameter value
  **/
-class PatientProfile : AppCompatActivity() {
+class PatientProfile :BaseActivity() {
 
     private lateinit var patientRepository: PatientRepository
     private val PICK_IMAGE_REQUEST = 100

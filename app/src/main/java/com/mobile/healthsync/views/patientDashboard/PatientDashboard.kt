@@ -6,12 +6,13 @@ import android.widget.SearchView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.DoctorAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 
-class PatientDashboard : AppCompatActivity() {
+class PatientDashboard : BaseActivity() {
 
     private  lateinit var doctorAdapter: DoctorAdapter
     private  lateinit var doctorRepository: DoctorRepository

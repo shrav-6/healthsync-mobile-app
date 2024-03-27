@@ -27,6 +27,7 @@
             android:exported="false" />
         <activity
             android:name=".views.patientDashboard.PatientDashboard"
+            android:parentActivityName=".BaseActivity"
             android:exported="false" />
         <activity
             android:name=".views.doctorProfile.DoctorProfile"
@@ -36,6 +37,7 @@
             android:exported="false" />
         <activity
             android:name=".views.patientProfile.PatientProfile"
+            android:parentActivityName=".BaseActivity"
             android:exported="false" />
         <activity
             android:name=".views.patientProfile.EditPatientProfile"
@@ -46,6 +48,10 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".views.signUp.SignupDoctorActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
+            android:name=".BaseActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
