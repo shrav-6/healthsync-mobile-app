@@ -38,9 +38,12 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
                     // Handle send-reminder data
                     val reminderData = remoteMessage.data["sendReminder"]
                     Log.d(TAG, "Send Reminder Data: $reminderData")
+                    val prescriptionId = remoteMessage.data["prescriptionId"]?.toInt()
 
                     // Show reminder notification with action buttons
-                    showReminderNotification(title, body)
+                    if (prescriptionId != null) {
+                        showReminderNotification(title, body,prescriptionId)
+                    }
                 } else {
                     // Show basic notification
                     sendBasicNotification(title, body)
@@ -91,13 +94,15 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         notificationManager.notify(BASIC_NOTIFICATION_ID, notificationBuilder.build())
     }
 
-    private fun showReminderNotification(title: String, messageBody: String) {
+    private fun showReminderNotification(title: String, messageBody: String,prescriptionId:Int) {
         val intent = Intent(this, MainActivity::class.java)
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
         val yesIntent = Intent(this, YesActionReceiver::class.java)
         yesIntent.putExtra("notificationId", REMINDER_NOTIFICATION_ID)
+        yesIntent.putExtra("prescriptionId", prescriptionId)
         val noIntent = Intent(this, NoActionReceiver::class.java)
         noIntent.putExtra("notificationId", REMINDER_NOTIFICATION_ID)
+        noIntent.putExtra("prescriptionId", prescriptionId)
 
         val yesPendingIntent = PendingIntent.getBroadcast(this, 0, yesIntent,
             PendingIntent.FLAG_ONE_SHOT or PendingIntent.FLAG_IMMUTABLE)

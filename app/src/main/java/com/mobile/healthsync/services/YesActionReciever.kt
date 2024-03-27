@@ -10,9 +10,10 @@ class YesActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", -1)
-        if (notificationId != -1) {
+        val prescriptionId = intent.getIntExtra("prescriptionId", -1)
+        if (prescriptionId != -1) {
             // Handle "Yes" action here
-            Log.d(TAG, "YesActionReceiver: Yes button clicked for notification ID $notificationId")
+            Log.d(TAG, "YesActionReceiver: Yes button clicked for prescription ID $prescriptionId")
 
             // Dismiss the notification
             dismissNotification(context, notificationId)
