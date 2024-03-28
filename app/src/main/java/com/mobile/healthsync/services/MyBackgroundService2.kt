@@ -47,7 +47,7 @@ class MyBackgroundService2 : Service() {
                         Log.e("MyBackgroundService", "Failed to send reminders. Response message: ${apiResponse?.message ?: "Unknown error"}")
                     }
                 } else {
-                    Log.e("MyBackgroundService", "Failed to send reminders. Response code: ${response.message()}")
+                    Log.e("MyBackgroundService", "Failed to send reminders. Response code: ${response.code()}")
                 }
                 stopSelf() // Stop the service after API call
             }
