@@ -10,7 +10,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.TextView
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -99,7 +98,7 @@ class EditDoctorProfile : AppCompatActivity() {
         //Getting availability from firebase
         val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val availabilityAdapter = AvailabilityAdapter(doctor.availability ?: emptyList())
+        val availabilityAdapter = doctor.availability?.let { AvailabilityAdapter(it) }
         recyclerView.adapter = availabilityAdapter
 
         return doctor;
@@ -126,53 +125,27 @@ class EditDoctorProfile : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
         val availabilityAdapter = recyclerView.adapter as AvailabilityAdapter
         val availabilityList = availabilityAdapter.getAvailabilityList()
-        for (i in availabilityList.indices) {
-            val viewHolder = recyclerView.findViewHolderForAdapterPosition(i) as AvailabilityAdapter.AvailabilityViewHolder
-            val startTimePicker = viewHolder.startTimePicker
-            val endTimePicker = viewHolder.endTimePicker
-            val checkBox = viewHolder.availabilityCheckbox
+        for (i in availabilityList.keys.toList().indices) {
+            val viewHolder = recyclerView.findViewHolderForAdapterPosition(i) as? AvailabilityAdapter.AvailabilityViewHolder
+            val checkBox = viewHolder?.availabilityCheckbox
 
-            if (checkBox.isChecked) {
-                // If checkbox is checked, set start time and end time to null
-                availabilityList[i].start_time = "null"
-                availabilityList[i].end_time = "null"
-            } else {
-                // If checkbox is unchecked, set start time and end time as usual
-                var startTimeHour = if (startTimePicker.hour >= 12) startTimePicker.hour - 12 else startTimePicker.hour
-                val startTimeMinute = startTimePicker.minute
-                val startTimeAMPM = if (startTimePicker.hour >= 12) "PM" else "AM"
-                val startTimeString = String.format("%02d:%02d %s", startTimeHour, startTimeMinute, startTimeAMPM)
+            val day = when (i) {
+                0 -> "Monday"
+                1 -> "Tuesday"
+                2 -> "Wednesday"
+                3 -> "Thursday"
+                4 -> "Friday"
+                5 -> "Saturday"
+                6 -> "Sunday"
+                else -> ""
+            }
 
-                var endTimeHour = if (endTimePicker.hour >= 12) endTimePicker.hour - 12 else endTimePicker.hour
-                val endTimeMinute = endTimePicker.minute
-                val endTimeAMPM = if (endTimePicker.hour >= 12) "PM" else "AM"
-                val endTimeString = String.format("%02d:%02d %s", endTimeHour, endTimeMinute, endTimeAMPM)
-
-                // Validating start time and end time range
-                startTimeHour += if (startTimeAMPM == "PM") 12 else 0
-                endTimeHour += if (endTimeAMPM == "PM") 12 else 0
-
-                val startTimeInMinutes = startTimeHour * 60 + startTimeMinute
-                val endTimeInMinutes = endTimeHour * 60 + endTimeMinute
-                // If start time is smaller than end time
-                if (startTimeInMinutes < endTimeInMinutes) {
-                    availabilityList[i].start_time = startTimeString
-                    availabilityList[i].end_time = endTimeString
+            if (checkBox != null) {
+                // if checkbox is checked, update db to false as doctor is not available
+                if (checkBox.isChecked && day!= "") {
+                    availabilityList[day]!!.is_available = false;
                 } else {
-                    availabilityList[i].start_time = "NA"
-                    availabilityList[i].end_time = "NA"
-                    val day = when (i) {
-                        0 -> "Monday"
-                        1 -> "Tuesday"
-                        2 -> "Wednesday"
-                        3 -> "Thursday"
-                        4 -> "Friday"
-                        5 -> "Saturday"
-                        6 -> "Sunday"
-                        else -> ""
-                    }
-                    val message = "Start time cannot be greater than end time for $day"
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                    availabilityList[day]!!.is_available = true;
                 }
             }
         }
