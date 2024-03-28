@@ -21,7 +21,7 @@ class YesActionReceiver : BroadcastReceiver() {
             if (prescriptionId != -1) {
                 // Handle "Yes" action here
                 Log.d(TAG,"YesActionReceiver: Yes button clicked for prescription ID $prescriptionId")
-                prescriptionRepository.updatePatientMedicineIntake(prescriptionId, true)
+                prescriptionRepository.updatePatientMedicineIntake(true)
                 // Dismiss the notification
                 dismissNotification(context, notificationId)
             }

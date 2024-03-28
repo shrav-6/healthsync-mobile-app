@@ -18,7 +18,7 @@ class NoActionReceiver : BroadcastReceiver() {
             // Handle "No" action here
             Log.d(TAG, "NoActionReceiver: No button clicked for prescription ID $prescriptionId")
 
-            prescriptionRepository.updatePatientMedicineIntake(prescriptionId, false)
+            prescriptionRepository.updatePatientMedicineIntake(false)
 
             // Dismiss the notification
             dismissNotification(context, notificationId)
