@@ -2,15 +2,18 @@ package com.mobile.healthsync.adapters
 
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
+import com.squareup.picasso.Picasso
 
 class DoctorAdapter(
     private val doctors: MutableList<Doctor>,
@@ -30,7 +33,6 @@ class DoctorAdapter(
                 activity.startActivity(intent)
             }
         }
-
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): DoctorViewHolder {
@@ -46,10 +48,18 @@ class DoctorAdapter(
     override fun onBindViewHolder(holder: DoctorViewHolder, position: Int) {
         var currDoctor = doctors[position]
 
+        val tvDoctorImage = holder.itemView.findViewById<ImageView>(R.id.ivDoctorImage)
         val tvDoctorName = holder.itemView.findViewById<TextView>(R.id.tvDoctorName)
         val tvExperience = holder.itemView.findViewById<TextView>(R.id.tvExperience)
         val tvSpeciality = holder.itemView.findViewById<TextView>(R.id.tvSpeciality)
         val tvConsultationFee = holder.itemView.findViewById<TextView>(R.id.tvConsultationFee)
+
+        // Getting image from firebase
+        if (currDoctor.doctor_info.photo == "null") {
+            tvDoctorImage.setImageResource(R.drawable.default_doctor_image)
+        } else {
+            Picasso.get().load(Uri.parse(currDoctor.doctor_info.photo)).into(tvDoctorImage)
+        }
 
         tvDoctorName.text = currDoctor.doctor_info.name
         tvExperience.text = currDoctor.doctor_info.years_of_practice.toString()

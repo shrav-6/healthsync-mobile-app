@@ -7,10 +7,11 @@
     tools:context=".views.patientBooking.BookingInfoActivity">
 
     <LinearLayout
-        android:layout_width="300dp"
-        android:layout_height="600dp"
+        android:layout_width="346dp"
+        android:layout_height="637dp"
         android:layout_gravity="center"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="30dp"
+        android:background="@drawable/rounded_corner_bg"
         android:orientation="vertical">
 
         <LinearLayout
@@ -28,7 +29,7 @@
                 android:layout_gravity="center"
                 android:gravity="center"
                 android:text="11-02-2024"
-                android:textSize="25sp" />
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/searchdate"
@@ -44,16 +45,17 @@
             android:layout_width="280dp"
             android:layout_height="300dp"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="30dp" />
 
         <Button
             android:id="@+id/bookbutton"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
             android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:background="@drawable/rounded_corner_input"
             android:text="BOOK"
-            android:background="@drawable/rounded_corner_bg"/>
+            android:textColor="@color/white" />
 
     </LinearLayout>
 

@@ -10,6 +10,7 @@
         android:layout_margin="5dp"
         android:id="@+id/slotcard"
         app:cardCornerRadius="15dp"
+        app:cardBackgroundColor="@color/magnolia"
         app:cardElevation="7dp"
         android:clickable="true">
 

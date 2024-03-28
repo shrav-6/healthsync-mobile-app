@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="100dp"
     android:layout_margin="10dp"
-    android:orientation="horizontal">
+    android:orientation="horizontal"
+    android:padding="15dp"
+    android:background="@drawable/rounded_corner_bg">
 
     <TextView
         android:id="@+id/ratingtext"
@@ -15,7 +17,8 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:inputType="textMultiLine"
-        android:text="Superbbb"
+        android:text="Leave Rating here..."
+        android:gravity="center_vertical"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -29,11 +32,11 @@
         android:layout_marginTop="30dp"
         android:layout_marginBottom="30dp"
         android:numStars="5"
-        android:progressBackgroundTint="@color/teal_700"
+        android:progressBackgroundTint="@color/yellow"
         android:progressTint="@color/black"
         android:rating="2"
-        android:scaleX="0.20"
-        android:scaleY="0.20"
+        android:scaleX="0.45"
+        android:scaleY="0.45"
         android:stepSize="1"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
