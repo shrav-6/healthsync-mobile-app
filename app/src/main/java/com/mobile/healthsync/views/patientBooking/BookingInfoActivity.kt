@@ -9,6 +9,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.CheckoutActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.BookSlotAdapter
 import com.mobile.healthsync.model.Availability
@@ -35,10 +36,9 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
 
     private var doctor_id : Int = -1
     private var slot_id :Int = -1
+    private var start_time: String = ""
     private lateinit var date : String
     private lateinit var adapter: BookSlotAdapter
-
-    private var appointment_id : Int = 0;
     init {
         //initialising helper classes
         this.appointmentRepository = AppointmentRepository(this)
@@ -73,6 +73,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
             if(this.adapter.isSlotselected()) {
                 var selectedSlot : Slot = this.adapter.getselectedSlot()
                 this.slot_id = selectedSlot.slot_id
+                this.start_time = selectedSlot.start_time
                 handleBooking(patient_id);
             }
             else {
@@ -88,14 +89,12 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
         return formattedDate
     }
     private fun handleBooking(patient_id: Int) {
-        val intent :Intent = Intent(this, TestActivity::class.java)
-        intent.putExtra("doctor_id", this.doctor_id)
-        intent.putExtra("patient_id", patient_id)
-        intent.putExtra("slot_id", this.slot_id)
-        intent.putExtra("date",this.date)
         appointmentRepository.createAppointment(
-            this.doctor_id,patient_id,this.slot_id,date,{ appointmentID ->
-                this.appointment_id = appointmentID
+            this.doctor_id,patient_id,this.slot_id,date, this.start_time,{ appointmentID ->
+                val intent :Intent = Intent(this, CheckoutActivity::class.java)
+                intent.putExtra("doctor_id", this.doctor_id)
+                intent.putExtra("patient_id", patient_id)
+                intent.putExtra("appointment_id",appointmentID)
                 updateAfterPayment.launch(intent)
             })
     }
@@ -103,8 +102,6 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
     private val updateAfterPayment = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == this.SUCCESS) { // Payment is complete
             println("Payment Complete")
-            val payment_id = result.data?.getIntExtra("payment_id", -1) ?: -1
-            appointmentRepository.fixAppointment(this.appointment_id,payment_id)
             finish()
         }
         else if(result.resultCode == this.FAILURE) { // Payment failed

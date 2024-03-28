@@ -76,9 +76,11 @@ dependencies {
     implementation("com.google.android.material:material:1.11.0")
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    implementation("com.squareup.picasso:picasso:2.71828")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -86,7 +88,15 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
-
     implementation("com.wdullaer:materialdatetimepicker:4.2.3")
     implementation("com.google.code.gson:gson:2.9.0")
+
+    implementation("com.stripe:stripe-android:20.38.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
+    implementation("com.stripe:stripe-java:24.0.0")
+    implementation ("com.google.android.material:material:1.11.0")
+
+
 }
