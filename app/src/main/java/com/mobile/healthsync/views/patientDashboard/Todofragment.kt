@@ -76,8 +76,7 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
         Log.d("db", db.toString())
         Log.d("loadPrescriptionData", "Firestore instance obtained")
 
-        // TODO: uncomment below code
-        /*db.collection("prescriptions")
+        db.collection("prescriptions")
             .whereEqualTo("appointment_id", prescriptionID).limit(1)
             .get()
             .addOnSuccessListener { documents ->
@@ -109,10 +108,10 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
             }
             .addOnFailureListener { exception ->
                 Log.w("document not found", "Error getting documents: ", exception)
-            }*/
+            }
 
-        //return medicinesList
-        return arrayListOf(Medicine(name="crosine", dosage="4", numberOfDays=5, schedule=DaySchedule(morning=Schedule(doctorSaid=false, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=true), night=Schedule(doctorSaid=true, patientTook=false))), Medicine(name="dolo", dosage="2", numberOfDays=2, schedule= DaySchedule(morning=Schedule(doctorSaid=true, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night= Schedule(doctorSaid=false, patientTook=false))))
+        return medicinesList
+        //return arrayListOf(Medicine(name="crosine", dosage="4", numberOfDays=5, schedule=DaySchedule(morning=Schedule(doctorSaid=false, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=true), night=Schedule(doctorSaid=true, patientTook=false))), Medicine(name="dolo", dosage="2", numberOfDays=2, schedule= DaySchedule(morning=Schedule(doctorSaid=true, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night= Schedule(doctorSaid=false, patientTook=false))))
     }
 }
 
