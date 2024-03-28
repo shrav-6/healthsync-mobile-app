@@ -2,26 +2,32 @@ package com.mobile.healthsync.views.signUp
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.PatientDetails
 import com.mobile.healthsync.uploadToDatabase
+import com.mobile.healthsync.views.patientDashboard.PatientToDo
+import android.content.Context
+
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var imageViewProfile: ImageView
+    lateinit var sharedPreferences: SharedPreferences
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
 
         // for gender options spinner
         val spinner: Spinner = findViewById(R.id.gender_spinner)
@@ -81,7 +87,13 @@ class SignupActivity : AppCompatActivity() {
 
             // upload in database
             val dbObj = uploadToDatabase()
-            dbObj.createPatient(newPatient)
+            dbObj.createPatient(newPatient, sharedPreferences)
+
+            //for testing to-do
+            Log.d("after patient signup","going to patient todo activity")
+            intent = Intent(this, PatientToDo::class.java)
+            startActivity(intent)
+
         }
 
         registerDoctorButton.setOnClickListener {
@@ -89,6 +101,4 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-
 }
