@@ -96,6 +96,5 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("com.stripe:stripe-java:24.0.0")
     implementation ("com.google.android.material:material:1.11.0")
-
-
+    implementation("com.itextpdf:itextpdf:5.5.13.3")
 }
