@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">healthsync</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="total_amount">Total Amount: $%1$.2f</string>
@@ -95,6 +95,7 @@
     <string name="doctor_profile_image">Doctor profile image</string>
     <string name="profile_image">Upload</string>
     <string name="doctorRegister"><b>Register as doctor?</b></string>
+    <string name="google_map_api_key">AIzaSyAFD_PuEsjoQ56qR3XP7-w-XjgC-8x-GkE</string>
     <string name="doctor_login">Doctor Login</string>
     <string name="password">Password</string>
     <string name="email_address">Email Address</string>
