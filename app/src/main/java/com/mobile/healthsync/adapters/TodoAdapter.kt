@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Medicine
 
-class TodoAdapter(private val medicines: List<Medicine>) :
+class TodoAdapter(private val medicines: List<Medicine>, private val listener: MedicinesUpdateListener) :
     RecyclerView.Adapter<TodoAdapter.ViewHolder>() {
 
     interface MedicinesUpdateListener {
@@ -25,27 +25,7 @@ class TodoAdapter(private val medicines: List<Medicine>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val medicine = medicines[position]
-        holder.medicineNameTextView.text = medicine.name
-        holder.morningCheckBox.isChecked = medicine.schedule.morning.doctorSaid
-        holder.afternoonCheckBox.isChecked = medicine.schedule.afternoon.doctorSaid
-        holder.nightCheckBox.isChecked = medicine.schedule.night.doctorSaid
-
-        // Disable checkboxes if doctorSaid is false
-        holder.morningCheckBox.isEnabled = medicine.schedule.morning.doctorSaid
-        holder.afternoonCheckBox.isEnabled = medicine.schedule.afternoon.doctorSaid
-        holder.nightCheckBox.isEnabled = medicine.schedule.night.doctorSaid
-
-        // Update patientTook status when checkboxes are clicked
-        holder.morningCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            medicine.schedule.morning.patientTook = isChecked
-        }
-        holder.afternoonCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            medicine.schedule.afternoon.patientTook = isChecked
-        }
-        holder.nightCheckBox.setOnCheckedChangeListener { _, isChecked ->
-            medicine.schedule.night.patientTook = isChecked
-        }
-        Log.d("medicine list updated", medicine.toString())
+        holder.bind(medicine)
     }
 
     override fun getItemCount(): Int {
@@ -53,10 +33,38 @@ class TodoAdapter(private val medicines: List<Medicine>) :
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val medicineNameTextView: TextView = itemView.findViewById(R.id.text_view_medicine_name)
-        val morningCheckBox: CheckBox = itemView.findViewById(R.id.check_box_taken_morning)
-        val afternoonCheckBox: CheckBox = itemView.findViewById(R.id.check_box_taken_afternoon)
-        val nightCheckBox: CheckBox = itemView.findViewById(R.id.check_box_taken_night)
+        private val medicineNameTextView: TextView = itemView.findViewById(R.id.text_view_medicine_name)
+        private val morningCheckBox: CheckBox = itemView.findViewById(R.id.check_box_taken_morning)
+        private val afternoonCheckBox: CheckBox = itemView.findViewById(R.id.check_box_taken_afternoon)
+        private val nightCheckBox: CheckBox = itemView.findViewById(R.id.check_box_taken_night)
 
+        fun bind(medicine: Medicine) {
+            medicineNameTextView.text = medicine.name
+
+            // Set checkbox states based on patientTook status
+            morningCheckBox.isChecked = medicine.schedule.morning.patientTook
+            afternoonCheckBox.isChecked = medicine.schedule.afternoon.patientTook
+            nightCheckBox.isChecked = medicine.schedule.night.patientTook
+
+            // Disable checkboxes if doctorSaid is false
+            morningCheckBox.isEnabled = medicine.schedule.morning.doctorSaid
+            afternoonCheckBox.isEnabled = medicine.schedule.afternoon.doctorSaid
+            nightCheckBox.isEnabled = medicine.schedule.night.doctorSaid
+
+            // Update patientTook status when checkboxes are clicked
+            morningCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                medicine.schedule.morning.patientTook = isChecked
+                listener.onMedicinesUpdated(medicines) // Notify listener of changes
+            }
+            afternoonCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                medicine.schedule.afternoon.patientTook = isChecked
+                listener.onMedicinesUpdated(medicines) // Notify listener of changes
+            }
+            nightCheckBox.setOnCheckedChangeListener { _, isChecked ->
+                medicine.schedule.night.patientTook = isChecked
+                listener.onMedicinesUpdated(medicines) // Notify listener of changes
+            }
+        }
     }
 }
+

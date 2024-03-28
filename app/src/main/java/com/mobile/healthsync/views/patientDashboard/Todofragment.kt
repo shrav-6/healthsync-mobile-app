@@ -20,14 +20,19 @@ import com.mobile.healthsync.model.Medicine
 //import com.mobile.healthsync.adapters.TodoAdapter
 import com.mobile.healthsync.model.Prescription
 import com.mobile.healthsync.model.Schedule
+import com.mobile.healthsync.repository.PrescriptionRepository
 import com.mobile.healthsync.views.signUp.SignupActivity
 
-class TodoFragment : Fragment() {
+class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: TodoAdapter
     private lateinit var medicinesList: List<Medicine>
     lateinit var sharedPreferences: SharedPreferences
+
+    // Variable to store the updated medicines list
+    private var updatedMedicinesList: MutableList<Medicine> = mutableListOf()
+    private var prescriptionID: String = "1" //TODO: get from db
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,18 +45,29 @@ class TodoFragment : Fragment() {
         recyclerView.setHasFixedSize(true)
 
         val medicinesListf = loadPrescriptionData()
-        //Log.d("after function", medicinesList.toString())
-        recyclerView.adapter = TodoAdapter(medicinesListf)
+        recyclerView.adapter = TodoAdapter(medicinesListf,  this)
 
         val submitButton: Button = view.findViewById(R.id.submit_button)
         submitButton.setOnClickListener {
-            //TODO: backend to store the new medicinesList for the given prescriptionID
-            val intent = Intent(requireContext(), SignupActivity::class.java) //TODO: go to patient dashboard
-            intent.putExtra("medicinesList", ArrayList(medicinesList)) // Pass medicinesList to ConfirmationActivity
+            // Update the medicines list with the changes made in the adapter
+            medicinesList = updatedMedicinesList
+            Log.d("Updated Medicines List", updatedMedicinesList.toString())
+
+            PrescriptionRepository.updateMedicinesForPrescription(prescriptionID, updatedMedicinesList)
+
+            // go to patient dashboard once submitted
+            val intent = Intent(requireContext(), PatientDashboard::class.java)
+            intent.putExtra("medicinesList", ArrayList(medicinesList))
             startActivity(intent)
         }
 
         return view
+    }
+
+    override fun onMedicinesUpdated(medicines: List<Medicine>) {
+        // Update the updatedMedicinesList whenever medicines are updated in the adapter
+        updatedMedicinesList.clear()
+        updatedMedicinesList.addAll(medicines)
     }
 
     fun loadPrescriptionData() : List<Medicine> {
@@ -62,7 +78,7 @@ class TodoFragment : Fragment() {
 
         // TODO: uncomment below code
         /*db.collection("prescriptions")
-            .whereEqualTo("appointment_id", "1").limit(1)
+            .whereEqualTo("appointment_id", prescriptionID).limit(1)
             .get()
             .addOnSuccessListener { documents ->
                 if (!documents.isEmpty) {
@@ -96,7 +112,7 @@ class TodoFragment : Fragment() {
             }*/
 
         //return medicinesList
-        return arrayListOf(Medicine(name="crosine", dosage="4", numberOfDays=5, schedule=DaySchedule(morning=Schedule(doctorSaid=false, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night=Schedule(doctorSaid=true, patientTook=false))), Medicine(name="dolo", dosage="2", numberOfDays=2, schedule= DaySchedule(morning=Schedule(doctorSaid=true, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night= Schedule(doctorSaid=false, patientTook=false))))
+        return arrayListOf(Medicine(name="crosine", dosage="4", numberOfDays=5, schedule=DaySchedule(morning=Schedule(doctorSaid=false, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=true), night=Schedule(doctorSaid=true, patientTook=false))), Medicine(name="dolo", dosage="2", numberOfDays=2, schedule= DaySchedule(morning=Schedule(doctorSaid=true, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night= Schedule(doctorSaid=false, patientTook=false))))
     }
 }
 
