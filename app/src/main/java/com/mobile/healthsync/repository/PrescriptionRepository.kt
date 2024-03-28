@@ -16,7 +16,7 @@ class PrescriptionRepository (private val context: Context) {
         db = FirebaseFirestore.getInstance()
     }
 
-    fun updatePatientMedicineIntake(prescriptionId: String) {
+    fun updatePatientMedicineIntake(prescriptionId: Int, intakeStatus: Boolean) {
         db.collection("prescriptions").whereEqualTo("prescription_id",prescriptionId)
             .get()
             .addOnCompleteListener { task : Task<QuerySnapshot> ->
@@ -27,9 +27,9 @@ class PrescriptionRepository (private val context: Context) {
                             val prescription = document.toObject(Prescription::class.java)
                             prescription.medicines.forEach { (_, medicine) ->
                                 medicine.schedule.forEach{(_, schedule) ->
-                                    schedule.morning.patientTook = true
-                                    schedule.afternoon.patientTook = true
-                                    schedule.night.patientTook = true
+                                    schedule.morning.patientTook = intakeStatus
+                                    schedule.afternoon.patientTook = intakeStatus
+                                    schedule.night.patientTook = intakeStatus
                                 }
                             }
                             db.collection("prescriptions").document(document.id)

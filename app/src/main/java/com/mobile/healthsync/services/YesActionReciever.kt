@@ -13,22 +13,15 @@ class YesActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", -1)
-//<<<<<<< HEAD
-        val prescriptionId1: String = "122";
+        val prescriptionId = intent.getIntExtra("prescriptionId", -1)
         if (notificationId != -1) {
             // Handle "Yes" action here
             Log.d(TAG, "YesActionReceiver: Yes button clicked for notification ID $notificationId")
-            prescriptionRepository.updatePatientMedicineIntake(prescriptionId1)
-//=======
-            val prescriptionId = intent.getIntExtra("prescriptionId", -1)
+
             if (prescriptionId != -1) {
                 // Handle "Yes" action here
-                Log.d(
-                    TAG,
-                    "YesActionReceiver: Yes button clicked for prescription ID $prescriptionId"
-                )
-//>>>>>>> 11-email-confirmation-for-booking
-
+                Log.d(TAG,"YesActionReceiver: Yes button clicked for prescription ID $prescriptionId")
+                prescriptionRepository.updatePatientMedicineIntake(prescriptionId, true)
                 // Dismiss the notification
                 dismissNotification(context, notificationId)
             }

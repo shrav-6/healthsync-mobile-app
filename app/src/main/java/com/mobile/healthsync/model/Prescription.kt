@@ -57,3 +57,4 @@ data class Schedule(
     @set:PropertyName("patient_took")
     var patientTook: Boolean = false,
 ) : Serializable
+
