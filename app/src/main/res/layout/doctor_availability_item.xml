@@ -13,7 +13,7 @@
         android:id="@+id/dayOfTheWeek"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
+        android:layout_marginStart="20dp"
         android:layout_marginTop="10dp"
         android:text="Monday"
         android:textColor="@color/black"
@@ -25,7 +25,7 @@
         android:id="@+id/availabilityCheckbox"
         android:layout_width="wrap_content"
         android:layout_height="48dp"
-        android:layout_marginStart="188dp"
+        android:layout_marginStart="160dp"
         android:text="Not Available"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
