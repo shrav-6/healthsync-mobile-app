@@ -133,7 +133,7 @@ class PatientAppointmentListActivity : AppCompatActivity() {
         appointmentRepository = AppointmentRepository(this)
         doctorRepository = DoctorRepository(this)
 
-        appointmentRepository.getAppointmentsForPatient(251) { retrievedAppointmentsList ->
+        appointmentRepository.getAppointments(251) { retrievedAppointmentsList ->
             // Assuming appointmentsList is a mutable variable accessible in this scope
             appointments = retrievedAppointmentsList
         }
@@ -151,7 +151,8 @@ class PatientAppointmentListActivity : AppCompatActivity() {
                     putExtra(PatientAppointmentDetailsActivity.DOCTOR_KEY, doctor as Parcelable)
                 }
                 startActivity(intent)
-            }
+            } ?: PatientAppointmentListAdapter(emptyList(), emptyList()) { _, _ -> }
+
             recyclerView.adapter = appointmentAdapter
         }
 

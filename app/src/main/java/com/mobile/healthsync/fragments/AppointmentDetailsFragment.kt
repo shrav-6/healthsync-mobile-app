@@ -1,10 +1,9 @@
-package com.mobile.healthsync.fragment
+package com.mobile.healthsync.fragments
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Appointment
@@ -29,13 +28,13 @@ class AppointmentDetailsFragment : Fragment() {
         val doctor: Doctor? = arguments?.getParcelable(DOCTOR_KEY)
 
         // Update UI with appointment and doctor data
-        if (appointment != null && doctor != null) {
-            view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
-            view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
-            view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
-            view.findViewById<TextView>(R.id.textSpecialty).text = "Specialty: ${doctor.doctor_speciality}"
-            // Add more setText() calls for other appointment and doctor details TextViews as needed
-        }
+//        if (appointment != null && doctor != null) {
+//            view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
+//            view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
+//            view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
+//            view.findViewById<TextView>(R.id.textSpecialty).text = "Specialty: ${doctor.doctor_speciality}"
+//            // Add more setText() calls for other appointment and doctor details TextViews as needed
+//        }
     }
 
     companion object {

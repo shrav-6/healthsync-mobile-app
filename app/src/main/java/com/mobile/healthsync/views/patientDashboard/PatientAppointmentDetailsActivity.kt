@@ -3,7 +3,7 @@ package com.mobile.healthsync.views.patientDashboard
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.mobile.healthsync.R
-import com.mobile.healthsync.fragment.AppointmentDetailsFragment
+import com.mobile.healthsync.fragments.AppointmentDetailsFragment
 import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Doctor
 
