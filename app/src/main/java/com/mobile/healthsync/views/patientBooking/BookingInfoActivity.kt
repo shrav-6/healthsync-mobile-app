@@ -37,6 +37,8 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
     private var slot_id :Int = -1
     private lateinit var date : String
     private lateinit var adapter: BookSlotAdapter
+
+    private var appointment_id : Int = 0;
     init {
         //initialising helper classes
         this.appointmentRepository = AppointmentRepository(this)
@@ -90,17 +92,19 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
         intent.putExtra("doctor_id", this.doctor_id)
         intent.putExtra("patient_id", patient_id)
         intent.putExtra("slot_id", this.slot_id)
-        intent.putExtra("date",date)
+        intent.putExtra("date",this.date)
         appointmentRepository.createAppointment(
-            this.doctor_id,patient_id,this.slot_id,date,{
-                updateAfterPayment.launch(intent) })
+            this.doctor_id,patient_id,this.slot_id,date,{ appointmentID ->
+                this.appointment_id = appointmentID
+                updateAfterPayment.launch(intent)
+            })
     }
 
     private val updateAfterPayment = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == this.SUCCESS) { // Payment is complete
             println("Payment Complete")
             val payment_id = result.data?.getIntExtra("payment_id", -1) ?: -1
-            appointmentRepository.fixAppointment(this.doctor_id,this.date,this.slot_id,payment_id)
+            appointmentRepository.fixAppointment(this.appointment_id,payment_id)
             finish()
         }
         else if(result.resultCode == this.FAILURE) { // Payment failed

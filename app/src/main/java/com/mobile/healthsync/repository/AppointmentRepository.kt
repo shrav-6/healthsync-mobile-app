@@ -7,6 +7,7 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.mobile.healthsync.model.Appointment
+import java.util.Random
 
 class AppointmentRepository(private val context: Context) {
     private val db: FirebaseFirestore
@@ -20,6 +21,13 @@ class AppointmentRepository(private val context: Context) {
         // Show a toast message
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
+
+    private fun generateUniqueAppointmentID(): Int {
+        val timestampPart = (System.currentTimeMillis() % 100000).toInt() // Last 5 digits of the current timestamp
+        val randomPart = Random().nextInt(900) + 100 // Ensures a 3-digit random number
+        return timestampPart * 1000 + randomPart // Combines both parts
+    }
+
 
     fun getAppointments(doctor_id: Int, datestr: String,callback: (MutableList<Appointment>) -> Unit)
     {
@@ -44,15 +52,16 @@ class AppointmentRepository(private val context: Context) {
             }
     }
 
-    fun createAppointment(doctor_id: Int, patient_id: Int, slot_id: Int, date: String,callback: () -> Unit){
+    fun createAppointment(doctor_id: Int, patient_id: Int, slot_id: Int, date: String,callback: (Int) -> Unit){
 
-        val appointment = Appointment(-1,doctor_id, patient_id,date,slot_id)
+        val appointment_id = generateUniqueAppointmentID()
+        val appointment = Appointment(appointment_id,doctor_id, patient_id,date,slot_id)
         db.collection("appointments")
             .add(appointment)
             .addOnSuccessListener { documentReference ->
                 println("DocumentSnapshot added with ID: ${documentReference.id}")
                 showToast("Booking Complete")
-                callback()
+                callback(appointment_id)
             }
             .addOnFailureListener { e ->
                 println("DocumentSnapshot addeition failed")
@@ -60,11 +69,9 @@ class AppointmentRepository(private val context: Context) {
             }
     }
 
-    fun fixAppointment(doctor_id: Int, datestr: String, slot_id: Int, payment_id: Int) {
+    fun fixAppointment(appointment_id: Int, payment_id: Int) {
         db.collection("appointments")
-            .whereEqualTo("doctor_id", doctor_id)
-            .whereEqualTo("date", datestr)
-            .whereEqualTo("slot_id",slot_id).get()
+            .whereEqualTo("appointment_id", appointment_id).get()
             .addOnCompleteListener { task: Task<QuerySnapshot> ->
                 if (task.isSuccessful) {
                     val documents = task.result
