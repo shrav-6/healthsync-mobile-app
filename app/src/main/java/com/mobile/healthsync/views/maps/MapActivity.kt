@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.IntentSender
 import com.google.android.gms.location.LocationRequest
 import android.location.Location
+import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
@@ -31,6 +32,8 @@ import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.Marker
+import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.OnFailureListener
 import com.google.android.gms.tasks.OnSuccessListener
@@ -48,7 +51,16 @@ import com.google.android.libraries.places.api.net.PlacesClient
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter
 import com.mobile.healthsync.R
-import java.lang.Exception
+import com.mobile.healthsync.model.JsonParser
+import org.json.JSONException
+import org.json.JSONObject
+import java.io.BufferedReader
+import java.io.IOException
+import java.io.InputStream
+import java.io.InputStreamReader
+import java.lang.StringBuilder
+import java.net.HttpURLConnection
+import java.net.URL
 
 class MapActivity : AppCompatActivity(), OnMapReadyCallback {
 
@@ -66,10 +78,92 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var btnFind : Button
 
     private val DEFAULT_ZOOM : Float = 18f
+    private val MARKER_ZOOM : Float = 14f
+
+    inner class PlaceTask() : AsyncTask<String,Integer,String>() {
+        override fun doInBackground(vararg strings: String?): String {
+            var data : String = ""
+            try {
+                 data = downloadUrl(strings[0])
+            }
+            catch (e : IOException) {
+                e.printStackTrace()
+            }
+            return data
+        }
+
+        @Throws(IOException::class)
+        private fun downloadUrl(string: String?): String {
+            val url : URL = URL(string)
+            val conn : HttpURLConnection = url.openConnection() as HttpURLConnection
+            conn.connect()
+            val stream :InputStream = conn.inputStream
+            val reader : BufferedReader = BufferedReader(InputStreamReader(stream))
+            var builder : StringBuilder = StringBuilder()
+            try {
+                var line: String? = reader.readLine()
+                while(line != null) {
+                    builder.append(line)
+                    line = reader.readLine()
+                }
+            }
+            catch (ex : Exception){
+                ex.printStackTrace()
+            }
+            val data : String = builder.toString()
+            reader.close()
+            return data
+        }
+
+        override fun onPostExecute(s: String?) {
+            ParserTask().execute(s)
+        }
+    }
+
+    inner class ParserTask() : AsyncTask<String,Integer, List<HashMap<String,String>>>() {
+        override fun doInBackground(vararg strings: String?): List<HashMap<String, String>> {
+            val jsonParser : JsonParser = JsonParser()
+            var mapList : List<HashMap<String,String>>? = null
+            var jsonObject : JSONObject? = null
+            try {
+                jsonObject  = JSONObject(strings[0])
+                mapList = jsonParser.parseResult(jsonObject)
+
+            }catch (ex: JSONException) {
+                ex.printStackTrace()
+            }
+            return mapList!!
+        }
+
+        override fun onPostExecute(hashMaps: List<HashMap<String, String>>?) {
+            mMap.clear()
+            for (i in 0 until (hashMaps?.size !!)) {
+                val hashMaplist : HashMap<String,String> = hashMaps.get(i)
+                val lat: Double = hashMaplist.get("lat")?.toDoubleOrNull()!!
+                val lng: Double = hashMaplist.get("lng")?.toDoubleOrNull()!!
+                val name : String = hashMaplist.get("name")!!
+                val latlng : LatLng = LatLng(lat,lng)
+                val marker = addMarker(latlng)
+                marker.title = "$name"
+            }
+
+            val cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMap.cameraPosition.target, MARKER_ZOOM)
+            mMap.animateCamera(cameraUpdate)
+        }
+
+    }
+
+    private fun addMarker(position: LatLng): Marker {
+        //Add simple marker
+        val marker = mMap?.addMarker(MarkerOptions()
+            .position(position)
+            .title("Marker"))
+        return marker!!
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_map)
+        setContentView(R.layout.content_map)
 
         materialSearchBar = findViewById(R.id.searchBar)
         btnFind = findViewById(R.id.btn_find)
@@ -194,6 +288,20 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
             }
 
         })
+
+
+        btnFind.setOnClickListener{
+            val url : String = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" + //Url
+            "?location=" + mLastKnownlocation.latitude + "," + mLastKnownlocation.longitude + //latitude and longitude
+            "&radius=3000" + // Nearby radius
+            "&types=" + "pharmacy" + //Place type
+            "&sensor=true" + //Sensor
+            "&key=" + resources.getString(R.string.google_map_api_key); //gMaps key
+
+            //Execute place task method to download json data
+            PlaceTask().execute(url)
+
+        }
     }
 
     @SuppressLint("MissingPermission")
