@@ -4,14 +4,11 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-
 import com.mobile.healthsync.R
-import com.mobile.healthsync.adapters.AvailableSlotAdapter
 import com.mobile.healthsync.adapters.RatingsAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
@@ -52,7 +49,8 @@ class DoctorInfoActivity : ComponentActivity() {
 
         val availableslots = findViewById<RecyclerView>(R.id.infoAvailableSlots)
         availableslots.layoutManager = GridLayoutManager(this, 3)
-        availableslots.adapter = AvailableSlotAdapter(doctor?.availability)
+        // temp commenting
+//        availableslots.adapter = AvailableSlotAdapter(doctor?.availability)
 
         reviewRepository.getReviews(doctor!!.doctor_id , { reviewlist ->
             val reviews = findViewById<RecyclerView>(R.id.infoReviews)

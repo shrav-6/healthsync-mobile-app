@@ -7,14 +7,12 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.firestore.QuerySnapshot
+import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
-import java.util.UUID
-import com.google.gson.Gson
-import com.google.gson.reflect.TypeToken
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Slot
+import java.util.UUID
 
 
 class DoctorRepository(private val context: Context) {
@@ -78,10 +76,11 @@ class DoctorRepository(private val context: Context) {
                     if (documents != null && !documents.isEmpty) {
                         val doctor = documents.documents[0].toObject(Doctor::class.java)
                         for(slot in doctor?.availability!!) {
-                            if(slot is Slot)
-                            {
-                                slotsList.add(slot)
-                            }
+                            // temp commenting
+//                            if(slot is Slot)
+//                            {
+//                                slotsList.add(slot)
+//                            }
                         }
                         callback(slotsList)
                     }
@@ -98,21 +97,23 @@ class DoctorRepository(private val context: Context) {
                     val doctorsList = mutableListOf<Doctor>()
 
                     val documents = task.result
-                    if (documents != null && !documents.isEmpty) {
+                    documents?.let {
                         // Documents found, parse data and add each Doctor object to the list
-                        for (document in documents) {
+                        for (document in it) {
                             val doctor = document.toObject(Doctor::class.java)
-                            doctor?.let { doctorsList.add(it) }
+                            doctor?.let { doc -> doctorsList.add(doc) }
                         }
-                    }
-
-                    // Invoke the callback with the list of Doctor objects
-                    callback(doctorsList)
+                        // Invoke the callback with the list of Doctor objects
+                        callback(doctorsList)
+                    } ?: showToast("No documents found.")
                 } else {
-                    showToast("Error fetching doctors: ${task.exception?.message}")
+                    // Handle the task failure
+                    val errorMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching doctors: $errorMessage")
                 }
             }
     }
+
 
     private fun displayDoctorData(doctor: Doctor) {
         // Use the populated Doctor object as needed

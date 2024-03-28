@@ -12,7 +12,6 @@ import android.widget.Spinner
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.R
@@ -69,6 +68,7 @@ class EditDoctorProfile : AppCompatActivity() {
         }
     }
 
+
     private fun displayDoctorProfileData(doctor: Doctor): Doctor {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
@@ -97,10 +97,11 @@ class EditDoctorProfile : AppCompatActivity() {
         }
 
         //Getting availability from firebase
-        val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        val availabilityAdapter = AvailabilityAdapter(doctor.availability ?: emptyList())
-        recyclerView.adapter = availabilityAdapter
+        // making temp commenting
+//        val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
+//        recyclerView.layoutManager = LinearLayoutManager(this)
+//        val availabilityAdapter = AvailabilityAdapter(doctor.availability ?: emptyList())
+//        recyclerView.adapter = availabilityAdapter
 
         return doctor;
     }
@@ -178,7 +179,8 @@ class EditDoctorProfile : AppCompatActivity() {
         }
 
         // Update the availability list in the Doctor object
-        updateDoctor.availability = availabilityList
+        //making temp commenting
+//        updateDoctor.availability = availabilityList
 
         return updateDoctor
     }

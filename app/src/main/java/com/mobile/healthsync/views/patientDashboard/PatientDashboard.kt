@@ -66,7 +66,7 @@ class PatientDashboard : AppCompatActivity() {
             } else {
                 // If no name match, check for speciality match
                 val specialityMatch =
-                    doctor.doctor_info.doctor_speciality?.contains(query.orEmpty(), ignoreCase = true) ?: false
+                    doctor.doctor_speciality?.contains(query.orEmpty(), ignoreCase = true) ?: false
 
                 if (specialityMatch) {
                     // Add the matching doctor to the filtered list
