@@ -11,6 +11,7 @@ import android.widget.EditText
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.repository.PatientRepository
@@ -18,7 +19,7 @@ import com.squareup.picasso.Picasso
 import java.util.Calendar
 import java.util.Locale
 
-class EditPatientProfile : AppCompatActivity() {
+class EditPatientProfile : BaseActivity() {
 
     private lateinit var patientRepository: PatientRepository
     private var documentID: String = ""
