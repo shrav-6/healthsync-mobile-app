@@ -1,8 +1,6 @@
 package com.mobile.healthsync.model
 
-import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
-import kotlinx.parcelize.Parcelize
 import java.io.Serializable
 
 data class Doctor(
@@ -12,7 +10,7 @@ data class Doctor(
 
     @get:PropertyName("availability")
     @set:PropertyName("availability")
-    var availability: List<Slot>? = null,
+    var availability: Map<String,Availability>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")

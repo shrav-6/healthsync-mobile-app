@@ -100,4 +100,13 @@
     <string name="email_address">Email Address</string>
     <string name="patient_login">Patient Login</string>
     <string name="sign_up">Sign Up</string>
+    <string-array name="week_days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>
