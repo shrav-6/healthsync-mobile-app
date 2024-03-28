@@ -24,9 +24,6 @@
             android:value="@string/google_map_api_key" />
 
     <activity
-        android:name=".views.maps.MapingActivity"
-        android:exported="false" />
-    <activity
         android:name=".views.maps.MapActivity"
         android:exported="false" />
     <activity

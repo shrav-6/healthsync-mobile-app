@@ -264,6 +264,12 @@ class MapActivity : AppCompatActivity(), OnMapReadyCallback {
                             Log.i("mytag", "place found: " + place.name)
                             val latlng :LatLng   = place.latLng
                             if(latlng != null) {
+                                val newLocation = Location("")
+                                // Set the latitude and longitude of the new Location object
+                                newLocation.latitude = latlng.latitude
+                                newLocation.longitude = latlng.longitude
+                                // Assign the new Location object to mLastKnownlocation
+                                mLastKnownlocation = newLocation
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,DEFAULT_ZOOM))
                             }
                         }
