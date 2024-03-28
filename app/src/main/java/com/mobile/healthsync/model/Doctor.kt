@@ -3,15 +3,14 @@ package com.mobile.healthsync.model
 import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
 
-
 data class Doctor(
-    @get:PropertyName("availability")
-    @set:PropertyName("availability")
-    var availability: Map<String, Map<String, String>>? = null,
-
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
-    var doctor_id: List<Any> = emptyList(),
+    var doctor_id: Int = -1,
+
+    @get:PropertyName("availability")
+    @set:PropertyName("availability")
+    var availability: Map<String,Availability>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")
