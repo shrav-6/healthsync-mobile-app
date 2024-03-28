@@ -10,9 +10,10 @@ class NoActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", -1)
-        if (notificationId != -1) {
+        val prescriptionId = intent.getIntExtra("prescriptionId", -1)
+        if (prescriptionId != -1) {
             // Handle "No" action here
-            Log.d(TAG, "NoActionReceiver: No button clicked for notification ID $notificationId")
+            Log.d(TAG, "NoActionReceiver: No button clicked for prescription ID $prescriptionId")
 
             // Dismiss the notification
             dismissNotification(context, notificationId)
