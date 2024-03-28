@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,10 +16,40 @@
         android:theme="@style/AppTheme"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".views.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.events.EventInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.events.EventsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientBooking.BookingInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CheckoutActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientBooking.TestActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientDashboard.DoctorInfoActivity"
             android:exported="false" />
         <activity
             android:name=".views.patientDashboard.PatientDashboard"
+            android:exported="false" />
+        <activity
+            android:name=".views.doctorProfile.DoctorProfile"
+            android:exported="false" />
+        <activity
+            android:name=".views.doctorProfile.EditDoctorProfile"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientProfile.PatientProfile"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientProfile.EditPatientProfile"
             android:exported="false" />
         <activity
             android:name=".views.signUp.SignupActivity"
@@ -29,12 +60,11 @@
             android:exported="false"
             android:theme="@style/AppTheme" />
         <activity
-            android:name=".views.patientDashboard.PatientToDo"
+            android:name=".MainActivity"
             android:exported="true"
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
