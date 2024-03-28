@@ -99,7 +99,7 @@ class EditDoctorProfile : AppCompatActivity() {
         //Getting availability from firebase
         val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val availabilityAdapter = AvailabilityAdapter(doctor.availability ?: emptyList())
+        val availabilityAdapter = doctor.availability?.let { AvailabilityAdapter(it) }
         recyclerView.adapter = availabilityAdapter
 
         return doctor;
@@ -126,7 +126,7 @@ class EditDoctorProfile : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
         val availabilityAdapter = recyclerView.adapter as AvailabilityAdapter
         val availabilityList = availabilityAdapter.getAvailabilityList()
-        for (i in availabilityList.indices) {
+        for (i in availabilityList.values.toString().indices) {
             val viewHolder = recyclerView.findViewHolderForAdapterPosition(i) as AvailabilityAdapter.AvailabilityViewHolder
             val startTimePicker = viewHolder.startTimePicker
             val endTimePicker = viewHolder.endTimePicker
@@ -134,8 +134,9 @@ class EditDoctorProfile : AppCompatActivity() {
 
             if (checkBox.isChecked) {
                 // If checkbox is checked, set start time and end time to null
-                availabilityList[i].start_time = "null"
-                availabilityList[i].end_time = "null"
+                // update booked status to true
+//                availabilityList[i].start_time = "null"
+//                availabilityList[i].end_time = "null"
             } else {
                 // If checkbox is unchecked, set start time and end time as usual
                 var startTimeHour = if (startTimePicker.hour >= 12) startTimePicker.hour - 12 else startTimePicker.hour
@@ -156,11 +157,11 @@ class EditDoctorProfile : AppCompatActivity() {
                 val endTimeInMinutes = endTimeHour * 60 + endTimeMinute
                 // If start time is smaller than end time
                 if (startTimeInMinutes < endTimeInMinutes) {
-                    availabilityList[i].start_time = startTimeString
-                    availabilityList[i].end_time = endTimeString
+//                    availabilityList[i].start_time = startTimeString
+//                    availabilityList[i].end_time = endTimeString
                 } else {
-                    availabilityList[i].start_time = "NA"
-                    availabilityList[i].end_time = "NA"
+//                    availabilityList[i].start_time = "NA"
+//                    availabilityList[i].end_time = "NA"
                     val day = when (i) {
                         0 -> "Monday"
                         1 -> "Tuesday"
