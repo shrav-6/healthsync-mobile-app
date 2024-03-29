@@ -1,5 +1,6 @@
 package com.mobile.healthsync.adapters
 
+import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -7,8 +8,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Appointment
+import com.mobile.healthsync.model.Patient
+import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
+import com.mobile.healthsync.views.patientProfile.PatientProfile
 
 class AppointmentAdapter(private var appointments: List<Appointment>, private var selectedDate: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -26,6 +32,16 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
         val appointmentTimeTextView: TextView = view.findViewById(R.id.appointmentTimeTextView)
         val appointmentStartTimeTextView: TextView = view.findViewById(R.id.appointmentStartTimeTextView)
         val profileImageView: ImageView = view.findViewById(R.id.profileImageView)
+
+        init {
+            // Set the click listener on the patientNameTextView to redirect to PatientAppointmentListActivity
+            patientNameTextView.setOnClickListener {
+                val context = it.context
+                val intent = Intent(context, PatientProfile::class.java)
+                context.startActivity(intent)
+
+            }
+        }
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -40,7 +56,7 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
                 HeaderViewHolder(view)
             }
             VIEW_TYPE_APPOINTMENT -> {
-                val view = inflater.inflate(R.layout.item_appointment, parent, false)
+                val view = inflater.inflate(R.layout.item_appointment_doctor, parent, false)
                 AppointmentViewHolder(view)
             }
             else -> throw IllegalArgumentException("Invalid view type")
@@ -49,7 +65,7 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
 
 
     //Last working Backup of BindViewHolder
-    override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+    /*override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_HEADER) {
             Log.d("AppointmentAdapter", "Binding header with date: $selectedDate")
             (holder as HeaderViewHolder).dateTextView.text = selectedDate
@@ -59,10 +75,10 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
             holder.appointmentTimeTextView.text = getTimeSlotFromId(appointment.slot_id)
             holder.appointmentStartTimeTextView.text = getTimeSlotFromId(appointment.slot_id).substring(0,8)
         }
-    }
+    }*/
 
     //Using Firebase to get Patient Name
-   /* override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+   override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (getItemViewType(position) == VIEW_TYPE_HEADER) {
             Log.d("AppointmentAdapter", "Binding header with date: $selectedDate")
             (holder as HeaderViewHolder).dateTextView.text = selectedDate
@@ -72,33 +88,36 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
             appointmentHolder.appointmentTimeTextView.text = getTimeSlotFromId(appointment.slot_id)
             appointmentHolder.appointmentStartTimeTextView.text = getTimeSlotFromId(appointment.slot_id).substring(0, 8)
 
+            val patientId = appointment.patient_id
+
             // Fetch patient details from Firestore
             val db = FirebaseFirestore.getInstance()
-            db.collection("Patients").document(appointment.patient_id.toString()).get()
-                .addOnSuccessListener { documentSnapshot ->
-                    val patient = documentSnapshot.toObject(Patient::class.java)
-                    if (patient != null) {
-                        // Access name and photo from patientDetails
-                        val patientName = patient.patientDetails.name
-                        val patientPhotoUrl = patient.patientDetails.photo
+            db.collection("patients").whereEqualTo("patient_id", patientId).get()
+                .addOnSuccessListener { documents ->
+                    if (!documents.isEmpty) {
+                        // Assuming the patient_id is unique and only one document should match
+                        val document = documents.documents.first()
+                        val patient = document.toObject(Patient::class.java)
+                        patient?.let {
+                            appointmentHolder.patientNameTextView.text = it.patientDetails.name
 
-                        (holder as AppointmentViewHolder).patientNameTextView.text = patientName
-
-                        // Load the photo URL into the ImageView using Glide or another image loading library
-                        patientPhotoUrl?.let { url ->
-                            Glide.with(holder.itemView.context)
-                                .load(url)
-                                .placeholder(R.drawable.placeholder) // Placeholder image
-                                .error(R.drawable.error) // Error image
-                                .into((holder as AppointmentViewHolder).profileImageView)
+                            it.patientDetails.photo?.let { url ->
+                                Glide.with(holder.itemView.context)
+                                    .load(url)
+                                    .placeholder(R.drawable.placeholder)  // Adjust with your placeholder
+                                    .error(R.drawable.error)  // Adjust with your error placeholder
+                                    .into(appointmentHolder.profileImageView)
+                            }
                         }
+                    } else {
+                        Log.d("AppointmentAdapter", "No matching patient found for ID: $patientId")
                     }
                 }
                 .addOnFailureListener { e ->
                     Log.e("AppointmentAdapter", "Error fetching patient details", e)
                 }
         }
-    }*/
+    }
 
 
     override fun getItemCount(): Int {

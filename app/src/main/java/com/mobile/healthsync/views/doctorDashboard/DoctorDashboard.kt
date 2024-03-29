@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.doctorDashboard
 
+import android.content.Context
 import com.google.firebase.firestore.QuerySnapshot
 
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AppointmentAdapter
 import com.mobile.healthsync.model.Appointment
@@ -55,10 +57,20 @@ class DoctorDashboard : AppCompatActivity() {
         appointmentsRecyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    //Load Bookings from Firebase
-    /*private fun loadBookings() {
+    private fun loadBookings() {
+        // Retrieve doctor_id from Shared Preferences
+        val sharedPreferences = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val doctorId = sharedPreferences.getString("doctor_id", "")?.toLongOrNull() // Assuming doctor_id is stored as a String
+
+        if (doctorId == null) {
+            Log.e("Firebase", "Doctor ID not found in Shared Preferences")
+            return // Exit if doctor_id is not found or not convertible to Long
+        }
+
         val db = FirebaseFirestore.getInstance()
+        // Modify the query to filter by doctor_id
         db.collection("appointments")
+            .whereEqualTo("doctor_id", doctorId)
             .get()
             .addOnSuccessListener { documents ->
                 allAppointments.clear()
@@ -66,15 +78,16 @@ class DoctorDashboard : AppCompatActivity() {
                     val appointment = document.toObject(Appointment::class.java)
                     allAppointments.add(appointment)
                 }
-                Log.d("Firebase", "Fetched ${allAppointments.size} appointments")
+                Log.d("Firebase", "Fetched ${allAppointments.size} appointments for doctor_id $doctorId")
             }
             .addOnFailureListener { exception ->
                 Log.e("Firebase", "Error loading appointments", exception)
             }
-    }*/
+    }
+
 
     //Load Bookings from Dummy Data
-    private fun loadBookings() {
+   /* private fun loadBookings() {
         // Dummy data for appointments on 28th March and 30th March
         allAppointments.clear() // Clear existing data
 
@@ -91,7 +104,7 @@ class DoctorDashboard : AppCompatActivity() {
         // or you can choose to show for one of the dummy dates by default
         val currentFormattedDate = getCurrentFormattedDate()
         showAppointmentsForDay(currentFormattedDate) // Or replace currentFormattedDate with "28/03/2023" or "30/03/2023" as desired
-    }
+    }*/
 
 
 
@@ -105,25 +118,6 @@ class DoctorDashboard : AppCompatActivity() {
     }
 
     private fun getCurrentFormattedDate(): String = dateFormat.format(Date())
-
-    /*private fun setupCalendar() {
-        val daysOfWeek = arrayOf("Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat")
-        val today = Calendar.getInstance()
-        for (i in 0 until 7) {
-            val dayView = LayoutInflater.from(this).inflate(R.layout.calendar_day_view, null)
-            val dateTextView: TextView = dayView.findViewById(R.id.dateTextView)
-            val dayLabelTextView: TextView = dayView.findViewById(R.id.dayLabelTextView)
-
-            today.add(Calendar.DAY_OF_MONTH, if (i == 0) 0 else 1)
-
-            val date = dateFormat.format(today.time)
-            dateTextView.text = date
-            dayLabelTextView.text = daysOfWeek[today.get(Calendar.DAY_OF_WEEK) - 1]
-
-            dayView.setOnClickListener { showAppointmentsForDay(date) }
-            calendarView.addView(dayView)
-        }
-    }*/
 
     private fun setupCalendar() {
         val daysOfWeek = arrayOf("SN", "MO", "TU", "WE", "TH", "FR", "SA")
@@ -163,15 +157,6 @@ class DoctorDashboard : AppCompatActivity() {
             today.add(Calendar.DAY_OF_MONTH, 1)
         }
     }
-
-    /*private fun showAppointmentsForDay(date: String) {
-        Log.d("Calendar", "Filtering for date: $date")
-        val filteredAppointments = allAppointments.filter { appointment ->
-            appointment.date == date
-        }.sortedBy { it.slot_id }
-        Log.d("Calendar", "Found ${filteredAppointments.size} appointments for $date")
-        adapter.updateAppointments(filteredAppointments, date)
-    }*/
 
     private fun showAppointmentsForDay(date: String) {
         Log.d("Calendar", "Filtering for date: $date")

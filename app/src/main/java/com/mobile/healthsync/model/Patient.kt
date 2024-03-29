@@ -62,6 +62,3 @@ data class Patient(
         var photo: String? = null
     ) : Serializable
 }
-
-
-

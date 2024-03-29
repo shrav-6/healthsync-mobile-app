@@ -9,4 +9,11 @@
     <color name="white">#FFFFFFFF</color>
     <color name="light_gray">#F2F2F2</color>
     <color name="calendar_date_color">#FF000000</color> <!-- Replace with your desired color -->
+    <color name="gray">#EFEEF0</color>
+    <color name="magnolia">#f8f4ff</color>
+    <color name="orchid">#9932cc</color>
+
+    <color name="mapcolorPrimary">#35b64f</color>
+    <color name="mapcolorPrimaryDark">#289b35</color>
+    <color name="mapaccentcolor">#ff4081</color>
 </resources>

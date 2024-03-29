@@ -1,84 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="0dp"
-    android:layout_marginBottom="5dp"
-    android:gravity="center_vertical">
+    android:layout_height="110dp"
+    android:layout_marginTop="8dp"
+    android:layout_marginStart="4dp"
+    android:layout_marginEnd="4dp"
+    android:paddingStart="8dp"
+    android:background="@drawable/rounded_corner_bg">
 
-    <!-- Appointment Start Time -->
     <TextView
-    android:id="@+id/appointmentStartTimeTextView"
-    android:layout_width="66dp"
-    android:layout_height="64dp"
-    android:maxLines="2"
-    android:gravity="center"
-    android:layout_marginEnd="16dp"
-    android:textSize="12sp"
-    android:textStyle="bold"
-    tools:text="09:00\nAM" />
-
-
-
-    <!-- Patient Details CardView -->
-    <androidx.cardview.widget.CardView
+        android:id="@+id/tvDoctorName"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        app:cardBackgroundColor ="@color/light_gray">
+        android:layout_marginTop="12dp"
+        android:textStyle="bold"
+        android:textSize="20sp"
+        android:text="TextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="8dp">
+    <TextView
+        android:id="@+id/tvDate"
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/timeTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvDoctorName" />
 
-            <!-- Profile Image and Patient Name Container -->
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:gravity="center_vertical">
+    <TextView
+        android:id="@+id/timeTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="12dp"
+        android:textSize="16sp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
-                <!-- Profile Image -->
-                <ImageView
-                    android:id="@+id/profileImageView"
-                    android:layout_width="42dp"
-                    android:layout_height="42dp"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/profile_picture"
-                    tools:ignore="ContentDescription" />
 
-                <!-- Patient Name and Appointment Time Container -->
-                <LinearLayout
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:orientation="vertical">
-
-                    <!-- Patient Name -->
-                    <TextView
-                        android:id="@+id/patientNameTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="16sp"
-                        tools:text="Patient Name" />
-
-                    <!-- Appointment Time -->
-                    <TextView
-                        android:id="@+id/appointmentTimeTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:layout_marginTop="4dp"
-                        tools:text="08:15 - 08:45" />
-                </LinearLayout>
-            </LinearLayout>
-        </LinearLayout>
-    </androidx.cardview.widget.CardView>
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
