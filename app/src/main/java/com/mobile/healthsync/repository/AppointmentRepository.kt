@@ -50,6 +50,31 @@ class AppointmentRepository(private val context: Context) {
             }
     }
 
+    fun getAppointments(patientId: Int, callback: (MutableList<Appointment>) -> Unit) {
+        val appointmentList = mutableListOf<Appointment>()
+        db.collection("appointments")
+            .whereEqualTo("patient_id", patientId)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        // Documents found, parse data and add each appointment object to the list
+                        for (document in documents) {
+                            val appointment = document.toObject(Appointment::class.java)
+                            appointment?.let { appointmentList.add(it) }
+                        }
+                    }
+                } else {
+                    // Error handling
+                    showToast("Error fetching appointments: ${task.exception?.message}")
+                }
+                // Callback with the list of appointments
+                callback(appointmentList)
+            }
+    }
+
+    
     fun createAppointment(doctor_id: Int, patient_id: Int, slot_id: Int, date: String,start_time : String, callback: (Int) -> Unit){
 
         val appointment_id = generateUniquePaymentId()

@@ -95,6 +95,8 @@
     <string name="doctor_profile_image">Doctor profile image</string>
     <string name="profile_image">Upload</string>
     <string name="doctorRegister"><b>Register as doctor?</b></string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="google_map_api_key">AIzaSyAFD_PuEsjoQ56qR3XP7-w-XjgC-8x-GkE</string>
     <string name="doctor_login">Doctor Login</string>
     <string name="password">Password</string>

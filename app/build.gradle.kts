@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -99,6 +97,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("com.stripe:stripe-java:24.0.0")
     implementation ("com.google.android.material:material:1.11.0")
+
+    implementation("org.json:json:20210307")
 
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
