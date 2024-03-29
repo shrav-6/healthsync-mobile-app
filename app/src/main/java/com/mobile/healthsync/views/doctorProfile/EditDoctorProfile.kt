@@ -68,6 +68,7 @@ class EditDoctorProfile : AppCompatActivity() {
         }
     }
 
+
     private fun displayDoctorProfileData(doctor: Doctor): Doctor {
         val doctorNameEditText: EditText = findViewById(R.id.editDoctorName)
         val doctorSpecializationEditText: EditText = findViewById(R.id.editDoctorSpecialization)
@@ -151,7 +152,8 @@ class EditDoctorProfile : AppCompatActivity() {
         }
 
         // Update the availability list in the Doctor object
-        updateDoctor.availability = availabilityList
+        //making temp commenting
+//        updateDoctor.availability = availabilityList
 
         return updateDoctor
     }
