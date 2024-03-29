@@ -1,5 +1,6 @@
 package com.mobile.healthsync.model
 
+import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
