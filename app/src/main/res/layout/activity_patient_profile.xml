@@ -5,7 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/gray">
     <!-- Include the parent layout -->
-    <include layout="@layout/activity_toolbar" />
 
     <!-- Edit Button -->
 

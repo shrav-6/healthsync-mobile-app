@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.patientProfile
 
+import com.mobile.healthsync.BaseActivity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -9,9 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
-import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.repository.PatientRepository

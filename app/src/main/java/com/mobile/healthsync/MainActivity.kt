@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
+import com.mobile.healthsync.views.doctorProfile.DoctorProfile
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 
 import com.mobile.healthsync.views.signUp.SignupActivity

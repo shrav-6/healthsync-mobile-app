@@ -10,20 +10,21 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.mobile.healthsync.views.doctorProfile.DoctorProfile
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 import com.mobile.healthsync.views.patientProfile.PatientProfile
 
-open class BaseActivity : AppCompatActivity() {
+open class BaseActivityForDoctor : AppCompatActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
-        val fullView = layoutInflater.inflate(R.layout.activity_toolbar, null) as DrawerLayout
-        val activityContainer = fullView.findViewById<FrameLayout>(R.id.activity_content)
+        val fullView = layoutInflater.inflate(R.layout.activity_toolbar_doctor, null) as DrawerLayout
+        val activityContainer = fullView.findViewById<FrameLayout>(R.id.activity_content1)
         layoutInflater.inflate(layoutResID, activityContainer, true)
         super.setContentView(fullView)
 
-        val toolbar = findViewById<Toolbar>(R.id.toolbar)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar1)
         setSupportActionBar(toolbar)
 
 
@@ -39,8 +40,8 @@ open class BaseActivity : AppCompatActivity() {
     }
 
     private fun setupToolbar() {
-        val drawerLayout = findViewById<DrawerLayout>(R.id.activity_container)
-        val navView = findViewById<NavigationView>(R.id.navigationView)
+        val drawerLayout = findViewById<DrawerLayout>(R.id.activity_container1)
+        val navView = findViewById<NavigationView>(R.id.navigationView1)
         toggle = ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close)
         drawerLayout.addDrawerListener(toggle)
         toggle.syncState()
@@ -50,26 +51,16 @@ open class BaseActivity : AppCompatActivity() {
         navView.setNavigationItemSelectedListener { menuItem ->
             menuItem.isChecked = true
             when (menuItem.itemId) {
-                R.id.dashboard -> {
+                /*R.id.dashboard -> {
                     startActivity(Intent(this, PatientDashboard::class.java))
                 }
-                /*R.id.appointments -> {
-                    startActivity(Intent(this, PatientDashboard::class.java))
-                }
-                R.id.pharmacies -> {
-                    startActivity(Intent(this, PatientDashboard::class.java))
-                }
-                R.id.TODO -> {
+                R.id.appointments -> {
                     startActivity(Intent(this, PatientDashboard::class.java))
                 }*/
-                /*R.id.RSVP -> {
-                    startActivity(Intent(this, PatientProfile::class.java))
-                }*/
-                /*R.id.Insights -> {
-                    startActivity(Intent(this, PatientProfile::class.java))
-                }*/
+
+
                 R.id.profile -> {
-                    startActivity(Intent(this, PatientProfile::class.java))
+                    startActivity(Intent(this, DoctorProfile::class.java))
                 }
                 R.id.logout -> {
                     Toast.makeText(applicationContext, "Logging out!", Toast.LENGTH_SHORT).show()

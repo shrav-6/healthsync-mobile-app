@@ -15,13 +15,14 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.imageview.ShapeableImageView
+import com.mobile.healthsync.BaseActivityForDoctor
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AvailabilityAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
-class EditDoctorProfile : AppCompatActivity() {
+class EditDoctorProfile : BaseActivityForDoctor() {
 
     private  lateinit var doctorRepository: DoctorRepository
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -99,7 +100,7 @@ class EditDoctorProfile : AppCompatActivity() {
         //Getting availability from firebase
         val recyclerView: RecyclerView = findViewById(R.id.availabilityRecyclerView)
         recyclerView.layoutManager = LinearLayoutManager(this)
-        val availabilityAdapter = AvailabilityAdapter(doctor.availability ?: emptyList())
+        val availabilityAdapter = AvailabilityAdapter(doctor.availability?.get("Monday")?.slots ?: emptyList())
         recyclerView.adapter = availabilityAdapter
 
         return doctor;
@@ -178,7 +179,7 @@ class EditDoctorProfile : AppCompatActivity() {
         }
 
         // Update the availability list in the Doctor object
-        updateDoctor.availability = availabilityList
+        updateDoctor.availability = mutableMapOf()
 
         return updateDoctor
     }
