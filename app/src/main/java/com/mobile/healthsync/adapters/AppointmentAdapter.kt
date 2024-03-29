@@ -37,7 +37,7 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
             // Set the click listener on the patientNameTextView to redirect to PatientAppointmentListActivity
             patientNameTextView.setOnClickListener {
                 val context = it.context
-                val intent = Intent(context, PatientProfile::class.java)
+                val intent = Intent(context, PatientAppointmentListActivity::class.java)
                 context.startActivity(intent)
 
             }
