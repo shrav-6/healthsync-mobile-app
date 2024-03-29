@@ -21,6 +21,8 @@ import com.mobile.healthsync.model.Medicine
 import com.mobile.healthsync.model.Prescription
 import com.mobile.healthsync.model.Schedule
 import com.mobile.healthsync.repository.PrescriptionRepository
+import com.mobile.healthsync.repository.PrescriptionRepository.loadMedicinesData
+//import com.mobile.healthsync.repository.PrescriptionRepository.loadPrescriptionData
 import com.mobile.healthsync.views.signUp.SignupActivity
 
 class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
@@ -32,7 +34,8 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
     // Variable to store the updated medicines list
     private var updatedMedicinesList: MutableList<Medicine> = mutableListOf()
-    private var prescriptionID: String = "1" //TODO: get from db
+    private var appointmentId: String = "1" //TODO: get from db
+    private var prescriptionID: String = "1"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -44,7 +47,7 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        val medicinesListf = loadPrescriptionData()
+        val medicinesListf = loadMedicinesData(appointmentId)
         recyclerView.adapter = TodoAdapter(medicinesListf,  this)
 
         val submitButton: Button = view.findViewById(R.id.submit_button)
@@ -70,49 +73,6 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
         updatedMedicinesList.addAll(medicines)
     }
 
-    fun loadPrescriptionData() : List<Medicine> {
-        // Reference to the "doctors" collection
-        val db = Firebase.firestore
-        Log.d("db", db.toString())
-        Log.d("loadPrescriptionData", "Firestore instance obtained")
-
-        db.collection("prescriptions")
-            .whereEqualTo("appointment_id", prescriptionID).limit(1)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    val document = documents.documents[0]
-                    Log.d("document read", document.data.toString())
-                    val prescription = document.toObject(Prescription::class.java)
-
-                    val prescriptionID = prescription?.prescriptionId
-                    Log.d("prescription",prescription.toString())
-
-                    Log.d("prescriptionID", prescriptionID.toString())
-
-                    // Assuming prescription is a valid Prescription object obtained from Firestore
-                    val medicines: HashMap<String, Medicine>? = prescription?.medicines
-                    //lateinit var medicinesList: List<Medicine>
-                    Log.d("medicines", medicines.toString())
-                    if (medicines != null && medicines.isNotEmpty()) {
-                        medicinesList = medicines.values.toList()
-
-                        Log.d("medicinesList", medicinesList.toString())
-                    }
-                    // Handle the retrieved prescription
-                    //recyclerView.adapter = adapter
-                } else {
-                    // No prescription found with the given appointment ID
-                    Log.d("Prescription read", "No prescription found")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("document not found", "Error getting documents: ", exception)
-            }
-
-        return medicinesList
-        //return arrayListOf(Medicine(name="crosine", dosage="4", numberOfDays=5, schedule=DaySchedule(morning=Schedule(doctorSaid=false, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=true), night=Schedule(doctorSaid=true, patientTook=false))), Medicine(name="dolo", dosage="2", numberOfDays=2, schedule= DaySchedule(morning=Schedule(doctorSaid=true, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night= Schedule(doctorSaid=false, patientTook=false))))
-    }
 }
 
 

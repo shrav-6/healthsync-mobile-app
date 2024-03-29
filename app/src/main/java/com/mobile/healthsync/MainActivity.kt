@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import androidx.activity.ComponentActivity
+import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.login.LoginActivity
 
 class MainActivity : ComponentActivity() {
@@ -15,7 +16,7 @@ class MainActivity : ComponentActivity() {
         handler.postDelayed({
             val intent = Intent(
                 this@MainActivity,
-                LoginActivity::class.java
+                EventsActivity::class.java
             )
             startActivity(intent)
         }, 3000)

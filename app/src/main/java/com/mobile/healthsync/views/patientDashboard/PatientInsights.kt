@@ -7,7 +7,9 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.model.DaySchedule
 
 import android.R.attr.name
+import android.content.ContentValues.TAG
 import android.graphics.Typeface
+import android.util.Log
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
@@ -20,11 +22,19 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.android.gms.tasks.Task
+import com.google.firebase.Firebase
+import com.google.firebase.firestore.firestore
 
 import com.mobile.healthsync.model.Medicine
 
 import com.mobile.healthsync.model.Prescription
 import com.mobile.healthsync.model.Schedule
+import kotlinx.coroutines.tasks.await
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.QuerySnapshot
 
 
 class PatientInsights : AppCompatActivity() {
@@ -39,6 +49,8 @@ class PatientInsights : AppCompatActivity() {
 
         //TODO: read the prescription for the given prescription id
         //for now using expected data
+        val prescriptionRead = loadPrescriptionsData(1)
+        Log.d("prescription read", prescriptionRead.toString())
         val prescription = Prescription(
             appointmentId = "1",
             prescriptionId = "1",
@@ -197,6 +209,57 @@ class PatientInsights : AppCompatActivity() {
         dialog.show()
     }
 
+    private fun loadPrescriptionsData(patientId: Int) : Prescription {
+        //val prescriptionId =
+        //val prescriptionRef = db.collection("prescriptions").document(prescriptionId)
+
+        //val db = FirebaseFirestore.getInstance()
+        lateinit var readPrescription: Prescription
+        var appointment_id = "1"
+
+        val db = FirebaseFirestore.getInstance()
+
+        val query = db.collection("appointments")
+            .whereEqualTo("patient_id", patientId.toInt())
+            //.orderBy("date", Query.Direction.DESCENDING)
+            .limit(1)
+
+        query.get()
+            .addOnCompleteListener(object : OnCompleteListener<QuerySnapshot> {
+                override fun onComplete(task: Task<QuerySnapshot>) {
+                    if (task.isSuccessful) {
+                        val documents = task.result
+                        if (documents != null && !documents.isEmpty) {
+                            val document = documents.documents[0]
+                            appointment_id = document.getString("appointment_id")!!
+
+                        } else {
+                            //callback(null)
+                            Log.w("Error", "in else block: Failed to get latest appointment ID", task.exception)
+                        }
+                    } else {
+                        Log.w("Error", "Failed to get latest appointment ID", task.exception)
+                        //callback(null)
+                    }
+                }
+            })
+
+        db.collection("prescriptions")
+            .whereEqualTo("appointment_id", appointment_id)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val document = documents.documents[0]
+                    Log.d("prescription read", document.data.toString())
+                    readPrescription = document.toObject(Prescription::class.java)!!
+                }
+            }
+            .addOnFailureListener { exception ->
+                Log.w("prescription not found", "Error getting documents: ", exception)
+            }
+
+        return readPrescription
+    }
 
 
 }
