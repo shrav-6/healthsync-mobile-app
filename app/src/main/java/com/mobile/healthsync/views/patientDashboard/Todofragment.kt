@@ -15,11 +15,11 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.TodoAdapter
-import com.mobile.healthsync.model.DaySchedule
-import com.mobile.healthsync.model.Medicine
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
+import com.mobile.healthsync.model.Prescription.Medicine
 //import com.mobile.healthsync.adapters.TodoAdapter
 import com.mobile.healthsync.model.Prescription
-import com.mobile.healthsync.model.Schedule
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule.Schedule
 import com.mobile.healthsync.repository.PrescriptionRepository
 import com.mobile.healthsync.repository.PrescriptionRepository.loadMedicinesData
 //import com.mobile.healthsync.repository.PrescriptionRepository.loadPrescriptionData
@@ -34,8 +34,8 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
     // Variable to store the updated medicines list
     private var updatedMedicinesList: MutableList<Medicine> = mutableListOf()
-    private var appointmentId: String = "1" //TODO: get from db
-    private var prescriptionID: String = "1"
+    private var appointmentId: Int = 1 //TODO: get from db
+    private var prescriptionDocId: String = "1"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,7 +56,7 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
             medicinesList = updatedMedicinesList
             Log.d("Updated Medicines List", updatedMedicinesList.toString())
 
-            PrescriptionRepository.updateMedicinesForPrescription(prescriptionID, updatedMedicinesList)
+            PrescriptionRepository.updateMedicinesForPrescription(prescriptionDocId, updatedMedicinesList)
 
             // go to patient dashboard once submitted
             val intent = Intent(requireContext(), PatientDashboard::class.java)

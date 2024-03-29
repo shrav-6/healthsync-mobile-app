@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.firestore
-import com.mobile.healthsync.model.Medicine
+import com.mobile.healthsync.model.Prescription.Medicine
 import com.mobile.healthsync.model.Prescription
 
 object PrescriptionRepository {
@@ -12,20 +12,20 @@ object PrescriptionRepository {
     private val db = FirebaseFirestore.getInstance()
 
     @JvmStatic
-    fun updateMedicinesForPrescription(prescriptionId: String, updatedMedicines: List<Medicine>) {
+    fun updateMedicinesForPrescription(prescriptionDocId: String, updatedMedicines: List<Medicine>) {
         // Reference to the specific prescription document
-        val prescriptionRef = db.collection("prescriptions").document(prescriptionId)
+        val prescriptionRef = db.collection("prescriptions").document(prescriptionDocId)
 
         // Update the 'medicines' field with the new data
         prescriptionRef
             .update("medicines", updatedMedicines)
             .addOnSuccessListener {
                 // Handle success
-                Log.d("Medicines updated successfully for prescription", "$prescriptionId")
+                Log.d("Medicines updated successfully for prescription", "$prescriptionDocId")
             }
             .addOnFailureListener { e ->
                 // Handle failures
-                Log.d("Error updating medicines for prescription", "$prescriptionId, $e")
+                Log.d("Error updating medicines for prescription", "$prescriptionDocId, $e")
             }
     }
     fun loadPrescriptionsData(patientId: String) : Prescription {
@@ -64,7 +64,7 @@ object PrescriptionRepository {
     }
 
     @JvmStatic
-    fun loadMedicinesData(appointmentId: String) : List<Medicine> {
+    fun loadMedicinesData(appointmentId: Int) : List<Medicine> {
         // Reference to the "doctors" collection
         val db = Firebase.firestore
         Log.d("db", db.toString())

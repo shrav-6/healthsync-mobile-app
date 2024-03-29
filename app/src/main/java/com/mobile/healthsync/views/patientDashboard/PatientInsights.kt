@@ -4,7 +4,7 @@ import android.R.attr
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.DaySchedule
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
 
 import android.R.attr.name
 import android.content.ContentValues.TAG
@@ -27,14 +27,16 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 
-import com.mobile.healthsync.model.Medicine
+import com.mobile.healthsync.model.Prescription.Medicine
 
 import com.mobile.healthsync.model.Prescription
-import com.mobile.healthsync.model.Schedule
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule.Schedule
 import kotlinx.coroutines.tasks.await
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
+import com.mobile.healthsync.adapters.EventTypeAdapter
+import com.mobile.healthsync.repository.InsightsRepository
 
 
 class PatientInsights : AppCompatActivity() {
@@ -42,67 +44,36 @@ class PatientInsights : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_insights)
 
-        //TODO: get the latest appointment's prescription id
-        //for now assumming it to be 1
+        val repo = InsightsRepository(this)
+        val patientId = 1
 
-        val prescription_id = "1"
+        //repo.upload()
 
-        //TODO: read the prescription for the given prescription id
-        //for now using expected data
-        val prescriptionRead = loadPrescriptionsData(1)
-        Log.d("prescription read", prescriptionRead.toString())
-        val prescription = Prescription(
-            appointmentId = "1",
-            prescriptionId = "1",
-            medicines = hashMapOf(
-                "medicine_2" to Medicine(
-                    name = "crosine",
-                    dosage = "4",
-                    numberOfDays = 5,
-                    schedule = DaySchedule(
-                        morning = Schedule(doctorSaid = false, patientTook = false),
-                        afternoon = Schedule(doctorSaid = false, patientTook = false),
-                        night = Schedule(doctorSaid = true, patientTook = true)
-                    )
-                ),
-                "medicine_1" to Medicine(
-                    name = "dolo",
-                    dosage = "2",
-                    numberOfDays = 2,
-                    schedule = DaySchedule(
-                        morning = Schedule(doctorSaid = true, patientTook = true),
-                        afternoon = Schedule(doctorSaid = true, patientTook = true),
-                        night = Schedule(doctorSaid = true, patientTook = true)
-                    )
-                ),
-                "medicine_3" to Medicine(
-                    name = "acnedap",
-                    dosage = "2",
-                    numberOfDays = 2,
-                    schedule = DaySchedule(
-                        morning = Schedule(doctorSaid = true, patientTook = false),
-                        afternoon = Schedule(doctorSaid = true, patientTook = true),
-                        night = Schedule(doctorSaid = true, patientTook = true)
-                    )
-                )
-            )
-        )
+        //var prescriptionRead = repo.getPrescriptionForInsights("1")
+        //Log.d("after function", prescriptionRead.toString())
 
-        //TODO: get doctor name and appointment date
-        //for now using dummy data
-        val doctorName = "Shelly"
-        val appointmentDate = "16/01/2024"
+        //val repo = InsightsRepository(this)
+        repo.getPrescriptionForInsights(1) { prescriptionRead ->
+            Log.d("after function", prescriptionRead.toString())
+            //create bar chart
+            createBarChart(prescriptionRead)
+        }
 
         // Update the TextViews with the fetched data
         val doctorNameHolder = findViewById<TextView>(R.id.doctorNameHolder)
         val appointmentDateHolder = findViewById<TextView>(R.id.dateHolder)
 
-        doctorNameHolder.text = doctorName
-        appointmentDateHolder.text = appointmentDate
 
-
-        //create bar chart
-        createBarChart(prescription)
+        repo.getAppointmentDetails(patientId) { appointmentDetails ->
+            if (appointmentDetails != null) {
+                // Appointment details retrieved successfully
+                val (appointmentDate, doctorName) = appointmentDetails
+                doctorNameHolder.text = doctorName
+                appointmentDateHolder.text = appointmentDate
+            } else {
+                Log.d("Error:", "Failed to retrieve appointment details")
+            }
+        }
 
     }
 
@@ -160,9 +131,9 @@ class PatientInsights : AppCompatActivity() {
         barChart.data = barData
         barChart.description.isEnabled = false // Disable description
         barChart.legend.isEnabled = true // Disable legend
-        barChart.legend.textSize = 13f
-        barChart.legend.xEntrySpace = 10f
-        //barChart.legend.yOffset = 0.5f
+        barChart.legend.textSize = 12f
+        barChart.legend.xEntrySpace = 12f
+        barChart.legend.xOffset = 1f
 
         // Set up a listener for bar clicks
         barChart.setOnChartValueSelectedListener(object : OnChartValueSelectedListener {
@@ -208,58 +179,4 @@ class PatientInsights : AppCompatActivity() {
         val dialog = dialogBuilder.create()
         dialog.show()
     }
-
-    private fun loadPrescriptionsData(patientId: Int) : Prescription {
-        //val prescriptionId =
-        //val prescriptionRef = db.collection("prescriptions").document(prescriptionId)
-
-        //val db = FirebaseFirestore.getInstance()
-        lateinit var readPrescription: Prescription
-        var appointment_id = "1"
-
-        val db = FirebaseFirestore.getInstance()
-
-        val query = db.collection("appointments")
-            .whereEqualTo("patient_id", patientId.toInt())
-            //.orderBy("date", Query.Direction.DESCENDING)
-            .limit(1)
-
-        query.get()
-            .addOnCompleteListener(object : OnCompleteListener<QuerySnapshot> {
-                override fun onComplete(task: Task<QuerySnapshot>) {
-                    if (task.isSuccessful) {
-                        val documents = task.result
-                        if (documents != null && !documents.isEmpty) {
-                            val document = documents.documents[0]
-                            appointment_id = document.getString("appointment_id")!!
-
-                        } else {
-                            //callback(null)
-                            Log.w("Error", "in else block: Failed to get latest appointment ID", task.exception)
-                        }
-                    } else {
-                        Log.w("Error", "Failed to get latest appointment ID", task.exception)
-                        //callback(null)
-                    }
-                }
-            })
-
-        db.collection("prescriptions")
-            .whereEqualTo("appointment_id", appointment_id)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    val document = documents.documents[0]
-                    Log.d("prescription read", document.data.toString())
-                    readPrescription = document.toObject(Prescription::class.java)!!
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("prescription not found", "Error getting documents: ", exception)
-            }
-
-        return readPrescription
-    }
-
-
 }
