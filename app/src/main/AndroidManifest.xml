@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-    <uses-permission android:name="android.permission.INTERNET" />
+
+
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -30,6 +35,27 @@
          android:name=".views.prescription.PrescriptionFormActivity"
          android:exported="false" />
         <activity
+            android:name=".views.patientDashboard.PatientAppointmentDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientDashboard.PatientAppointmentListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.maps.MapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.maps.PermissionsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.login.LoginActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.events.EventInfoActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.events.EventsActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.patientBooking.BookingInfoActivity"
             android:exported="false" />
         <activity
@@ -57,6 +83,9 @@
             android:name=".views.patientProfile.EditPatientProfile"
             android:exported="false" />
         <activity
+            android:name=".views.patientDashboard.PatientToDo"
+            android:exported="false" />
+        <activity
             android:name=".views.signUp.SignupActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
@@ -70,12 +99,14 @@
             android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_map_api_key" />
+
+    </application>
 
 </manifest>
