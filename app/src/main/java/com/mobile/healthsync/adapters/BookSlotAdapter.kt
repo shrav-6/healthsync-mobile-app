@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Slot
 
-class BookSlotAdapter(val slotList : MutableList<Slot>, val activity : Activity): RecyclerView.Adapter<BookSlotAdapter.SlotViewHolder>() {
+class BookSlotAdapter(val slotList : List<Slot>, val activity : Activity): RecyclerView.Adapter<BookSlotAdapter.SlotViewHolder>() {
 
     private lateinit var selectedSlotCard : CardView
     private lateinit var selectedSlot : Slot

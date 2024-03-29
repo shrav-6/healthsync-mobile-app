@@ -90,22 +90,19 @@ class BookingInfoActivity : BaseActivity(),OnDateSetListener {
         return formattedDate
     }
     private fun handleBooking(patient_id: Int) {
-        val intent :Intent = Intent(this, CheckoutActivity::class.java)
-        intent.putExtra("doctor_id", this.doctor_id)
-        intent.putExtra("patient_id", patient_id)
-
-        intent.putExtra("appointment_id",-1)
-
         appointmentRepository.createAppointment(
-            this.doctor_id,patient_id,this.slot_id,date, this.start_time,{
-                updateAfterPayment.launch(intent) })
+            this.doctor_id,patient_id,this.slot_id,date, this.start_time,{ appointmentID ->
+                val intent :Intent = Intent(this, CheckoutActivity::class.java)
+                intent.putExtra("doctor_id", this.doctor_id)
+                intent.putExtra("patient_id", patient_id)
+                intent.putExtra("appointment_id",appointmentID)
+                updateAfterPayment.launch(intent)
+            })
     }
 
     private val updateAfterPayment = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == this.SUCCESS) { // Payment is complete
             println("Payment Complete")
-            //val payment_id = result.data?.getIntExtra("payment_id", -1) ?: -1
-            //appointmentRepository.fixAppointment(this.doctor_id,this.date,this.slot_id,payment_id)
             finish()
         }
         else if(result.resultCode == this.FAILURE) { // Payment failed

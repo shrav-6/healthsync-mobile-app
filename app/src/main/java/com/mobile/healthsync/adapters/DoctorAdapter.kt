@@ -53,7 +53,7 @@ class DoctorAdapter(
 
         tvDoctorName.text = currDoctor.doctor_info.name
         tvExperience.text = currDoctor.doctor_info.years_of_practice.toString()
-        tvSpeciality.text = currDoctor.doctor_speciality
+
         tvConsultationFee.text = "${currDoctor.doctor_info.consultation_fees}$/consultation"
 //        tvDoctorName.text = currDoctor.email
 //        tvExperience.text = currDoctor.email
@@ -70,4 +70,5 @@ class DoctorAdapter(
         doctors.addAll(newList)
         notifyDataSetChanged()
     }
+
 }

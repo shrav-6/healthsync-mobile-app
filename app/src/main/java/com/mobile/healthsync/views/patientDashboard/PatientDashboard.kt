@@ -60,11 +60,19 @@ class PatientDashboard : BaseActivity() {
         for(doctor in doctorsList)
         {
             val nameMatch = doctor.doctor_info.name.contains(query.orEmpty(), ignoreCase = true)
-            // val specialityMatch = doctor.doctor_info.doctor_speciality?.contains(query.orEmpty(), ignoreCase = true) ?: false
 
-            if (nameMatch /*|| specialityMatch*/) {
+            if (nameMatch) {
                 // Add the matching doctor to the filtered list
                 filteredList.add(doctor)
+            } else {
+                // If no name match, check for speciality match
+                val specialityMatch =
+                    doctor.doctor_speciality?.contains(query.orEmpty(), ignoreCase = true) ?: false
+
+                if (specialityMatch) {
+                    // Add the matching doctor to the filtered list
+                    filteredList.add(doctor)
+                }
             }
         }
 
