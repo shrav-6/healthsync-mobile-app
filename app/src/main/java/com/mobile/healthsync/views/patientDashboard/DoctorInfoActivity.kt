@@ -2,7 +2,11 @@ package com.mobile.healthsync.views.patientDashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.GridLayoutManager
@@ -30,7 +34,6 @@ class DoctorInfoActivity : ComponentActivity() {
         var patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
         var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
 
-        //get doctor details:toDo
         doctorRepository.getDoctor(doctor_id, { doctor ->
             // Set doctor details to views
             fillDocotorDetails(doctor)
@@ -49,8 +52,31 @@ class DoctorInfoActivity : ComponentActivity() {
 
         val availableslots = findViewById<RecyclerView>(R.id.infoAvailableSlots)
         availableslots.layoutManager = GridLayoutManager(this, 3)
-        // temp commenting
-//        availableslots.adapter = AvailableSlotAdapter(doctor?.availability)
+        val availabity_map = doctor?.availability
+
+        val spinner : Spinner = findViewById(R.id.weekday)
+        val spinnerAdapter : ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this, R.array.week_days,android.R.layout.simple_spinner_item)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+        spinner.adapter = spinnerAdapter
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val selected_day = parent?.getItemAtPosition(position).toString()
+                val availability = availabity_map?.get(selected_day)
+                if(availability != null && availability?.is_available!!)
+                {
+                    availableslots.adapter = AvailableSlotAdapter(availability.slots)
+                }
+                else
+                {
+                    availableslots.adapter = AvailableSlotAdapter(emptyList())
+                }
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+                // Handle case when nothing is selected if needed
+            }
+        }
 
         reviewRepository.getReviews(doctor!!.doctor_id , { reviewlist ->
             val reviews = findViewById<RecyclerView>(R.id.infoReviews)

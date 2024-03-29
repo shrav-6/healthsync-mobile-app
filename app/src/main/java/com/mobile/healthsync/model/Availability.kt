@@ -6,7 +6,7 @@ import java.io.Serializable
 data class Availability(
     @get:PropertyName("is_available")
     @set:PropertyName("is_available")
-    var isAvailable: Boolean = true,
+    var is_available: Boolean = true,
 
     @get:PropertyName("slots")
     @set:PropertyName("slots")

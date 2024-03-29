@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <string name="app_name">healthsync</string>
     <string name="title_activity_scrolling">ScrollingActivity</string>
     <string name="total_amount">Total Amount: $%1$.2f</string>
@@ -97,4 +97,19 @@
     <string name="doctorRegister"><b>Register as doctor?</b></string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="google_map_api_key">AIzaSyAFD_PuEsjoQ56qR3XP7-w-XjgC-8x-GkE</string>
+    <string name="doctor_login">Doctor Login</string>
+    <string name="password">Password</string>
+    <string name="email_address">Email Address</string>
+    <string name="patient_login">Patient Login</string>
+    <string name="sign_up">Sign Up</string>
+    <string-array name="week_days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
 </resources>
