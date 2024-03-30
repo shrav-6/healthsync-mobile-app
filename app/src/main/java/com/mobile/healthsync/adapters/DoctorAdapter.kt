@@ -70,4 +70,5 @@ class DoctorAdapter(
         doctors.addAll(newList)
         notifyDataSetChanged()
     }
+
 }

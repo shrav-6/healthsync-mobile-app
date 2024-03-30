@@ -85,6 +85,27 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 //        }
 
 
+//        val submitButton: Button = view.findViewById(R.id.submit_button)
+//        submitButton.setOnClickListener {
+//            // Update the medicines list with the changes made in the adapter
+//            medicinesList = updatedMedicinesList
+//            Log.d("Updated Medicines List", updatedMedicinesList.toString())
+//
+//
+//            Log.d("prescriptionId before update medicines",prescriptionId.toString())
+//            repo.updateMedicinesForPrescription(documentId, appointmentId, prescriptionId, updatedMedicinesList)
+//
+//            // go to patient dashboard once submitted
+//            val intent = Intent(requireContext(), PatientDashboard::class.java)
+//            intent.putExtra("from to do -> dashboard", ArrayList(medicinesList))
+//            startActivity(intent)
+//        }
+
+        return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         val submitButton: Button = view.findViewById(R.id.submit_button)
         submitButton.setOnClickListener {
             // Update the medicines list with the changes made in the adapter
@@ -93,15 +114,14 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
 
             Log.d("prescriptionId before update medicines",prescriptionId.toString())
+            val repo = ToDoRepository(view.context)
             repo.updateMedicinesForPrescription(documentId, appointmentId, prescriptionId, updatedMedicinesList)
 
             // go to patient dashboard once submitted
-            val intent = Intent(requireContext(), PatientDashboard::class.java)
-            intent.putExtra("medicinesList", ArrayList(medicinesList))
+            val intent = Intent(activity, PatientDashboard::class.java)
+            intent.putExtra("from", "patient to do")
             startActivity(intent)
         }
-
-        return view
     }
 
     override fun onMedicinesUpdated(medicines: List<Medicine>) {

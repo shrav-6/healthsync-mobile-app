@@ -15,14 +15,14 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.Patient.PatientDetails
-import com.mobile.healthsync.uploadToDatabase
 import com.mobile.healthsync.views.patientDashboard.PatientToDo
 import android.content.Context
+import android.widget.Toast
 import com.mobile.healthsync.repository.SignupRepository
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import java.util.UUID
-
+import com.mobile.healthsync.views.login.LoginActivity
 
 
 class SignupActivity : AppCompatActivity() {
@@ -82,9 +82,10 @@ class SignupActivity : AppCompatActivity() {
                 email = email,
                 password = password,
                 patientCreated = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
-                patient_id = UUID.randomUUID().mostSignificantBits.toInt(),
+                patient_id = (Math.abs(UUID.randomUUID().mostSignificantBits) xor UUID.randomUUID().leastSignificantBits).toInt(),
                 patientUpdated = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 rewardPoints = 0,
+                token = "",
                 patientDetails = PatientDetails(
                     age = age.toInt(),
                     allergies = allergies,
@@ -104,7 +105,8 @@ class SignupActivity : AppCompatActivity() {
 
             //for testing to-do
             Log.d("after patient signup","going to patient todo activity")
-            intent = Intent(this, PatientToDo::class.java)
+            Toast.makeText(this, "Patient Registered", Toast.LENGTH_LONG)
+            intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 
         }

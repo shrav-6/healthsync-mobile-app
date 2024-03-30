@@ -1,5 +1,3 @@
-import org.jetbrains.kotlin.storage.CacheResetOnProcessCanceled.enabled
-
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -74,6 +72,14 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
+    implementation("androidx.recyclerview:recyclerview:1.3.2")
+
+    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+    implementation("com.google.firebase:firebase-auth:22.3.1")
+    //implementation("com.google.firebase:firebase-firestore-ktx:24.10.3")
+    implementation("com.google.firebase:firebase-firestore")
+    implementation("androidx.media3:media3-common:1.3.0")
+
     implementation("com.google.firebase:firebase-auth:22.3.1")
     implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
     implementation("com.squareup.picasso:picasso:2.71828")
@@ -81,6 +87,8 @@ dependencies {
     implementation("com.google.firebase:firebase-analytics")
     implementation("com.google.firebase:firebase-auth")
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
+    implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
+    implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
@@ -88,6 +96,10 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    //Glide
+    implementation("com.github.bumptech.glide:glide:4.13.0")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.13.0")
     implementation("com.wdullaer:materialdatetimepicker:4.2.3")
     implementation("com.google.code.gson:gson:2.9.0")
 
@@ -98,8 +110,16 @@ dependencies {
     implementation("com.stripe:stripe-java:24.0.0")
     implementation ("com.google.android.material:material:1.11.0")
 
+    implementation("org.json:json:20210307")
 
-    //implementation("com.github.User:Repo:Tag")
+
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+
+    implementation("com.google.android.gms:play-services-maps:18.2.0")
+    implementation("com.google.android.gms:play-services-location:21.2.0")
+    implementation("com.google.android.libraries.places:places:3.4.0")
+    implementation("com.karumi:dexter:6.2.3")
+    implementation("com.github.mancj:MaterialSearchBar:0.8.5")
 
 }

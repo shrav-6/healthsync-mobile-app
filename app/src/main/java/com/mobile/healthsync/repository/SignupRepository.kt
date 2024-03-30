@@ -26,7 +26,7 @@ class SignupRepository(private val context: Context) {
 
                 // add to sharedPreferences, TODO: in signin not signup - this is just for testing
                 val editor = sharedPreferences.edit()
-                editor.putString("patient_id", "${documentReference.id}")
+                editor.putString("patient_id", newPatient.patient_id.toString())
                 editor.putString("emailid",newPatient.email)
                 editor.putString("password",newPatient.password)
                 editor.apply()
@@ -36,7 +36,7 @@ class SignupRepository(private val context: Context) {
             }
     }
 
-    fun createDoctor(newDoctor: Doctor) {
+    fun createDoctor(newDoctor: Doctor, sharedPreferences: SharedPreferences) {
         val db = FirebaseFirestore.getInstance()
         val patientsCollection = db.collection("doctors")
 
@@ -44,6 +44,12 @@ class SignupRepository(private val context: Context) {
             .addOnSuccessListener { documentReference ->
                 println("DocumentSnapshot added with ID: ${documentReference.id}")
                 Log.d("doctor signup done", "${documentReference.id}")
+
+                val editor = sharedPreferences.edit()
+                editor.putString("doctor_id", newDoctor.doctor_id.toString())
+                editor.putString("emailid",newDoctor.email)
+                editor.putString("password",newDoctor.password)
+                editor.apply()
             }
             .addOnFailureListener { e ->
                 println("Error adding document: $e")

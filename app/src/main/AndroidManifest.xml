@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.INTERNET" />
+<!--    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
@@ -19,7 +20,16 @@
             android:name=".views.patientDashboard.PatientInsights"
             android:exported="false" />
         <activity
-            android:name=".views.login.LoginActivity"
+            android:name=".views.patientDashboard.PatientAppointmentDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientDashboard.PatientAppointmentListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.maps.MapActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.maps.PermissionsActivity"
             android:exported="false" />
         <activity
             android:name=".views.events.EventInfoActivity"
@@ -43,6 +53,9 @@
             android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
+            android:name=".views.doctorDashboard.DoctorDashboard"
+            android:exported="false" />
+        <activity
             android:name=".views.doctorProfile.DoctorProfile"
             android:exported="false" />
         <activity
@@ -58,6 +71,10 @@
             android:name=".views.patientDashboard.PatientToDo"
             android:exported="false" />
         <activity
+            android:name=".views.login.LoginActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".views.signUp.SignupActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
@@ -67,14 +84,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
-            android:exported="true"
-            android:theme="@style/AppTheme">
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

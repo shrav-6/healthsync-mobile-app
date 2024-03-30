@@ -1,10 +1,23 @@
 package com.mobile.healthsync.model
 
+import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
 
-data class Slot(var slot_id: Int = 0, var start_time: String ="", var end_time : String="") : Serializable{
+data class Slot(
+    @get:PropertyName("slot_id")
+    @set:PropertyName("slot_id")
+    var slot_id: Int = 0,
 
-    private var isbooked:Boolean = false;
+    @get:PropertyName("start_time")
+    @set:PropertyName("start_time")
+    var start_time: String = "",
+
+    @get:PropertyName("end_time")
+    @set:PropertyName("end_time")
+    var end_time: String = ""
+) : Serializable {
+
+    var isbooked: Boolean = false
     fun setAsBooked() {
         this.isbooked = true
     }
@@ -16,4 +29,5 @@ data class Slot(var slot_id: Int = 0, var start_time: String ="", var end_time :
     fun isBooked() : Boolean {
         return this.isbooked
     }
+
 }
