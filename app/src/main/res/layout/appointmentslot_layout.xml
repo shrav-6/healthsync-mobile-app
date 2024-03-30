@@ -5,7 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_margin="5dp"
         android:id="@+id/appointmentcard"
@@ -16,7 +16,7 @@
 
         <TextView
             android:id="@+id/appointmentslot"
-            android:layout_width="148dp"
+            android:layout_width="wrap_content"
             android:layout_height="72dp"
             android:layout_gravity="center"
             android:layout_margin="5dp"
@@ -24,7 +24,7 @@
             android:gravity="center"
             android:lines="2"
             android:text="11:30 - 12:30"
-            android:textSize="14sp"
+            android:textSize="16sp"
             android:textColor="@color/black"
             android:textStyle="bold" />
 
