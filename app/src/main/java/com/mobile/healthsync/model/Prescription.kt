@@ -2,7 +2,6 @@ package com.mobile.healthsync.model
 
 import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
-
 data class Prescription(
     @PropertyName("appointment_id")
     @get:PropertyName("appointment_id")
@@ -20,7 +19,6 @@ data class Prescription(
     var medicines: HashMap<String, Medicine>? = hashMapOf(),
 ) : Serializable
 {
-
     data class Medicine(
         @PropertyName("name")
         @set:PropertyName("name")
@@ -42,8 +40,6 @@ data class Prescription(
         @get:PropertyName("schedule")
         var schedule: DaySchedule = DaySchedule(),
     ) : Serializable {
-
-
         data class DaySchedule(
             @PropertyName("morning")
             @set:PropertyName("morning")

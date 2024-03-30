@@ -10,6 +10,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.mobile.healthsync.services.AlarmScheduler
 import com.mobile.healthsync.services.AlarmScheduler2
 import com.mobile.healthsync.views.signUp.SignupActivity
+import com.mobile.healthsync.views.login.LoginActivity
 
 
 class MainActivity : ComponentActivity() {
@@ -17,24 +18,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-// Get the Firebase token
         // Get the Firebase token
-//        FirebaseMessaging.getInstance().getToken()
-//            .addOnCompleteListener { task: Task<String> ->
-//                if (task.isSuccessful) {
-//                    val token = task.result
-//                    Log.d("firebase token", "Firebase Token: $token")
-//                    // Handle the token (e.g., send it to your server)
-//                } else {
-//                    Log.e("firebase token", "Failed to get Firebase token: " + task.exception)
-//                }
-//            }
+        FirebaseMessaging.getInstance().getToken()
+            .addOnCompleteListener { task: Task<String> ->
+                if (task.isSuccessful) {
+                    val token = task.result
+
+                    Log.d("token", "Firebase Token: $token")
+                    // Handle the token (e.g., send it to your server)
+                } else {
+                    Log.e("token", "Failed to get Firebase token: " + task.exception)
+                }
+            }
 
         val handler = Handler()
         handler.postDelayed({
             val intent = Intent(
                 this@MainActivity,
-                SignupActivity::class.java
+                LoginActivity::class.java
             )
             startActivity(intent)
         }, 3000)

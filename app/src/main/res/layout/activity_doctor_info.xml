@@ -61,6 +61,14 @@
 
         </LinearLayout>
 
+        <Spinner
+            android:id="@+id/weekday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:spinnerMode="dropdown"
+            android:textStyle="bold" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/infoAvailableSlots"
             android:layout_width="350dp"
@@ -74,7 +82,8 @@
             android:layout_height="wrap_content"
             android:text="Reviews"
             android:textStyle="bold"
-            android:layout_margin="5dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginStart="5dp"/>
 
 
         <androidx.recyclerview.widget.RecyclerView
