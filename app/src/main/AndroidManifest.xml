@@ -29,11 +29,8 @@
                 android:resource="@xml/file_paths" />
         </provider>
         <activity
-            android:name=".views.prescription.PrescriptionDownloadActivity"
+            android:name=".views.prescription.PrescriptionFormActivity"
             android:exported="false" />
-         <activity
-         android:name=".views.prescription.PrescriptionFormActivity"
-         android:exported="false" />
         <activity
             android:name=".views.patientDashboard.PatientAppointmentDetailsActivity"
             android:exported="false" />

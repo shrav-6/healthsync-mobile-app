@@ -8,7 +8,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
-import com.mobile.healthsync.model.Medicine
+import com.mobile.healthsync.model.Prescription.Medicine
 
 class TodoAdapter(private val medicines: List<Medicine>, private val listener: MedicinesUpdateListener) :
     RecyclerView.Adapter<TodoAdapter.ViewHolder>() {

@@ -15,13 +15,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.TodoAdapter
-import com.mobile.healthsync.model.DaySchedule
-import com.mobile.healthsync.model.Medicine
-//import com.mobile.healthsync.adapters.TodoAdapter
 import com.mobile.healthsync.model.Prescription
-import com.mobile.healthsync.model.Schedule
 import com.mobile.healthsync.repository.PrescriptionRepository
-import com.mobile.healthsync.views.signUp.SignupActivity
+import com.mobile.healthsync.model.Prescription.Medicine
 
 class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
@@ -91,7 +87,7 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
                     Log.d("prescriptionID", prescriptionID.toString())
 
                     // Assuming prescription is a valid Prescription object obtained from Firestore
-                    val medicines: HashMap<String, Medicine>? = prescription?.medicines
+                    val medicines: Map<String, Medicine>? = prescription?.medicines
                     //lateinit var medicinesList: List<Medicine>
                     Log.d("medicines", medicines.toString())
                     if (medicines != null && medicines.isNotEmpty()) {

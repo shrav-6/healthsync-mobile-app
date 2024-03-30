@@ -7,59 +7,73 @@
     android:padding="16dp">
 
     <TextView
+        android:id="@id/tvHeading"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Patient Information"
         android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Appointment ID:" />
-
-        <EditText
-            android:id="@+id/appointment_id_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Enter Appointment ID"
-            android:inputType="number" />
-    </LinearLayout>
-
-    <Space
-        android:layout_width="match_parent"
-        android:layout_height="16dp" />
-
     <TextView
+        android:id="@+id/textPatientName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Prescription Details"
-        android:textAppearance="@style/TextAppearance.AppCompat.Headline" />
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Name: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textPatientAge"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Age: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Prescription ID:" />
+    <TextView
+        android:id="@+id/textPatientGender"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Gender: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/prescription_id_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:hint="Enter Prescription ID" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/textPatientHeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Height: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textPatientWeight"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:text="Weight: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/textPatientAllergies"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="20dp"
+        android:text="Allergies: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
 
     <Space
         android:layout_width="match_parent"
@@ -141,7 +155,14 @@
                 android:text="Add Medicine" />
 
         </LinearLayout>
-        <!-- Dynamically added medicines will appear here -->
+
+        <!-- Add RecyclerView for displaying medicines -->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/medicineRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp" />
+
     </LinearLayout>
 
     <ScrollView
@@ -167,13 +188,6 @@
             android:layout_weight="1"
             android:text="Submit Prescription" />
 
-        <Button
-            android:id="@+id/download_button"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Download PDF"
-            android:enabled="false" />
     </LinearLayout>
 
 </LinearLayout>
