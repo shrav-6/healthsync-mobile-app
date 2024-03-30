@@ -8,6 +8,7 @@ import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
 
 import android.R.attr.name
 import android.content.ContentValues.TAG
+import android.content.Context
 import android.graphics.Typeface
 import android.util.Log
 import android.widget.LinearLayout
@@ -38,19 +39,18 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.mobile.healthsync.adapters.EventTypeAdapter
 import com.mobile.healthsync.repository.InsightsRepository
 
-
+/**
+ * @input: patientId
+ */
 class PatientInsights : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_insights)
 
         val repo = InsightsRepository(this)
-        val patientId = 1
+        val sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
 
-        //repo.upload()
-
-        //var prescriptionRead = repo.getPrescriptionForInsights("1")
-        //Log.d("after function", prescriptionRead.toString())
+        val patientId = sharedPreferences.getString("patientId", "1")!!.toInt()
 
         //val repo = InsightsRepository(this)
         repo.getPrescriptionForInsights(1) { prescriptionRead ->
@@ -104,9 +104,6 @@ class PatientInsights : AppCompatActivity() {
         barDataSet.stackLabels = arrayOf("Morning", "Afternoon", "Night")
 
 
-        //for (i in prescription.medicines!!.keys) {
-        //    xAxisLabels.add(i)
-        //}
         val xAxis = barChart.xAxis
         xAxis.labelCount = barEntries.size
         xAxis.valueFormatter = IndexAxisValueFormatter(xAxisLabels)

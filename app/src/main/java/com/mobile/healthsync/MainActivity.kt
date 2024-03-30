@@ -7,6 +7,7 @@ import androidx.activity.ComponentActivity
 import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.login.LoginActivity
 import com.mobile.healthsync.views.patientDashboard.PatientInsights
+import com.mobile.healthsync.views.patientDashboard.PatientToDo
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -17,7 +18,7 @@ class MainActivity : ComponentActivity() {
         handler.postDelayed({
             val intent = Intent(
                 this@MainActivity,
-                PatientInsights::class.java
+                PatientToDo::class.java
             )
             startActivity(intent)
         }, 3000)
