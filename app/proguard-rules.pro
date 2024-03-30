@@ -19,3 +19,9 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+
+# Prevent code obfuscation. Tthe process of modifying an
+# executable so that it is no longer useful to a hacker but remains fully functional.
+-keep class io.agora.**{*;}
+-dontwarn io.agora.**
