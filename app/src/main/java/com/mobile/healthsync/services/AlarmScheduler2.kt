@@ -18,8 +18,8 @@ class AlarmScheduler2(private val context: Context) {
         // Set the alarm to trigger at approximately the same time every day (e.g., 9 PM and 30 minutes)
         val calendar = Calendar.getInstance().apply {
             timeInMillis = System.currentTimeMillis()
-            set(Calendar.HOUR_OF_DAY, 1) // Set hour to 21 (9 PM)
-            set(Calendar.MINUTE, 45)      // Set minute to 30
+            set(Calendar.HOUR_OF_DAY, 10) // Set hour to 21 (9 PM)
+            set(Calendar.MINUTE, 25)      // Set minute to 30
             set(Calendar.SECOND, 0)
             // Optionally, you can set milliseconds to 0 as well
             set(Calendar.MILLISECOND, 0)

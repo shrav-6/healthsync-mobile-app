@@ -19,16 +19,17 @@ class MainActivity : ComponentActivity() {
 
 // Get the Firebase token
         // Get the Firebase token
-        /*FirebaseMessaging.getInstance().getToken()
+        FirebaseMessaging.getInstance().getToken()
             .addOnCompleteListener { task: Task<String> ->
                 if (task.isSuccessful) {
                     val token = task.result
-                    Log.d(TAG, "Firebase Token: $token")
+
+                    Log.d("token", "Firebase Token: $token")
                     // Handle the token (e.g., send it to your server)
                 } else {
-                    Log.e(TAG, "Failed to get Firebase token: " + task.exception)
+                    Log.e("token", "Failed to get Firebase token: " + task.exception)
                 }
-            }*/
+            }
 
         val handler = Handler()
         handler.postDelayed({
