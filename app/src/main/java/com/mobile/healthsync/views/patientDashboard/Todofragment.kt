@@ -36,6 +36,7 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
     private var updatedMedicinesList: MutableList<Medicine> = mutableListOf()
     private var appointmentId: Int = 1
     private var prescriptionId: Int = 1
+    private var documentId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -56,22 +57,32 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
         repo.getappointmentAndPrescriptionId(patientId) {result ->
             if (result != null) {
                 // Iterate through the list of pairs and retrieve appointment_id and prescription_id
-                for ((appointment_id, prescription_id) in result) {
-                    appointmentId = appointment_id
-                    prescriptionId = prescription_id
+
+                    documentId = result.get(0)
+                    appointmentId = result.get(1).toInt()
+                    prescriptionId = result.get(2).toInt()
+                    Log.d("document ID in fragment:", documentId.toString())
                     Log.d("Appointment ID in fragment:", appointmentId.toString())
                     Log.d("Prescription ID in fragment:", prescriptionId.toString())
+
+
+                Log.d("before calling load medicines data",appointmentId.toString())
+                repo.loadMedicinesData(appointmentId) { medicinesListRead ->
+
+                    //val medicinesListf = medicinesListRead
+                    recyclerView.adapter = TodoAdapter(medicinesListRead!!,  this)
                 }
             } else {
                 Log.d("Error:", "Failed to retrieve appointment and prescription IDs")
             }
         }
 
-        repo.loadMedicinesData(appointmentId) { medicinesListRead ->
-
-            //val medicinesListf = medicinesListRead
-            recyclerView.adapter = TodoAdapter(medicinesListRead!!,  this)
-        }
+//        Log.d("before calling load medicines data",appointmentId.toString())
+//        repo.loadMedicinesData(appointmentId) { medicinesListRead ->
+//
+//            //val medicinesListf = medicinesListRead
+//            recyclerView.adapter = TodoAdapter(medicinesListRead!!,  this)
+//        }
 
 
         val submitButton: Button = view.findViewById(R.id.submit_button)
@@ -81,7 +92,8 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
             Log.d("Updated Medicines List", updatedMedicinesList.toString())
 
 
-            repo.updateMedicinesForPrescription(prescriptionId, updatedMedicinesList)
+            Log.d("prescriptionId before update medicines",prescriptionId.toString())
+            repo.updateMedicinesForPrescription(documentId, appointmentId, prescriptionId, updatedMedicinesList)
 
             // go to patient dashboard once submitted
             val intent = Intent(requireContext(), PatientDashboard::class.java)

@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
         handler.postDelayed({
             val intent = Intent(
                 this@MainActivity,
-                PatientToDo::class.java
+                PatientInsights::class.java
             )
             startActivity(intent)
         }, 3000)

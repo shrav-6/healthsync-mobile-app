@@ -157,6 +157,7 @@ class InsightsRepository(private val context: Context) {
                         Log.d("getAppointmentDetails", appointmentId.toString())
 
                         // Now that we have the appointment ID, call getAppointmentDetailsInner
+                        Log.d("before calling innner", appointmentId.toString())
                         getAppointmentDetailsInner(appointmentId, callback)
                     } else {
                         callback(null) // No appointment found
@@ -181,6 +182,7 @@ class InsightsRepository(private val context: Context) {
                 if (appointmentTask.isSuccessful) {
                     val appointmentDocument = appointmentTask.result?.documents?.firstOrNull()
                     if (appointmentDocument != null) {
+                        Log.d("received appointmentdoc",appointmentDocument.toString())
                         val appointmentDate = appointmentDocument.getString("date")
                         val doctorId = appointmentDocument.getLong("doctor_id")!!.toInt()
 

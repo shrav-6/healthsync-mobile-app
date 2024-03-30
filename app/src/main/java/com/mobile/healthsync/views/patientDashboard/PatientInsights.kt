@@ -48,12 +48,12 @@ class PatientInsights : AppCompatActivity() {
         setContentView(R.layout.activity_patient_insights)
 
         val repo = InsightsRepository(this)
-        val sharedPreferences = getSharedPreferences("my_preferences", Context.MODE_PRIVATE)
+        val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
-        val patientId = sharedPreferences.getString("patientId", "1")!!.toInt()
+        val patientId = sharedPreferences.getString("patientId", "123")!!.toInt()
 
         //val repo = InsightsRepository(this)
-        repo.getPrescriptionForInsights(1) { prescriptionRead ->
+        repo.getPrescriptionForInsights(patientId) { prescriptionRead ->
             Log.d("after function", prescriptionRead.toString())
             //create bar chart
             createBarChart(prescriptionRead)
