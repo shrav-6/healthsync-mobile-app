@@ -3,29 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/magnolia">
+    android:background="@color/white">
 
     <!-- Edit Button -->
     <Button
         android:id="@+id/editPatient"
-        android:layout_width="48dp"
-        android:layout_height="48dp"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
         android:layout_marginStart="344dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/edit"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.567"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.022" />
+        app:layout_constraintTop_toTopOf="parent"/>
 
     <!-- CardView -->
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        app:cardCornerRadius="16dp"
+        android:layout_marginTop="16dp"
+        app:cardCornerRadius="20dp"
         app:cardElevation="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +33,9 @@
         app:layout_constraintVertical_bias="0.5">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_width="356dp"
+            android:layout_height="608dp"
+            android:background="@drawable/rounded_edittext"
             android:gravity="center"
             android:orientation="vertical"
             android:padding="50dp">
@@ -47,7 +45,6 @@
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:padding="5dp"
-                android:src="@drawable/user"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

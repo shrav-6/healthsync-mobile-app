@@ -19,25 +19,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:translationY="-18dp"
-        android:scaleY="0.2"
         android:scaleX="0.2"
-        android:src="@drawable/pin_149059" />
+        android:scaleY="0.2"
+        android:src="@drawable/pin_149059"
+        android:translationY="-18dp" />
 
     <com.mancj.materialsearchbar.MaterialSearchBar
+        android:id="@+id/searchBar"
         style="@style/MaterialSearchBarLight"
-        app:mt_speechMode="false"
-        app:mt_hint="Search a pharmacy"
-        app:mt_maxSuggestionsCount="10"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/searchBar"
-        android:layout_margin="16dp"
-        app:mt_navIconEnabled="true"
-        app:mt_placeholder="Search a pharmacy"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="16dp"
         android:elevation="5dp"
         android:outlineProvider="bounds"
-        />
+        app:mt_hint="Search a pharmacy"
+        app:mt_maxSuggestionsCount="10"
+        app:mt_navIconEnabled="true"
+        app:mt_placeholder="Search a pharmacy"
+        app:mt_speechMode="false" />
 
     <Button
         android:id="@+id/btn_find"

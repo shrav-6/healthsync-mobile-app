@@ -109,4 +109,8 @@ dependencies {
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("com.karumi:dexter:6.2.3")
     implementation("com.github.mancj:MaterialSearchBar:0.8.5")
+
+    //implementation("com.github.User:Repo:Tag")
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
 }

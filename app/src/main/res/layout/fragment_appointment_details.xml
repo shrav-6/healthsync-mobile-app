@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="32dp"
+    android:padding="2dp"
+    android:background="@drawable/rounded_edittext">
 
     <TextView
         android:id="@+id/tvHeading"
@@ -11,8 +14,10 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="Appointment Detail"
+        android:textColor="@color/orchid"
         android:textSize="32sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:paddingTop="15dp"/>
 
     <TextView
         android:id="@+id/textDoctorName"
@@ -22,7 +27,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:text="Doctor: "
-        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -33,7 +39,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Specialty: "
-        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -44,7 +51,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Date: "
-        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -55,7 +63,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Time: "
-        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <TextView
@@ -66,7 +75,8 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:text="Total Amount: "
-        android:textSize="16sp"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         android:textStyle="bold" />
 
     <Button
@@ -74,6 +84,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/textPayment"
+        android:background="@drawable/rounded_corner_input"
+        android:textColor="@color/white"
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
@@ -85,6 +97,9 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/button"
         android:layout_marginStart="16dp"
+        android:background="@drawable/rounded_corner_input"
+        android:textColor="@color/white"
+        android:layout_marginBottom="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="Add Review" />

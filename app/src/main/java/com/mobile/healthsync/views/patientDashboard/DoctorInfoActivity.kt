@@ -1,11 +1,13 @@
 package com.mobile.healthsync.views.patientDashboard
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
 import androidx.activity.ComponentActivity
@@ -19,6 +21,7 @@ import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.repository.ReviewRepository
 import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
+import com.squareup.picasso.Picasso
 
 class DoctorInfoActivity : ComponentActivity() {
 
@@ -47,6 +50,15 @@ class DoctorInfoActivity : ComponentActivity() {
     }
 
     private fun fillDocotorDetails(doctor: Doctor?) {
+
+        val doctorImage: ImageView = findViewById(R.id.doctorImage)
+        // Getting image from firebase
+        if (doctor?.doctor_info?.photo == "null") {
+            doctorImage.setImageResource(R.drawable.user)
+        } else {
+            Picasso.get().load(Uri.parse(doctor?.doctor_info?.photo)).into(doctorImage)
+        }
+
         findViewById<TextView>(R.id.infodoctoctorName).text = doctor?.doctor_info?.name
         findViewById<TextView>(R.id.infoSpecialization).text = "Specialization:  ${doctor?.doctor_speciality}"
         findViewById<TextView>(R.id.infoExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"

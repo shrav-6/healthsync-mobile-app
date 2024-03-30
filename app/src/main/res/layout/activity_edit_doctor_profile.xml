@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray">
+    android:background="@color/white">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
@@ -24,10 +24,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
+            android:gravity="left"
             android:orientation="vertical"
             android:padding="50dp"
-            android:textAlignment="center"
             tools:ignore="MissingConstraints">
 
             <!-- Doctor Profile Image -->
@@ -49,6 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Name:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -72,6 +72,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Specialization:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -95,6 +96,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Email:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -117,6 +119,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Age:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -140,28 +143,30 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Gender:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/editDoctorAge" />
 
+            <!-- Doctor Consultation Fees -->
             <Spinner
                 android:id="@+id/editDoctorGender"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
                 android:layout_below="@id/labelDoctorGender"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="1dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Doctor Consultation Fees -->
             <TextView
                 android:id="@+id/labelDoctorFee"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Consultation Fees:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -185,6 +190,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Experience in Years:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -208,6 +214,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:text="Availability:"
+                android:textColor="@color/orchid"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintEnd_toEndOf="parent"
