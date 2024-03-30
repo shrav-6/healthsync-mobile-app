@@ -26,7 +26,7 @@ class BookSlotAdapter(val slotList : List<Slot>, val activity : Activity): Recyc
                     {
                         selectedSlotCard.setBackgroundColor(R.drawable.rounded_edittext)
                     }
-                    slotcard.setBackgroundColor(itemView.resources.getColor(R.color.pastelBlue))
+                    slotcard.setBackgroundColor(R.drawable.selected)
                     selectedSlotCard = slotcard
                     selectedSlot = slotList[adapterPosition]
                 }
