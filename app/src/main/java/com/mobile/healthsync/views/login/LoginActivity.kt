@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.login
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mobile.healthsync.R
@@ -12,6 +13,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 import com.mobile.healthsync.views.signUp.SignupActivity
 import com.google.firebase.messaging.FirebaseMessaging
+import com.mobile.healthsync.views.doctorDashboard.DoctorDashboard
 
 class LoginActivity : AppCompatActivity() {
 
@@ -63,8 +65,16 @@ class LoginActivity : AppCompatActivity() {
                     // Handle successful login
                     when(userType) {
                         UserType.DOCTOR -> {
+                            val doctorId = documents.documents.firstOrNull()?.getLong("doctor_id") ?: -1L // Default to -1 if not found
+                            // Store doctor_id in Shared Preferences
+                            val sharedPreferences = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().apply {
+                                putString("doctor_id", doctorId.toString()) // Convert to String and save
+                                apply()
+                            }
+
                             generateAndSaveToken(email, userType)
-                            // Start Doctor Dashboard
+                            startActivity(Intent(this, DoctorDashboard::class.java))
                             Toast.makeText(this, "Doctor login successful", Toast.LENGTH_SHORT).show()
                         }
 
