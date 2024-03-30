@@ -1,6 +1,7 @@
 package com.mobile.healthsync.repository
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
@@ -119,7 +120,7 @@ class PrescriptionRepository (private val context: Context) {
 //    }
 
     fun updatePatientMedicineIntake(prescriptionId: Int, intakeStatus: Boolean) {
-
+        Log.d("prescription_id", prescriptionId.toString())
         db.collection("prescriptions").whereEqualTo("prescription_id",prescriptionId)
             .get()
             .addOnCompleteListener { task : Task<QuerySnapshot> ->
@@ -128,19 +129,22 @@ class PrescriptionRepository (private val context: Context) {
                     if (documents != null && !documents.isEmpty) {
                         for (document in documents) {
                             val prescription = document.toObject(Prescription::class.java)
-                            prescription.medicines.forEach { (_, medicineMap) ->
-                                medicineMap.schedule.forEach{(_, scheduleMap) ->
-                                    if(scheduleMap.morning.doctorSaid){
-                                        scheduleMap.morning.patientTook = intakeStatus
-                                    }
-                                    if(scheduleMap.afternoon.doctorSaid){
-                                        scheduleMap.afternoon.patientTook = intakeStatus
-                                    }
-                                    if(scheduleMap.night.doctorSaid){
-                                        scheduleMap.night.patientTook = intakeStatus
-                                    }
-
-                                }
+                            prescription.medicines?.forEach { (_, medicineMap) ->
+                                medicineMap.schedule.morning.patientTook = intakeStatus
+                                medicineMap.schedule.afternoon.patientTook = intakeStatus
+                                medicineMap.schedule.night.patientTook = intakeStatus
+                        //                                medicineMap.schedule.forEach{(_, scheduleMap) ->
+                        //                                    if(scheduleMap.morning.doctorSaid){
+                        //                                        scheduleMap.morning.patientTook = intakeStatus
+                        //                                    }
+                        //                                    if(scheduleMap.afternoon.doctorSaid){
+                        //                                        scheduleMap.afternoon.patientTook = intakeStatus
+                        //                                    }
+                        //                                    if(scheduleMap.night.doctorSaid){
+                        //                                        scheduleMap.night.patientTook = intakeStatus
+                        //                                    }
+                        //
+                        //                                }
                             }
                             db.collection("prescriptions").document(document.id)
                                 .set(prescription)
