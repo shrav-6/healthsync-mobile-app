@@ -10,6 +10,7 @@ import com.google.firebase.messaging.FirebaseMessaging
 import com.mobile.healthsync.services.AlarmScheduler
 import com.mobile.healthsync.services.AlarmScheduler2
 import com.mobile.healthsync.views.signUp.SignupActivity
+import com.mobile.healthsync.views.login.LoginActivity
 
 
 class MainActivity : ComponentActivity() {
@@ -35,7 +36,7 @@ class MainActivity : ComponentActivity() {
         handler.postDelayed({
             val intent = Intent(
                 this@MainActivity,
-                SignupActivity::class.java
+                LoginActivity::class.java
             )
             startActivity(intent)
         }, 3000)
