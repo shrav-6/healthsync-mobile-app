@@ -40,21 +40,15 @@ object PrescriptionRepository {
                         for (document in documents) {
                             val prescription = document.toObject(Prescription::class.java)
                             prescription.medicines?.forEach { (_, medicineMap) ->
-                                medicineMap.schedule.morning.patientTook = intakeStatus
-                                medicineMap.schedule.afternoon.patientTook = intakeStatus
-                                medicineMap.schedule.night.patientTook = intakeStatus
-                                //                                medicineMap.schedule.forEach{(_, scheduleMap) ->
-                                //                                    if(scheduleMap.morning.doctorSaid){
-                                //                                        scheduleMap.morning.patientTook = intakeStatus
-                                //                                    }
-                                //                                    if(scheduleMap.afternoon.doctorSaid){
-                                //                                        scheduleMap.afternoon.patientTook = intakeStatus
-                                //                                    }
-                                //                                    if(scheduleMap.night.doctorSaid){
-                                //                                        scheduleMap.night.patientTook = intakeStatus
-                                //                                    }
-                                //
-                                //                                }
+                                if(medicineMap.schedule.morning.doctorSaid){
+                                    medicineMap.schedule.morning.patientTook = intakeStatus
+                                }
+                                if(medicineMap.schedule.afternoon.doctorSaid){
+                                    medicineMap.schedule.afternoon.patientTook = intakeStatus
+                                }
+                                if(medicineMap.schedule.night.doctorSaid){
+                                    medicineMap.schedule.night.patientTook = intakeStatus
+                                }
                             }
                             db.collection("prescriptions").document(document.id)
                                 .set(prescription)

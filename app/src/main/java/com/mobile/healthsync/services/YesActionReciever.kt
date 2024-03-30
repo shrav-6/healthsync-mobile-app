@@ -9,12 +9,9 @@ import com.mobile.healthsync.repository.PrescriptionRepository
 
 class YesActionReceiver : BroadcastReceiver() {
 
-    private  lateinit var prescriptionRepository: PrescriptionRepository
-
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", -1)
         val prescriptionId = intent.getIntExtra("prescriptionId", -1)
-        Log.d("prescriptionId Intent", prescriptionId.toString())
         if (notificationId != -1) {
             // Handle "Yes" action here
             Log.d(TAG, "YesActionReceiver: Yes button clicked for notification ID $notificationId")
@@ -22,7 +19,7 @@ class YesActionReceiver : BroadcastReceiver() {
             if (prescriptionId != -1) {
                 // Handle "Yes" action here
                 Log.d(TAG,"YesActionReceiver: Yes button clicked for prescription ID $prescriptionId")
-                prescriptionRepository.updatePatientMedicineIntake(prescriptionId.toInt(),true)
+                PrescriptionRepository.updatePatientMedicineIntake(prescriptionId,true)
                 // Dismiss the notification
                 dismissNotification(context, notificationId)
             }

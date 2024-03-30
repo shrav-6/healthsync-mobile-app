@@ -9,8 +9,6 @@ import com.mobile.healthsync.repository.PrescriptionRepository
 
 class NoActionReceiver : BroadcastReceiver() {
 
-    private  lateinit var prescriptionRepository: PrescriptionRepository
-
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", -1)
         val prescriptionId = intent.getIntExtra("prescriptionId", -1)
@@ -18,7 +16,7 @@ class NoActionReceiver : BroadcastReceiver() {
             // Handle "No" action here
             Log.d(TAG, "NoActionReceiver: No button clicked for prescription ID $prescriptionId")
 
-            prescriptionRepository.updatePatientMedicineIntake(prescriptionId, false)
+            PrescriptionRepository.updatePatientMedicineIntake(prescriptionId, false)
 
             // Dismiss the notification
             dismissNotification(context, notificationId)
