@@ -12,6 +12,7 @@ import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AvailableSlotAdapter
 import com.mobile.healthsync.adapters.RatingsAdapter
@@ -20,7 +21,7 @@ import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.repository.ReviewRepository
 import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
 
-class DoctorInfoActivity : ComponentActivity() {
+class DoctorInfoActivity : BaseActivity() {
 
     private var doctorRepository: DoctorRepository
     private var reviewRepository: ReviewRepository = ReviewRepository()

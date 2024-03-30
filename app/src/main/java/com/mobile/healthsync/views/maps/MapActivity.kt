@@ -50,6 +50,7 @@ import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRe
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.mancj.materialsearchbar.MaterialSearchBar
 import com.mancj.materialsearchbar.adapter.SuggestionsAdapter
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.JsonParser
 import org.json.JSONException
@@ -62,7 +63,7 @@ import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 
-class MapActivity : AppCompatActivity(), OnMapReadyCallback {
+class MapActivity : BaseActivity(), OnMapReadyCallback {
 
     private lateinit var mMap : GoogleMap
     private lateinit var mFusedLocationProviderClient : FusedLocationProviderClient

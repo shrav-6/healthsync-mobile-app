@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.mobile.healthsync.views.maps.PermissionsActivity
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 import com.mobile.healthsync.views.patientProfile.PatientProfile
+import com.mobile.healthsync.views.signUp.SignupActivity
 
 open class BaseActivity : AppCompatActivity() {
 
@@ -53,12 +55,13 @@ open class BaseActivity : AppCompatActivity() {
                 R.id.dashboard -> {
                     startActivity(Intent(this, PatientDashboard::class.java))
                 }
+                R.id.pharmacies -> {
+                    startActivity(Intent(this, PermissionsActivity::class.java))
+                }
                 /*R.id.appointments -> {
                     startActivity(Intent(this, PatientDashboard::class.java))
                 }
-                R.id.pharmacies -> {
-                    startActivity(Intent(this, PatientDashboard::class.java))
-                }
+
                 R.id.TODO -> {
                     startActivity(Intent(this, PatientDashboard::class.java))
                 }*/
@@ -73,6 +76,9 @@ open class BaseActivity : AppCompatActivity() {
                 }
                 R.id.logout -> {
                     Toast.makeText(applicationContext, "Logging out!", Toast.LENGTH_SHORT).show()
+                    val intent = Intent(applicationContext, SignupActivity::class.java)//change to login activity later
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
                     finish()
                 }
             }
