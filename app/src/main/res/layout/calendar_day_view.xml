@@ -15,7 +15,9 @@
         android:layout_height="wrap_content"
         android:paddingTop="15dp"
         android:paddingBottom="15dp"
-        android:text="Sun" />
+        android:text="Sun"
+        android:textColor="@color/orchid"
+        android:textStyle="bold"/>
 
     <TextView
         android:id="@+id/dateTextView"
@@ -23,5 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:paddingBottom="15dp"
-        android:text="01" />
+        android:text="01"
+        android:textColor="@color/orchid"
+        android:textStyle="bold"/>
 </LinearLayout>

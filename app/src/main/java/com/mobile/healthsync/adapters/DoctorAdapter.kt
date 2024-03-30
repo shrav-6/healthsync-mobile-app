@@ -56,7 +56,7 @@ class DoctorAdapter(
 
         // Getting image from firebase
         if (currDoctor.doctor_info.photo == "null") {
-            tvDoctorImage.setImageResource(R.drawable.default_doctor_image)
+            tvDoctorImage.setImageResource(R.drawable.user)
         } else {
             Picasso.get().load(Uri.parse(currDoctor.doctor_info.photo)).into(tvDoctorImage)
         }
