@@ -54,7 +54,7 @@ class SignupDoctorActivity : AppCompatActivity() {
                 years_of_practice = years_of_practice,
                 name = name,
                 photo = "null",
-            ), speciality, email, password)
+            ), email, password, speciality, "")
 
             // upload in database
             val dbObj = uploadToDatabase()

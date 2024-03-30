@@ -18,6 +18,7 @@ import com.mobile.healthsync.model.Patient.PatientDetails
 import com.mobile.healthsync.uploadToDatabase
 import com.mobile.healthsync.views.patientDashboard.PatientToDo
 import android.content.Context
+import com.mobile.healthsync.views.login.LoginActivity
 
 
 class SignupActivity : AppCompatActivity() {
@@ -80,6 +81,7 @@ class SignupActivity : AppCompatActivity() {
                 patient_id = 0,
                 patientUpdated = "2/26/2024",
                 rewardPoints = 0,
+                token = "",
                 patientDetails = PatientDetails(
                     age = age.toInt(),
                     allergies = allergies,
@@ -97,7 +99,7 @@ class SignupActivity : AppCompatActivity() {
 
             //for testing to-do
             Log.d("after patient signup","going to patient todo activity")
-            intent = Intent(this, PatientToDo::class.java)
+            intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 
         }

@@ -29,7 +29,12 @@ data class Doctor(
 
     @get:PropertyName("doctor_speciality")
     @set:PropertyName("doctor_speciality")
-    var doctor_speciality: String = "General Medicine"
+    var doctor_speciality: String = "General Medicine",
+
+    @get:PropertyName("token")
+    @set:PropertyName("token")
+    var token: String = ""
+
 ) : Serializable, Parcelable {
 
     data class DoctorInfo(
