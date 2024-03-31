@@ -1,6 +1,5 @@
 package com.mobile.healthsync.views.patientProfile
 
-
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
@@ -16,8 +15,10 @@ import com.mobile.healthsync.repository.PatientRepository
 import com.squareup.picasso.Picasso
 
 /**
- * Line 32 can be deleted and in Line 33 documentID could be set to the Intent Parameter value
- **/
+ * Activity for displaying patient profile information.
+ * Allows the patient to view their profile data including name, email, age, gender, height, weight,
+ * allergies, reward points, and profile picture.
+ */
 class PatientProfile : BaseActivity() {
 
     private lateinit var patientRepository: PatientRepository
@@ -30,8 +31,6 @@ class PatientProfile : BaseActivity() {
         setContentView(R.layout.activity_patient_profile)
 
         patientRepository = PatientRepository(this)
-
-//        val testId = "00KDbESIgVNTIDzyAP04"
 
         // Retrieve doctor_id from Shared Preferences
         val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)

@@ -18,6 +18,11 @@ import com.squareup.picasso.Picasso
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * Activity for editing patient profile information.
+ * Allows the patient to modify their profile data including personal information, gender, age, height, weight,
+ * allergies, and profile picture.
+ */
 class EditPatientProfile : BaseActivity() {
 
     private lateinit var patientRepository: PatientRepository
