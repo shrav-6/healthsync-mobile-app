@@ -1,14 +1,15 @@
 package com.mobile.healthsync.views.patientBooking
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.CheckoutActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.BookSlotAdapter
@@ -17,13 +18,12 @@ import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
+class BookingInfoActivity : BaseActivity(), DatePickerDialog.OnDateSetListener {
 
     private val SUCCESS :Int = 1
     private val FAILURE :Int = 0
@@ -49,7 +49,8 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
         setContentView(R.layout.activity_booking)
 
         this.doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
-        val patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+        val patient_id = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+            .getString("patient_id", "-1")?.toInt() ?: -1
         this.date = fillInitialValues()
 
         var searchdatebtn = findViewById<Button>(R.id.searchdate)
@@ -93,7 +94,7 @@ class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
             this.doctor_id,patient_id,this.slot_id,date, this.start_time,{ appointmentID ->
                 val intent :Intent = Intent(this, CheckoutActivity::class.java)
                 intent.putExtra("doctor_id", this.doctor_id)
-                intent.putExtra("patient_id", patient_id)
+                //intent.putExtra("patient_id", patient_id)
                 intent.putExtra("appointment_id",appointmentID)
                 updateAfterPayment.launch(intent)
             })

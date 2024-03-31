@@ -1,15 +1,18 @@
-package com.mobile.healthsync
+package com.mobile.healthsync.repository
 
+import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
-import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.Doctor
-import io.grpc.Context
+import com.mobile.healthsync.model.Patient
 
-class uploadToDatabase {
-    //lateinit var sharedPreferences: SharedPreferences
+class SignupRepository(private val context: Context) {
+    private val db: FirebaseFirestore
+
+    init{
+        db = FirebaseFirestore.getInstance()
+    }
 
     fun createPatient(newPatient: Patient, sharedPreferences: SharedPreferences)  {
         val db = FirebaseFirestore.getInstance()
@@ -23,7 +26,9 @@ class uploadToDatabase {
 
                 // add to sharedPreferences, TODO: in signin not signup - this is just for testing
                 val editor = sharedPreferences.edit()
-                editor.putString("PatientID", "${documentReference.id}")
+                editor.putString("patient_id", newPatient.patient_id.toString())
+                editor.putString("emailid",newPatient.email)
+                editor.putString("password",newPatient.password)
                 editor.apply()
             }
             .addOnFailureListener { e ->
@@ -31,7 +36,7 @@ class uploadToDatabase {
             }
     }
 
-    fun createDoctor(newDoctor: Doctor) {
+    fun createDoctor(newDoctor: Doctor, sharedPreferences: SharedPreferences) {
         val db = FirebaseFirestore.getInstance()
         val patientsCollection = db.collection("doctors")
 
@@ -39,11 +44,15 @@ class uploadToDatabase {
             .addOnSuccessListener { documentReference ->
                 println("DocumentSnapshot added with ID: ${documentReference.id}")
                 Log.d("doctor signup done", "${documentReference.id}")
+
+                val editor = sharedPreferences.edit()
+                editor.putString("doctor_id", newDoctor.doctor_id.toString())
+                editor.putString("emailid",newDoctor.email)
+                editor.putString("password",newDoctor.password)
+                editor.apply()
             }
             .addOnFailureListener { e ->
                 println("Error adding document: $e")
             }
     }
 }
-
-
