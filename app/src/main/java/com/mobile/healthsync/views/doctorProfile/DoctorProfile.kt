@@ -15,8 +15,7 @@ import com.squareup.picasso.Picasso
 
 class DoctorProfile : BaseActivityForDoctor() {
 
-//    private var doctorDocumentId by Delegates.notNull<Int>()
-    private var doctorId: Int? = null
+    private lateinit var doctorDocumentId: String
     private lateinit var doctorImg: String
     private var imageURL: String = ""
 
@@ -27,10 +26,10 @@ class DoctorProfile : BaseActivityForDoctor() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        doctorId = 897
+        doctorDocumentId = "OXyUFwt5a5S9yUmclEd3"
 //        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
-        doctorRepository.getDoctorProfileData(doctorId) { doctor ->
+        doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
             if(doctor != null){
                 setDoctorProfileData(doctor)
                 doctorImg = doctor.doctor_info.photo.toString()
@@ -40,7 +39,7 @@ class DoctorProfile : BaseActivityForDoctor() {
         val editButton: Button = findViewById(R.id.editDoctor)
         editButton.setOnClickListener{
             val intent = Intent(this, EditDoctorProfile::class.java)
-            intent.putExtra("doctorId", doctorId);
+            intent.putExtra("doctorId", doctorDocumentId);
             startActivity(intent)
         }
 
@@ -95,11 +94,9 @@ class DoctorProfile : BaseActivityForDoctor() {
             imageView.setImageURI(imageUri)
 
             imageUri?.let {
-                doctorId?.let { it1 ->
-                    doctorRepository.uploadImageToFirebaseStorage(imageURL, it, it1) {it
-                        if (!it.isNullOrBlank()) {
-                            doctorImg = it
-                        }
+                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, doctorDocumentId) {it
+                    if (!it.isNullOrBlank()) {
+                        doctorImg = it
                     }
                 }
             }
