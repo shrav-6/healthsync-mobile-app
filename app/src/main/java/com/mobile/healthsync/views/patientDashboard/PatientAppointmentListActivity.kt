@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.widget.Button
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
+import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
@@ -105,64 +107,102 @@ class PatientAppointmentListActivity : BaseActivity() {
 
     private var appointments: MutableList<Appointment> = mutableListOf()
     private var doctorsList: MutableList<Doctor> = mutableListOf()
-    private var patientId: Int = -1
+    private var patient_id : Int = -1
 
     private lateinit var appointmentAdapter: PatientAppointmentListAdapter
 
     private val dateFormat = SimpleDateFormat("EEE, MMM d y", Locale.getDefault())
+    private val queryDateFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
     private val calendar = Calendar.getInstance()
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_appointment_list)
 
-        initializeViews()
+        tabLayout = findViewById<TabLayout>(R.id.tabLayout)
+        recyclerView = findViewById(R.id.recyclerView)
+        recyclerView.layoutManager = LinearLayoutManager(this)
+
+        btnPrev = findViewById<Button>(R.id.btnPrev)
+        btnNext = findViewById<Button>(R.id.btnNext)
+
+
+        // Set listeners for navigation buttons
+        btnPrev.setOnClickListener { showPreviousDates() }
+        btnNext.setOnClickListener { showNextDates() }
+
 
         appointmentRepository = AppointmentRepository(this)
         doctorRepository = DoctorRepository(this)
 
-        patientId = getSharedPreferences("preferences", Context.MODE_PRIVATE)
-            .getString("patient_id", "251")?.toInt() ?: 251
+        val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
-        loadAppointmentsAndDoctors()
+        this.patient_id = sharedPreferences.getString("patient_id", "251")?.toInt() ?: 251
 
-        setupListeners()
-    }
+        appointmentRepository.getAppointments(patient_id) { retrievedAppointmentsList ->
+            // Assuming appointmentsList is a mutable variable accessible in this scope
+            appointments = retrievedAppointmentsList
+        }
 
-    override fun onResume() {
-        super.onResume()
-        loadAppointmentsAndDoctors() // Assuming this method loads your data and updates the adapter.
-    }
+        doctorRepository.getAllDoctors { retrievedDoctorsList ->
+            doctorsList = retrievedDoctorsList
+            Log.d("DoctorList", " ${retrievedDoctorsList}")
+            appointmentAdapter = PatientAppointmentListAdapter(
+                appointments,
+                doctorsList
+            ) { appointment, doctor ->
+                // Handle item click
+                val intent = Intent(this, PatientAppointmentDetailsActivity::class.java).apply {
+                    putExtra(PatientAppointmentDetailsActivity.APPOINTMENT_KEY, appointment as Parcelable)
+                    putExtra(PatientAppointmentDetailsActivity.DOCTOR_KEY, doctor as Parcelable)
+                }
+                startActivity(intent)
+            } ?: PatientAppointmentListAdapter(emptyList(), emptyList()) { _, _ -> }
 
-    private fun initializeViews() {
-        tabLayout = findViewById(R.id.tabLayout)
-        recyclerView = findViewById(R.id.recyclerView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        btnPrev = findViewById(R.id.btnPrev)
-        btnNext = findViewById(R.id.btnNext)
-    }
+            recyclerView.adapter = appointmentAdapter
 
-    private fun setupListeners() {
-        btnPrev.setOnClickListener { showPreviousDates() }
-        btnNext.setOnClickListener { showNextDates() }
+            updateDates()
+
+            val todayDate = queryDateFormat.format(Calendar.getInstance().time)
+            val filteredAppointments = filterAppointmentsByDate(appointments, todayDate)
+            appointmentAdapter.updateList(filteredAppointments)
+        }
+
+        Log.d("DoctorList", " ${doctorsList}")
+
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tab?.let {
-                    val dateString = tab.text.toString()
-                    val formattedDate = dateFormat.parse(dateString)?.let { dateFormat.format(it) }
-                    val filteredAppointments = filterAppointmentsByDate(appointments, formattedDate)
-                    appointmentAdapter.updateList(filteredAppointments)
+                    val dateString = tab.text.toString() // Get the text on the tab
+                    val inputFormat = SimpleDateFormat("EEE, MMM d y", Locale.getDefault())
+                    val outputFormat = SimpleDateFormat("MM/dd/yyyy", Locale.getDefault())
+
+                    try {
+                        val date = inputFormat.parse(dateString)
+                        val formattedDate = outputFormat.format(date!!)
+                        val filteredAppointments = filterAppointmentsByDate(appointments, formattedDate)
+//                        Log.d("date and list","${filteredAppointments} and ${appointments}")
+                        appointmentAdapter.updateList(filteredAppointments)
+                    } catch (e: ParseException) {
+                        e.printStackTrace()
+                    }
                 }
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
+
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
+
+    }
+
+     override fun onResume() {
+        super.onResume()
+        loadAppointmentsAndDoctors() // Assuming this method loads your data and updates the adapter.
     }
 
     private fun loadAppointmentsAndDoctors() {
-        appointmentRepository.getAppointments(patientId) { retrievedAppointmentsList ->
+        appointmentRepository.getAppointments(patient_id) { retrievedAppointmentsList ->
             appointments = retrievedAppointmentsList
             updateRecyclerView()
         }
@@ -172,6 +212,8 @@ class PatientAppointmentListActivity : BaseActivity() {
             updateRecyclerView()
         }
     }
+
+
 
     private fun updateRecyclerView() {
         appointmentAdapter = PatientAppointmentListAdapter(
@@ -187,29 +229,35 @@ class PatientAppointmentListActivity : BaseActivity() {
         recyclerView.adapter = appointmentAdapter
     }
 
+
     private fun updateDates() {
+        // Clear existing tabs
         tabLayout.removeAllTabs()
+
+        // Add 3 dates starting from the current date
         for (i in 0 until 3) {
             val date = dateFormat.format(calendar.time)
             tabLayout.addTab(tabLayout.newTab().setText(date))
             calendar.add(Calendar.DAY_OF_MONTH, 1)
         }
+
     }
 
     private fun showPreviousDates() {
+        // Move the calendar 6 days back to get the starting date for the previous 3 dates
         calendar.add(Calendar.DAY_OF_MONTH, -6)
         updateDates()
     }
 
     private fun showNextDates() {
+        // Move the calendar 3 days forward to get the starting date for the next 3 dates
         calendar.add(Calendar.DAY_OF_MONTH, 0)
         updateDates()
+
     }
 
-    private fun filterAppointmentsByDate(appointments: List<Appointment>, date: String?): List<Appointment> {
+    fun filterAppointmentsByDate(appointments: List<Appointment>, date: String): List<Appointment> {
         val filteredList = mutableListOf<Appointment>()
-        date ?: return filteredList
-
         for (appointment in appointments) {
             if (appointment.date == date) {
                 filteredList.add(appointment)
@@ -218,4 +266,5 @@ class PatientAppointmentListActivity : BaseActivity() {
         return filteredList
     }
 
+    
 }
