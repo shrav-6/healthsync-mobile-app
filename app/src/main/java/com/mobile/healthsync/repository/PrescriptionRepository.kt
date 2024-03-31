@@ -7,6 +7,7 @@ import com.google.firebase.firestore.QuerySnapshot
 import com.mobile.healthsync.model.Prescription
 import com.mobile.healthsync.model.Prescription.Medicine
 
+
 object PrescriptionRepository {
 
     private val db = FirebaseFirestore.getInstance()

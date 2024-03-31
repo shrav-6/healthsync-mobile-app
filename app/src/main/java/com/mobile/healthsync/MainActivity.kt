@@ -9,7 +9,12 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.mobile.healthsync.services.AlarmScheduler
 import com.mobile.healthsync.services.AlarmScheduler2
+import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.login.LoginActivity
+import com.mobile.healthsync.views.patientDashboard.PatientDashboard
+import com.mobile.healthsync.views.patientDashboard.PatientInsights
+import com.mobile.healthsync.views.patientDashboard.PatientToDo
+import com.mobile.healthsync.views.signUp.SignupActivity
 
 
 class MainActivity : ComponentActivity() {
@@ -17,19 +22,11 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Get the Firebase token
-        FirebaseMessaging.getInstance().getToken()
-            .addOnCompleteListener { task: Task<String> ->
-                if (task.isSuccessful) {
-                    val token = task.result
-
-                    Log.d("token", "Firebase Token: $token")
-                    // Handle the token (e.g., send it to your server)
-                } else {
-                    Log.e("token", "Failed to get Firebase token: " + task.exception)
-                }
-            }
-
+        val from = intent.getStringExtra("from")
+        if(from == "patient to do") {
+            val intent = Intent(this, PatientDashboard::class.java)
+            startActivity(intent)
+        }
         val handler = Handler()
         handler.postDelayed({
             val intent = Intent(

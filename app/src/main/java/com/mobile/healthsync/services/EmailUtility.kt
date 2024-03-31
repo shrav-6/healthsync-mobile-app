@@ -30,7 +30,7 @@ class EmailUtility(private val context: Context) {
     ) {
         try {
             val senderEmail = "health.sync19@gmail.com"
-            val senderPassword = "ivtueflxuuogkxeo"
+            val senderPassword = "ivtueflxuuogkxeo"//to be edited by mohammed
 
             val properties = Properties()
             properties["mail.smtp.host"] = "smtp.gmail.com"

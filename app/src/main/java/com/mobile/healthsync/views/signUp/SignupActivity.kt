@@ -15,9 +15,14 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.Patient.PatientDetails
-import com.mobile.healthsync.uploadToDatabase
 import com.mobile.healthsync.views.patientDashboard.PatientToDo
 import android.content.Context
+import android.widget.Toast
+import com.mobile.healthsync.repository.SignupRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+import com.mobile.healthsync.views.login.LoginActivity
 
 
 class SignupActivity : AppCompatActivity() {
@@ -28,7 +33,7 @@ class SignupActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
-        sharedPreferences = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
         // for gender options spinner
         val spinner: Spinner = findViewById(R.id.gender_spinner)
@@ -76,10 +81,11 @@ class SignupActivity : AppCompatActivity() {
             val newPatient = Patient(
                 email = email,
                 password = password,
-                patientCreated = "2/26/2024",
-                patient_id = 0,
-                patientUpdated = "2/26/2024",
+                patientCreated = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                patient_id = (Math.abs(UUID.randomUUID().mostSignificantBits) xor UUID.randomUUID().leastSignificantBits).toInt(),
+                patientUpdated = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
                 rewardPoints = 0,
+                token = "",
                 patientDetails = PatientDetails(
                     age = age.toInt(),
                     allergies = allergies,
@@ -92,12 +98,15 @@ class SignupActivity : AppCompatActivity() {
             )
 
             // upload in database
-            val dbObj = uploadToDatabase()
-            dbObj.createPatient(newPatient, sharedPreferences)
+//            val dbObj = uploadToDatabase()
+//            dbObj.createPatient(newPatient, sharedPreferences)
+            val repo = SignupRepository(this)
+            repo.createPatient(newPatient, sharedPreferences)
 
             //for testing to-do
             Log.d("after patient signup","going to patient todo activity")
-            intent = Intent(this, PatientToDo::class.java)
+            Toast.makeText(this, "Patient Registered", Toast.LENGTH_LONG)
+            intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
 
         }

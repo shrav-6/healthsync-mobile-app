@@ -106,6 +106,7 @@
     <string name="basic_notification_channel_id" translatable="false">channel1</string>
     <string name="reminder_notification_channel_id" translatable="false">channel2</string>
 
+    <string name="edit_patient_profile">Edit patient profile</string>
     <string-array name="week_days">
         <item>Monday</item>
         <item>Tuesday</item>

@@ -2,6 +2,7 @@ package com.mobile.healthsync.model
 
 import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
+
 data class Prescription(
     @PropertyName("appointment_id")
     @get:PropertyName("appointment_id")
