@@ -8,6 +8,7 @@
     <!-- Edit Button -->
 
     <!-- CardView -->
+
     <Button
         android:id="@+id/editPatient"
         android:layout_width="45dp"
@@ -15,12 +16,12 @@
         android:layout_marginStart="344dp"
         android:layout_marginTop="16dp"
         android:background="@drawable/edit"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.631"
-        app:layout_constraintVertical_bias="0.095" />
+        app:layout_constraintHorizontal_bias="0.272"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

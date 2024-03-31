@@ -3,7 +3,6 @@ package com.mobile.healthsync
 import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.FrameLayout
 import android.widget.TextView
 import android.widget.Toast
@@ -21,7 +20,6 @@ import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 import com.mobile.healthsync.views.patientDashboard.PatientInsights
 import com.mobile.healthsync.views.patientDashboard.PatientToDo
 import com.mobile.healthsync.views.patientProfile.PatientProfile
-import com.mobile.healthsync.views.signUp.SignupActivity
 
 open class BaseActivity : AppCompatActivity() {
 
