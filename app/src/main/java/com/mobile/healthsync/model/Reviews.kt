@@ -18,5 +18,8 @@ data class Reviews(
 
     @get:PropertyName("stars")
     @set:PropertyName("stars")
-    var stars: Double = 0.0
+    var stars: Double = 0.0,
+
+    // Additional property for patient name
+    var patientName: String = ""
 ) : Serializable
