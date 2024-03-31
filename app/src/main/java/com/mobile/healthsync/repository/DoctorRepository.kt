@@ -127,24 +127,40 @@ class DoctorRepository(private val context: Context) {
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
-    fun getDoctorProfileData(doctorId: String?, callback: (Doctor?) -> Unit) {
-        db.collection("doctors").document(doctorId!!)
+    fun getDoctorProfileData(doctorIdValue: Int?, callback: (Doctor?) -> Unit) {
+        db.collection("doctors")
+            .whereEqualTo("doctor_id", doctorIdValue)
             .get()
-            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val document = task.result
-                    if (document.exists()) {
+                    for (document in task.result!!) {
                         val doctor = document.toObject(Doctor::class.java)
                         callback(doctor)
-                    } else {
-                        showToast("Doctor not found")
-                        callback(null)
                     }
                 } else {
-                    showToast("Error fetching doctor data: ${task.exception?.message}")
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching event data: $exceptionMessage")
                     callback(null)
                 }
             }
+//        db.collection("doctors").document(doctorId!!)
+//            .get()
+//            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+//                if (task.isSuccessful) {
+//                    val document = task.result
+//                    if (document.exists()) {
+//                        val doctor = document.toObject(Doctor::class.java)
+//                        callback(doctor)
+//                    } else {
+//                        showToast("Doctor not found")
+//                        callback(null)
+//                    }
+//                } else {
+//                    showToast("Error fetching doctor data: ${task.exception?.message}")
+//                    callback(null)
+//                }
+//            }
+
     }
 
     fun updateDoctorData(documentID: String, doctor: Doctor?) {

@@ -11,11 +11,12 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
+import kotlin.properties.Delegates
 
 
 class DoctorProfile : AppCompatActivity() {
 
-    private lateinit var doctorDocumentId: String
+    private var doctorDocumentId by Delegates.notNull<Int>()
     private lateinit var doctorImg: String
     private var imageURL: String = ""
 
@@ -26,7 +27,7 @@ class DoctorProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        doctorDocumentId = "QMW1ZsIEcyRjqyLip0dP"
+        doctorDocumentId = 897
 //        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
@@ -94,7 +95,7 @@ class DoctorProfile : AppCompatActivity() {
             imageView.setImageURI(imageUri)
 
             imageUri?.let {
-                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, doctorDocumentId) {it
+                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, "OXyUFwt5a5S9yUmclEd3") {it
                     if (!it.isNullOrBlank()) {
                         doctorImg = it
                     }
