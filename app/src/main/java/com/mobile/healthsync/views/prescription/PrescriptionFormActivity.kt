@@ -55,7 +55,7 @@ class PrescriptionFormActivity : AppCompatActivity() {
 
             val patientRepository = PatientRepository(this)
 
-            patientRepository.getPatientData(appointment.patient_id.toString()) { patient ->
+            patientRepository.getPatientWithPatientId(appointment.patient_id) { patient ->
                 if (patient != null) {
                     findViewById<TextView>(R.id.textPatientName).text = "Name: ${patient.patientDetails.name}"
                     findViewById<TextView>(R.id.textPatientAge).text = "Age: ${patient.patientDetails.age}"
