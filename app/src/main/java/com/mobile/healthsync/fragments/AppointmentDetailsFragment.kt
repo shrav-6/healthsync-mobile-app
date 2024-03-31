@@ -45,6 +45,7 @@ class AppointmentDetailsFragment : Fragment() {
     private lateinit var downloadButton: Button
     private lateinit var addPrescriptionButton: Button
     private lateinit var btnOpenReviewPopup: Button
+    private lateinit var cancelAppointmentButton: Button
     private lateinit var db: FirebaseFirestore
     private val TAG = "RatingAndReviewsActivity"
 
@@ -63,6 +64,7 @@ class AppointmentDetailsFragment : Fragment() {
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
         btnOpenReviewPopup = view.findViewById(R.id.btnReview)
+        cancelAppointmentButton = view.findViewById(R.id.cancel_appointment_button)
 
         // Get appointment and doctor data from arguments
         val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
@@ -96,6 +98,12 @@ class AppointmentDetailsFragment : Fragment() {
 
             showReviewPopup(it, appointment) // 'it' refers to the clicked button
         }
+
+        cancelAppointmentButton.setOnClickListener {
+            // Implement the logic to cancel the appointment
+            cancelAppointment(appointment)
+        }
+
 
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
@@ -352,6 +360,59 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    private fun cancelAppointment(appointment: Appointment?) {
+        appointment?.let { appt ->
+            val db = FirebaseFirestore.getInstance()
+
+            // Step 1: Retrieve the payment amount before deletion
+            val paymentRef = db.collection("payments").document(appt.payment_id.toString())
+            paymentRef.get().addOnSuccessListener { paymentDocument ->
+                val amountPaid = paymentDocument.getDouble("amount_paid") ?: 0.0
+
+                // Proceed to delete the payment
+                paymentRef.delete().addOnSuccessListener {
+                    Log.d(TAG, "Payment successfully deleted")
+
+                    // Step 2: Delete the appointment
+                    db.collection("appointments").document(appt.appointment_id.toString()).delete().addOnSuccessListener {
+                        Log.d(TAG, "Appointment successfully deleted")
+
+                        // Step 3: Update the reward points for the patient
+                        val patientRef = db.collection("patients").document(appt.patient_id.toString())
+                        db.runTransaction { transaction ->
+                            val snapshot = transaction.get(patientRef)
+                            val currentPoints = snapshot.getDouble("reward_points") ?: 0.0
+                            val newPoints = currentPoints + amountPaid // Use amountPaid from payment
+                            transaction.update(patientRef, "reward_points", newPoints)
+                            newPoints // Return newPoints for logging
+                        }.addOnSuccessListener { newPoints ->
+                            Log.d(TAG, "New reward points: $newPoints")
+
+                            // Step 4: Show confirmation popup
+                            activity?.let { act ->
+                                AlertDialog.Builder(act).apply {
+                                    setTitle("Booking Cancelled")
+                                    setMessage("Booking Cancelled Successfully. $newPoints reward points have been added to your account")
+                                    setPositiveButton("OK") { dialog, _ -> dialog.dismiss() }
+                                    show()
+                                }
+                            }
+                        }.addOnFailureListener { e ->
+                            Log.w(TAG, "Transaction failure: ", e)
+                        }
+                    }.addOnFailureListener { e ->
+                        Log.w(TAG, "Error deleting appointment: ", e)
+                    }
+                }.addOnFailureListener { e ->
+                    Log.w(TAG, "Error deleting payment: ", e)
+                }
+            }.addOnFailureListener { e ->
+                Log.w(TAG, "Error fetching payment amount: ", e)
+            }
+        }
+    }
+
+
     companion object {
         private const val APPOINTMENT_KEY = "appointment"
         private const val DOCTOR_KEY = "doctor"
@@ -372,4 +433,6 @@ class AppointmentDetailsFragment : Fragment() {
             return fragment
         }
     }
+
+
 }
