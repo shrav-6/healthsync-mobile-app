@@ -60,8 +60,9 @@ class DoctorDashboard : BaseActivityForDoctor() {
 
     private fun loadBookings() {
         // Retrieve doctor_id from Shared Preferences
-        val sharedPreferences = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+        val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
         val doctorId = sharedPreferences.getString("doctor_id", "")?.toLongOrNull() // Assuming doctor_id is stored as a String
+        Log.d("DoctorDashboardSharedPref","doctor id in sharedpref ${doctorId}")
 
         if (doctorId == null) {
             Log.e("Firebase", "Doctor ID not found in Shared Preferences")

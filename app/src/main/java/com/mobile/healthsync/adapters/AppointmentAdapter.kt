@@ -1,5 +1,6 @@
 package com.mobile.healthsync.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -89,6 +90,14 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
             appointmentHolder.appointmentStartTimeTextView.text = getTimeSlotFromId(appointment.slot_id).substring(0, 8)
 
             val patientId = appointment.patient_id
+
+            val context = holder.itemView.context
+
+            val sharedPreferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+            sharedPreferences.edit().apply {
+                putString("patient_id", patientId.toString()) // Convert to String and save
+                apply()
+            }
 
             // Fetch patient details from Firestore
             val db = FirebaseFirestore.getInstance()
