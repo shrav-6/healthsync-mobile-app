@@ -20,6 +20,10 @@ import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule.Schedule
 import com.mobile.healthsync.repository.PatientRepository
 import java.util.Random
 
+/**
+ * Activity for creating a prescription form.
+ * Author: Zeel Ravalani
+ */
 class PrescriptionFormActivity : AppCompatActivity() {
 
     private lateinit var medicineNameEditText: EditText
@@ -147,16 +151,29 @@ class PrescriptionFormActivity : AppCompatActivity() {
         }
     }
 
-    // Function to update RecyclerView adapter with new medicine list
+    /**
+     * Updates the RecyclerView adapter with the current medicine list.
+     * Author: Zeel Ravalani
+     */
     private fun updateMedicineAdapter() {
         medicineAdapter.updateData(medicinesList)
     }
+
+    /**
+     * Generates a unique prescription ID.
+     * Author: Zeel Ravalani
+     */
     private fun generateUniquePrescriptionId(): Int {
         val timestampPart = (System.currentTimeMillis() % 100000).toInt() // Last 5 digits of the current timestamp
         val randomPart = Random().nextInt(900) + 100 // Ensures a 3-digit random number
         return timestampPart * 1000 + randomPart // Combines both parts
     }
 
+    /**
+     * Submits the prescription to Firebase Firestore.
+     * @param appointmentId The ID of the appointment associated with the prescription.
+     * Author: Zeel Ravalani
+     */
     private fun submitPrescription(appointmentId: Int) {
         // Generate a unique prescription ID
         val prescriptionId = generateUniquePrescriptionId()
@@ -192,7 +209,10 @@ class PrescriptionFormActivity : AppCompatActivity() {
         }
     }
 
-
+    /**
+     * Clears the input fields for adding a new medicine.
+     * Author: Zeel Ravalani
+     */
     private fun clearMedicineInputFields() {
         // Clear medicine input fields
         medicineNameEditText.text.clear()
