@@ -20,6 +20,11 @@ import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
+/**
+ * Activity for editing doctor profile information.
+ * Allows the doctor to modify their profile data including personal information, specialization,
+ * consultation fees, years of experience, gender, and availability.
+ */
 class EditDoctorProfile : AppCompatActivity() {
 
     private  lateinit var doctorRepository: DoctorRepository

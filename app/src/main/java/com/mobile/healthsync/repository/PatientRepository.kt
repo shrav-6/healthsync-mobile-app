@@ -180,6 +180,32 @@ class PatientRepository(private val context: Context) {
     }
 
     /**
+     * Retrieves the photo URL for a specific patient document from the database.
+     *
+     * @param documentID The ID of the patient document to retrieve the photo for.
+     * @param callback The callback function to handle the retrieved photo URL.
+     */
+    fun getPhotoForPatient(documentID: String, callback: (String?) -> Unit) {
+        db.collection("patients")
+            .document(documentID)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document.exists()) {
+                        val imageURL = document.toObject(Patient::class.java)?.patientDetails?.photo
+                        callback(imageURL)
+                    }
+                    callback("null")
+                } else {
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching event data: $exceptionMessage")
+                    callback("null")
+                }
+            }
+    }
+
+    /**
      * Displays a toast message.
      * @param message The message to display.
      */

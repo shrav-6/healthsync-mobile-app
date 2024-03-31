@@ -8,22 +8,23 @@
     tools:context=".views.patientBooking.BookingInfoActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="300dp"
+        android:layout_width="350dp"
         android:layout_height="600dp"
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
+        android:background="@drawable/rounded_corner_bg"
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/linearLayout"
             android:layout_width="200dp"
             android:layout_height="50dp"
-            android:id="@+id/linearLayout"
             app:cardCornerRadius="5dp"
             android:layout_gravity="center"
             android:layout_marginTop="80dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:layout_width="200dp"
@@ -35,8 +36,8 @@
                     android:layout_width="160dp"
                     android:layout_height="match_parent"
                     android:layout_gravity="center"
-                    android:gravity="center"
                     android:background="@null"
+                    android:gravity="center"
                     android:text="11-02-2024"
                     android:textSize="18sp" />
 
@@ -45,36 +46,36 @@
                     android:layout_width="24dp"
                     android:layout_height="24dp"
                     android:layout_gravity="center"
-                    android:background="@drawable/search" />
-
+                    android:background="@drawable/searchicon" />
             </LinearLayout>
-
         </androidx.cardview.widget.CardView>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/slots"
-            android:layout_width="280dp"
+            android:layout_width="325dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginTop="10dp"
             android:layout_marginBottom="20dp"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/bookbutton"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linearLayout"
-            app:layout_constraintBottom_toTopOf="@id/bookbutton"/>
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
 
         <Button
             android:id="@+id/bookbutton"
             android:layout_width="150dp"
             android:layout_height="50dp"
-            android:layout_marginTop="30dp"
             android:layout_gravity="center"
-            android:text="BOOK"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginTop="30dp"
             android:layout_marginBottom="50dp"
-            android:background="@drawable/rounded_corner_bg"/>
+            android:background="@drawable/rounded_corner_input"
+            android:text="BOOK"
+            android:textColor="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
 </LinearLayout>

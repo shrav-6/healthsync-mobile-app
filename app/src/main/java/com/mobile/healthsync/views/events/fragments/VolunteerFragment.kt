@@ -11,6 +11,9 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.EventTypeAdapter
 import com.mobile.healthsync.repository.EventsRepository
 
+/**
+ * Fragment for displaying volunteer events.
+ */
 class VolunteerFragment : Fragment() {
     private lateinit var eventsRepository: EventsRepository
     override fun onCreateView(
@@ -27,7 +30,6 @@ class VolunteerFragment : Fragment() {
         eventsRepository.getEventsBySpecificField("type", "volunteer") {list ->
             recyclerView.adapter = EventTypeAdapter(list)
         }
-
         return view
     }
 }

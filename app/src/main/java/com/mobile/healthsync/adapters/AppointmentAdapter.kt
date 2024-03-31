@@ -14,7 +14,6 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
-import com.mobile.healthsync.views.patientProfile.PatientProfile
 
 class AppointmentAdapter(private var appointments: List<Appointment>, private var selectedDate: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
@@ -104,7 +103,7 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
                             it.patientDetails.photo?.let { url ->
                                 Glide.with(holder.itemView.context)
                                     .load(url)
-                                    .placeholder(R.drawable.placeholder)  // Adjust with your placeholder
+                                    .placeholder(R.drawable.user)  // Adjust with your placeholder
                                     .error(R.drawable.error)  // Adjust with your error placeholder
                                     .into(appointmentHolder.profileImageView)
                             }
