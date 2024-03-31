@@ -27,6 +27,7 @@ class PatientDashboard : BaseActivity() {
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
         this.patient_id = sharedPreferences.getString("patient_id", "251")?.toInt() ?: 251
+        Log.d("patient_id in PatientDashboard",patient_id.toString())
 
         //this.patient_id = intent.extras?.getInt("patient_id", 251) ?: 251
 

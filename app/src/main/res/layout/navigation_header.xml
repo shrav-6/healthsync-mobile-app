@@ -31,6 +31,7 @@
             android:textStyle="bold"/>
         <!-- changes needed in android:text-->
         <TextView
+            android:id="@+id/patientId"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Patient ID:"/>

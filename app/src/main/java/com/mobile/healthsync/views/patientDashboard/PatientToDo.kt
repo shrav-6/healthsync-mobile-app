@@ -3,6 +3,7 @@ package com.mobile.healthsync.views.patientDashboard
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 
@@ -18,7 +19,8 @@ class PatientToDo : BaseActivity() {
         setContentView(R.layout.activity_patient_to_do)
 
         sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
-        val patient_id = sharedPreferences.getString("PatientID", "123")
+        val patient_id = sharedPreferences.getString("patient_id", "123")
+        Log.d("patient_id in todo",patient_id.toString())
 
 
         //TODO: to receive latest appointment_id based on patient_id and then fetch the prescription_id from the given appointment_id
