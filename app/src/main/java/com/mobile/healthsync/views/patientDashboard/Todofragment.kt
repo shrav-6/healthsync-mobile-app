@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.patientDashboard
 
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,9 +16,14 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.TodoAdapter
-import com.mobile.healthsync.model.Prescription
-import com.mobile.healthsync.repository.PrescriptionRepository
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
 import com.mobile.healthsync.model.Prescription.Medicine
+//import com.mobile.healthsync.adapters.TodoAdapter
+import com.mobile.healthsync.model.Prescription
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule.Schedule
+import com.mobile.healthsync.repository.ToDoRepository
+//import com.mobile.healthsync.repository.PrescriptionRepository.loadPrescriptionData
+import com.mobile.healthsync.views.signUp.SignupActivity
 
 class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
@@ -28,7 +34,9 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
     // Variable to store the updated medicines list
     private var updatedMedicinesList: MutableList<Medicine> = mutableListOf()
-    private var prescriptionID: String = "1" //TODO: get from db
+    private var appointmentId: Int = 1
+    private var prescriptionId: Int = 1
+    private var documentId: String = ""
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,8 +48,63 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
         recyclerView.setHasFixedSize(true)
 
-        val medicinesListf = loadPrescriptionData()
-        recyclerView.adapter = TodoAdapter(medicinesListf,  this)
+        val patientId = arguments?.getString("patient_id")!!.toInt()
+
+        val repo = ToDoRepository(view.context)
+
+        //var medicinesListf = repo.loadMedicinesData(appointmentId)
+
+        repo.getappointmentAndPrescriptionId(patientId) {result ->
+            if (result != null) {
+                // Iterate through the list of pairs and retrieve appointment_id and prescription_id
+
+                    documentId = result.get(0)
+                    appointmentId = result.get(1).toInt()
+                    prescriptionId = result.get(2).toInt()
+                    Log.d("document ID in fragment:", documentId.toString())
+                    Log.d("Appointment ID in fragment:", appointmentId.toString())
+                    Log.d("Prescription ID in fragment:", prescriptionId.toString())
+
+
+                Log.d("before calling load medicines data",appointmentId.toString())
+                repo.loadMedicinesData(appointmentId) { medicinesListRead ->
+
+                    //val medicinesListf = medicinesListRead
+                    recyclerView.adapter = TodoAdapter(medicinesListRead!!,  this)
+                }
+            } else {
+                Log.d("Error:", "Failed to retrieve appointment and prescription IDs")
+            }
+        }
+
+//        Log.d("before calling load medicines data",appointmentId.toString())
+//        repo.loadMedicinesData(appointmentId) { medicinesListRead ->
+//
+//            //val medicinesListf = medicinesListRead
+//            recyclerView.adapter = TodoAdapter(medicinesListRead!!,  this)
+//        }
+
+
+//        val submitButton: Button = view.findViewById(R.id.submit_button)
+//        submitButton.setOnClickListener {
+//            // Update the medicines list with the changes made in the adapter
+//            medicinesList = updatedMedicinesList
+//            Log.d("Updated Medicines List", updatedMedicinesList.toString())
+//
+//
+//            Log.d("prescriptionId before update medicines",prescriptionId.toString())
+//            repo.updateMedicinesForPrescription(documentId, appointmentId, prescriptionId, updatedMedicinesList)
+//
+//            // go to patient dashboard once submitted
+//            val intent = Intent(requireContext(), PatientDashboard::class.java)
+//            intent.putExtra("from to do -> dashboard", ArrayList(medicinesList))
+//            startActivity(intent)
+//        }
+
+        return view
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
         val submitButton: Button = view.findViewById(R.id.submit_button)
         submitButton.setOnClickListener {
@@ -49,15 +112,16 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
             medicinesList = updatedMedicinesList
             Log.d("Updated Medicines List", updatedMedicinesList.toString())
 
-            PrescriptionRepository.updateMedicinesForPrescription(prescriptionID, updatedMedicinesList)
+
+            Log.d("prescriptionId before update medicines",prescriptionId.toString())
+            val repo = ToDoRepository(view.context)
+            repo.updateMedicinesForPrescription(documentId, appointmentId, prescriptionId, updatedMedicinesList)
 
             // go to patient dashboard once submitted
-            val intent = Intent(requireContext(), PatientDashboard::class.java)
-            intent.putExtra("medicinesList", ArrayList(medicinesList))
+            val intent = Intent(activity, PatientDashboard::class.java)
+            intent.putExtra("from", "patient to do")
             startActivity(intent)
         }
-
-        return view
     }
 
     override fun onMedicinesUpdated(medicines: List<Medicine>) {
@@ -66,49 +130,6 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
         updatedMedicinesList.addAll(medicines)
     }
 
-    fun loadPrescriptionData() : List<Medicine> {
-        // Reference to the "doctors" collection
-        val db = Firebase.firestore
-        Log.d("db", db.toString())
-        Log.d("loadPrescriptionData", "Firestore instance obtained")
-
-        db.collection("prescriptions")
-            .whereEqualTo("appointment_id", prescriptionID).limit(1)
-            .get()
-            .addOnSuccessListener { documents ->
-                if (!documents.isEmpty) {
-                    val document = documents.documents[0]
-                    Log.d("document read", document.data.toString())
-                    val prescription = document.toObject(Prescription::class.java)
-
-                    val prescriptionID = prescription?.prescriptionId
-                    Log.d("prescription",prescription.toString())
-
-                    Log.d("prescriptionID", prescriptionID.toString())
-
-                    // Assuming prescription is a valid Prescription object obtained from Firestore
-                    val medicines: Map<String, Medicine>? = prescription?.medicines
-                    //lateinit var medicinesList: List<Medicine>
-                    Log.d("medicines", medicines.toString())
-                    if (medicines != null && medicines.isNotEmpty()) {
-                        medicinesList = medicines.values.toList()
-
-                        Log.d("medicinesList", medicinesList.toString())
-                    }
-                    // Handle the retrieved prescription
-                    //recyclerView.adapter = adapter
-                } else {
-                    // No prescription found with the given appointment ID
-                    Log.d("Prescription read", "No prescription found")
-                }
-            }
-            .addOnFailureListener { exception ->
-                Log.w("document not found", "Error getting documents: ", exception)
-            }
-
-        return medicinesList
-        //return arrayListOf(Medicine(name="crosine", dosage="4", numberOfDays=5, schedule=DaySchedule(morning=Schedule(doctorSaid=false, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=true), night=Schedule(doctorSaid=true, patientTook=false))), Medicine(name="dolo", dosage="2", numberOfDays=2, schedule= DaySchedule(morning=Schedule(doctorSaid=true, patientTook=false), afternoon=Schedule(doctorSaid=true, patientTook=false), night= Schedule(doctorSaid=false, patientTook=false))))
-    }
 }
 
 

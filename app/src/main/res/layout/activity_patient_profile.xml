@@ -146,16 +146,16 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/patientHeight" />
 
-<!--            &lt;!&ndash; Patient Blood Type &ndash;&gt;-->
-<!--            <TextView-->
-<!--                android:id="@+id/patientBloodType"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_marginTop="6dp"-->
-<!--                android:textSize="18sp"-->
-<!--                app:layout_constraintEnd_toEndOf="parent"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintTop_toBottomOf="@+id/patientWeight" />-->
+            <!--            &lt;!&ndash; Patient Blood Type &ndash;&gt;-->
+            <!--            <TextView-->
+            <!--                android:id="@+id/patientBloodType"-->
+            <!--                android:layout_width="wrap_content"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                android:layout_marginTop="6dp"-->
+            <!--                android:textSize="18sp"-->
+            <!--                app:layout_constraintEnd_toEndOf="parent"-->
+            <!--                app:layout_constraintStart_toStartOf="parent"-->
+            <!--                app:layout_constraintTop_toBottomOf="@+id/patientWeight" />-->
 
             <!-- Patient Allergies-->
             <TextView

@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.login
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mobile.healthsync.R
@@ -12,12 +13,17 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 import com.mobile.healthsync.views.signUp.SignupActivity
 import com.google.firebase.messaging.FirebaseMessaging
+import com.mobile.healthsync.views.doctorDashboard.DoctorDashboard
 
+/**
+ * LoginActivity for user authentication.
+ */
 class LoginActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
         // Get references to views
         val emailEditText: EditText = findViewById(R.id.editTextEmailAddress)
@@ -45,6 +51,13 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Validates the login credentials.
+     *
+     * @param email The email entered by the user.
+     * @param password The password entered by the user.
+     * @param userType The type of user logging in (doctor or patient).
+     */
     private fun validateLogin(email: String, password: String, userType: UserType) {
         val db = FirebaseFirestore.getInstance()
 
@@ -63,44 +76,71 @@ class LoginActivity : AppCompatActivity() {
                     // Handle successful login
                     when(userType) {
                         UserType.DOCTOR -> {
+                            val doctorId = documents.documents.firstOrNull()?.getLong("doctor_id") ?: -1L // Default to -1 if not found
+                            // Store doctor_id in Shared Preferences
+                            val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().apply {
+                                putString("doctor_id", doctorId.toString()) // Convert to String and save
+                                apply()
+                            }
+
                             generateAndSaveToken(email, userType)
-                            // Start Doctor Dashboard
+                            startActivity(Intent(this, DoctorDashboard::class.java))
                             Toast.makeText(this, "Doctor login successful", Toast.LENGTH_SHORT).show()
                         }
 
                         UserType.PATIENT -> {
+                            val patientId = documents.documents.firstOrNull()?.getLong("patient_id") ?: -1L // Default to -1 if not found
+                            // Store doctor_id in Shared Preferences
+                            val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().apply {
+                                putString("patient_id", patientId.toString()) // Convert to String and save
+                                apply()
+                            }
                             generateAndSaveToken(email, userType)
                             startActivity(Intent(this, PatientDashboard::class.java))
                             Toast.makeText(this, "Patient login successful", Toast.LENGTH_SHORT).show()
                         }
                     }
                 } else {
-                    Log.d("UserLogin", "User not found")
+                    Log.d("LoginActivity", "User not found")
                     Toast.makeText(this, "Invalid username or password", Toast.LENGTH_SHORT).show()
                 }
             }
             .addOnFailureListener { e ->
-                Log.e("UserLogin", "Error searching user: $e")
+                Log.e("LoginActivity", "Error searching user: $e")
                 Toast.makeText(this, "Error occurred. Please try again later.", Toast.LENGTH_SHORT).show()
             }
     }
 
+    /**
+     * Generates and saves the token for a user.
+     *
+     * @param email The email of the user.
+     * @param userType The type of user (doctor or patient).
+     */
     private fun generateAndSaveToken(email: String, userType: UserType) {
         val tokenTask = FirebaseMessaging.getInstance().token
         tokenTask.addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val token = task.result
-                Log.d("FirebaseMessaging", "Token: $token")
+                Log.d("LoginActivity", "FirebaseMessaging: Token: $token")
                 saveTokenToFirebase(email, token, userType)
             } else {
-                Log.e("FirebaseMessaging", "Failed to get token: ${task.exception}")
+                Log.e("LoginActivity", "FirebaseMessaging: Failed to get token: ${task.exception}")
             }
         }
     }
 
+    /**
+     * Saves the token to Firebase Firestore.
+     *
+     * @param email The email of the user.
+     * @param token The token generated for the user.
+     * @param userType The type of user (doctor or patient).
+     */
     private fun saveTokenToFirebase(email: String, token: String, userType: UserType) {
         val db = FirebaseFirestore.getInstance()
-        val accessTokensCollection = db.collection("accesstokens")
 
         val userCollection = when (userType) {
             UserType.DOCTOR -> db.collection("doctors")
@@ -115,43 +155,36 @@ class LoginActivity : AppCompatActivity() {
                 if (!documents.isEmpty) {
                     val userDocument = documents.documents[0]
                     val userId = userDocument.id
-                    Log.d("LoginActivity", "User document found for email: $email")
-                    // Create a map with userId, userType, and token
-                    val accessTokenData = hashMapOf(
-                        "userId" to userId,
-                        "userType" to userType.name,
-                        "tokenId" to token
-                    )
-                    // Add the access token document to the accesstokens collection
-                    Log.d("LoginActivity", "Adding access token document for email: $email")
-                    accessTokensCollection.document(email).set(accessTokenData)
+                    // Update token in user instance
+                    userCollection.document(userId).update("token", token)
                         .addOnSuccessListener {
-                            Log.d(
-                                "LoginActivity",
-                                "Token added to ${userType.name.lowercase()} instance successfully"
-                            )
+                            Log.d("LoginActivity", "Token added to user instance successfully")
                         }
                         .addOnFailureListener { e ->
-                            Log.e(
-                                "LoginActivity",
-                                "Error adding token to ${userType.name.lowercase()} instance: $e"
-                            )
+                            Log.e("LoginActivity", "Error adding token to user instance: $e")
                         }
-                } else {
-                    Log.e(
-                        "LoginActivity",
-                        "User document not found for email: $email and userType: ${userType.name}"
+                    Log.d("LoginActivity", "User document found for email: $email")
+
+                    // If you want to add an access token document, uncomment the following lines
+                    /*
+                    val accessTokensCollection = db.collection("accesstokens")
+                    val accessTokenData = hashMapOf(
+                        "userId" to userId,
+                        "token" to token
                     )
+                    accessTokensCollection.add(accessTokenData)
+                        .addOnSuccessListener {
+                            Log.d("LoginActivity", "Access token document added successfully")
+                        }
+                        .addOnFailureListener { e ->
+                            Log.e("LoginActivity", "Error adding access token document: $e")
+                        }
+                    */
                 }
-            }
-            .addOnFailureListener { e ->
-                Log.e(
-                    "LoginActivity",
-                    "Error retrieving user document: $e"
-                )
             }
     }
 
+    // Enum to represent user types
     enum class UserType {
         DOCTOR,
         PATIENT
