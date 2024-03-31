@@ -50,7 +50,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/mapcolorPrimary"
+        android:background="@drawable/rounded_corner_input"
         android:text="Find Pharmacies"
         android:textColor="@color/white"
         android:textStyle="bold" />

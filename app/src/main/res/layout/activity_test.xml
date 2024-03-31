@@ -18,7 +18,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@color/orchid"
+        android:background="@drawable/rounded_corner_input"
         android:text="Payment Successful"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
@@ -28,7 +28,7 @@
         android:layout_width="250dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:background="@color/orchid"
+        android:background="@drawable/rounded_corner_input"
         android:text="Payment Cancelled"
         android:textColor="@android:color/white"
         android:textSize="18sp" />
