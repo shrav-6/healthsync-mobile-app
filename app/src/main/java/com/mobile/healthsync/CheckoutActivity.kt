@@ -12,10 +12,12 @@ import androidx.lifecycle.lifecycleScope
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.PaymentAPI.ApiUtilities
 import com.mobile.healthsync.PaymentUtils.PUBLISH_KEY
+import com.mobile.healthsync.services.EmailUtility
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.text.DecimalFormat
@@ -44,6 +46,11 @@ class CheckoutActivity : BaseActivity() {
     private var doctorId: Int = 663 // Placeholder
     private var app_date: String = "Date" // Placeholder
     private var discountAmount: Double = 0.0
+    private var appointmentDate:String =""
+    private var appointmentStart:String=""
+    private var patientEmailAddress:String=""
+    private var doctorName:String=""
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -101,6 +108,7 @@ class CheckoutActivity : BaseActivity() {
             .addOnSuccessListener { patients ->
                 for (patientDoc in patients) {
                     rewardPoints = patientDoc.getLong("reward_points") ?: 0
+                    patientEmailAddress=patientDoc.getString("email")?:""
                     tvTotalPoints.text = "Total Points: $rewardPoints"
                     // Optionally update the UI or a variable to reflect the patient's reward points
                 }
@@ -114,8 +122,8 @@ class CheckoutActivity : BaseActivity() {
             .get()
             .addOnSuccessListener { appointments ->
                 for (appointmentDoc in appointments) {
-                    val appointmentDate = appointmentDoc.getString("date")
-                    val appointmentStart = appointmentDoc.getString("start_time")
+                    appointmentDate = appointmentDoc.getString("date").toString()
+                    appointmentStart = appointmentDoc.getString("start_time").toString()
                     tvDateTime.text = "Date & Time: $appointmentDate $appointmentStart"
                 }
             }.addOnFailureListener { e ->
@@ -130,7 +138,7 @@ class CheckoutActivity : BaseActivity() {
                 for (doctorDoc in doctors) {
                     // Assuming 'doctor_info' is a field containing a map of doctor information
                     val doctorInfo = doctorDoc.get("doctor_info") as Map<String, Any>?
-                    val doctorName = doctorInfo?.get("name").toString()
+                    doctorName = doctorInfo?.get("name").toString()
                     val consultationFee = (doctorInfo?.get("consultation_fees") as Number?)?.toDouble() ?: 0.0
 
                     tvDoctorName.text = "Doctor: $doctorName"
@@ -423,6 +431,24 @@ class CheckoutActivity : BaseActivity() {
                 val returnIntent = Intent()
                 returnIntent.putExtra("status", "Operation Success")
                 returnIntent.putExtra("payment_id", 1)
+                val emailUtility = EmailUtility(this)
+
+                // Launch a coroutine using GlobalScope
+                GlobalScope.launch(Dispatchers.Main) {
+                    try {
+                        emailUtility.sendConfirmationEmail(receiverEmail = patientEmailAddress, doctorName =doctorName, startTime = appointmentStart , timeStamp = appointmentDate, callback = object : EmailUtility.EmailCallback {
+                            override fun onSuccess() {
+                                emailUtility.showSuccessToast()
+                            }
+
+                            override fun onError(error: String) {
+                                emailUtility.showErrorToast(error)
+                            }
+                        })
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                    }
+                }
                 setResult(1, returnIntent)
                 finish()
             }

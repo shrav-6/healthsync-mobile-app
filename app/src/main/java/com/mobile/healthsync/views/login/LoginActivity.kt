@@ -215,6 +215,7 @@ class LoginActivity : AppCompatActivity() {
             }
     }
 
+
     // Enum to represent user types
     enum class UserType {
         DOCTOR,
