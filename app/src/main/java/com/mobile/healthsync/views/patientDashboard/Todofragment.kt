@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -73,7 +74,12 @@ class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
                     recyclerView.adapter = TodoAdapter(medicinesListRead!!,  this)
                 }
             } else {
+                Toast.makeText(view.context,"Patient does not have any prescriptions",Toast.LENGTH_LONG).show()
                 Log.d("Error:", "Failed to retrieve appointment and prescription IDs")
+                // go to patient dashboard once submitted
+                val intent = Intent(view.context, PatientDashboard::class.java)
+                intent.putExtra("from", "patient to do")
+                startActivity(intent)
             }
         }
 

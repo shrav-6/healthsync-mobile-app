@@ -1,21 +1,17 @@
 package com.mobile.healthsync.views.patientDashboard
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.mobile.healthsync.R
 import android.content.Context
 import android.content.SharedPreferences
+import android.os.Bundle
 import android.util.Log
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.mobile.healthsync.model.Prescription
+import com.mobile.healthsync.BaseActivity
+import com.mobile.healthsync.R
 
 
 /**
  * @input: patientId
  */
-class PatientToDo : AppCompatActivity() {
+class PatientToDo : BaseActivity() {
     lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -23,7 +19,8 @@ class PatientToDo : AppCompatActivity() {
         setContentView(R.layout.activity_patient_to_do)
 
         sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
-        val patient_id = sharedPreferences.getString("PatientID", "123")
+        val patient_id = sharedPreferences.getString("patient_id", "123")
+        Log.d("patient_id in todo",patient_id.toString())
 
 
         //TODO: to receive latest appointment_id based on patient_id and then fetch the prescription_id from the given appointment_id

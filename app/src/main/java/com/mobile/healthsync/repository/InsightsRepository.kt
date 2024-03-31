@@ -74,6 +74,7 @@ class InsightsRepository(private val context: Context) {
                     } else {
                         val exceptionMessage = task.exception?.message ?: "Unknown error"
                         showToast("Error fetching prescription data: $exceptionMessage")
+                        callback(Prescription())
                     }
                     // If no documents found or an error occurred, invoke the callback with an empty Prescription
                     callback(Prescription())
