@@ -1,6 +1,5 @@
 package com.mobile.healthsync.fragments
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -34,6 +33,14 @@ import com.mobile.healthsync.repository.PatientRepository
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
+import android.net.Uri
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import kotlin.random.Random
+import androidx.appcompat.app.AppCompatActivity
+
 
 /**
  * Fragment class responsible for displaying appointment details.
@@ -45,8 +52,21 @@ class AppointmentDetailsFragment : Fragment() {
     private lateinit var downloadButton: Button
     private lateinit var addPrescriptionButton: Button
     private lateinit var btnOpenReviewPopup: Button
+    private lateinit var videoCallButton: Button
+    private lateinit var selectedUrlTextView: TextView
     private lateinit var db: FirebaseFirestore
     private val TAG = "RatingAndReviewsActivity"
+    private val meetLinks = listOf(
+        "https://meet.google.com/opk-pbqh-pqv",
+        "https://meet.google.com/unq-ktip-voj",
+        "https://meet.google.com/vpe-cinr-pgf",
+        "https://meet.google.com/koz-wooa-dvf",
+        "https://meet.google.com/die-dpuo-ios",
+        "https://meet.google.com/eqv-ture-bfv",
+        "https://meet.google.com/fjr-ugxs-oii",
+        "https://meet.google.com/bif-hpvc-ezc"
+    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +83,8 @@ class AppointmentDetailsFragment : Fragment() {
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
         btnOpenReviewPopup = view.findViewById(R.id.btnReview)
+        videoCallButton = view.findViewById(R.id.initiate_vc_button)
+        selectedUrlTextView = view.findViewById<TextView>(R.id.selectedUrlTextView)
 
         // Get appointment and doctor data from arguments
         val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
@@ -97,6 +119,13 @@ class AppointmentDetailsFragment : Fragment() {
             showReviewPopup(it, appointment) // 'it' refers to the clicked button
         }
 
+        videoCallButton.setOnClickListener {
+            // Get appointment data from arguments
+            val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+
+            initiateVideoCall(appointment, selectedUrlTextView)
+        }
+
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
             view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
@@ -106,6 +135,102 @@ class AppointmentDetailsFragment : Fragment() {
             // Add more setText() calls for other appointment and doctor details TextViews as needed
         }
     }
+
+    private fun initiateVideoCall(appointment: Appointment?, textView: TextView) {
+        if (appointment != null) {
+            val appointmentUrl = appointment.appointment_url
+
+            if (appointmentUrl.isNullOrEmpty()) {
+                val meetLink = generateRandomMeetLink()
+                openMeetLinkInBrowser(meetLink)
+                saveAppointment(meetLink, appointment)
+                setClickableLink(meetLink, textView)
+            } else {
+                openMeetLinkInBrowser(appointmentUrl)
+                setClickableLink(appointmentUrl, textView)
+            }
+        } else {
+            Toast.makeText(requireContext(), "No appointment data available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun generateRandomMeetLink(): String {
+        val randomIndex = Random.nextInt(meetLinks.size)
+        return meetLinks[randomIndex]
+    }
+
+    private fun openMeetLinkInBrowser(meetLink: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(meetLink))
+        startActivity(browserIntent)
+    }
+
+    private fun saveAppointment(meetLink: String, appointment: Appointment?) {
+        val firestore = FirebaseFirestore.getInstance()
+        val appointmentId = appointment?.appointment_id
+
+        if (appointmentId != null) {
+            val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
+            appointmentRef.update("appointment_url", meetLink)
+                .addOnSuccessListener {
+                    Log.d("AppointmentDetailsFragment", "Appointment URL updated successfully")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+                }
+        } else {
+            Log.e("AppointmentDetailsFragment", "No appointment ID available")
+        }
+    }
+
+    private fun setClickableLink(link: String, textView: TextView) {
+        val text = if (link.isNotEmpty()) "Appointment Link: $link" else "Appointment Link: "
+        val spannableString = SpannableString(text)
+        if (link.isNotEmpty()) {
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    openMeetLinkInBrowser(link)
+                }
+            }
+            spannableString.setSpan(clickableSpan, 16, text.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        textView.apply {
+            movementMethod = LinkMovementMethod.getInstance()
+            setText(spannableString, TextView.BufferType.SPANNABLE)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // App goes to the background
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // App comes back to the foreground
+        // Show toast message saying "Appointment done"
+        Toast.makeText(requireContext(), "Appointment call is finished", Toast.LENGTH_SHORT).show()
+
+        // Update appointment_url to an empty string in Firestore
+        val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+        val appointmentId = appointment?.appointment_id
+        if (appointmentId != null && isResumed) { // Check if fragment is resumed
+            val firestore = FirebaseFirestore.getInstance()
+            val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
+            appointmentRef.update("appointment_url", "")
+                .addOnSuccessListener {
+                    Log.d("AppointmentDetailsFragment", "Appointment URL updated to empty string successfully")
+                    // Update text view with an empty string
+                    selectedUrlTextView.text = ""
+                }
+                .addOnFailureListener { e ->
+                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+                }
+        } else {
+            Log.e("AppointmentDetailsFragment", "No appointment ID available")
+        }
+    }
+
 
     /**
      * Shows a popup dialog for submitting reviews.
