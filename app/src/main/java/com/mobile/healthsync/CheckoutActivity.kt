@@ -1,6 +1,7 @@
 package com.mobile.healthsync
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
@@ -53,7 +54,8 @@ class CheckoutActivity : BaseActivity() {
 //        appointmentId = intent.getStringExtra("APPOINTMENT_ID") ?: "default_appointment_id"
 //        doctorId = intent.getStringExtra("DOCTOR_ID") ?: "default_doctor_id"
 
-        patientId = intent.getIntExtra("patient_id", -1)
+        patientId = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+            .getString("patient_id", "-1")?.toInt() ?: -1
         appointmentId = intent.getIntExtra("appointment_id", -1)
         doctorId = intent.getIntExtra("doctor_id", -1)
 
