@@ -39,13 +39,10 @@ import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
 import android.net.Uri
-import android.text.Spannable
 import android.text.SpannableString
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import kotlin.random.Random
-import androidx.appcompat.app.AppCompatActivity
-
 
 /**
  * Fragment class responsible for displaying appointment details.
@@ -145,40 +142,70 @@ class AppointmentDetailsFragment : Fragment() {
             view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
             view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
-            view.findViewById<TextView>(R.id.textSpecialty).text = "Specialty: ${doctor.doctor_speciality}"
+            view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
             // Add more setText() calls for other appointment and doctor details TextViews as needed
         }
     }
 
+    /**
+     * Initiates a video call with the provided appointment data.
+     * If the appointment has a URL, opens it in the browser; otherwise, generates a random URL,
+     * saves it to Firestore, and updates the UI.
+     *
+     * @param appointment The appointment data.
+     * @param textView The TextView to display the clickable link.
+     */
     private fun initiateVideoCall(appointment: Appointment?, textView: TextView) {
         if (appointment != null) {
             val appointmentUrl = appointment.appointment_url
 
             if (appointmentUrl.isNullOrEmpty()) {
+                // Generate random meet link if URL is not provided
                 val meetLink = generateRandomMeetLink()
+                // Open meet link in browser
                 openMeetLinkInBrowser(meetLink)
+                // Save meet link to Firestore and update UI
                 saveAppointment(meetLink, appointment)
+                // Set the meet link as a clickable link in the TextView
                 setClickableLink(meetLink, textView)
             } else {
+                // Open provided meet link in browser
                 openMeetLinkInBrowser(appointmentUrl)
+                // Set the meet link as a clickable link in the TextView
                 setClickableLink(appointmentUrl, textView)
             }
         } else {
+            // Show error message if no appointment data is available
             Toast.makeText(requireContext(), "No appointment data available", Toast.LENGTH_SHORT).show()
         }
     }
 
-
+    /**
+     * Generates a random meet link from a predefined list.
+     *
+     * @return A randomly selected meet link.
+     */
     private fun generateRandomMeetLink(): String {
         val randomIndex = Random.nextInt(meetLinks.size)
         return meetLinks[randomIndex]
     }
 
+    /**
+     * Opens the provided meet link in the default browser.
+     *
+     * @param meetLink The meet link to be opened.
+     */
     private fun openMeetLinkInBrowser(meetLink: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(meetLink))
         startActivity(browserIntent)
     }
 
+    /**
+     * Saves the generated meet link to Firestore as the appointment URL.
+     *
+     * @param meetLink The meet link to be saved.
+     * @param appointment The appointment data.
+     */
     private fun saveAppointment(meetLink: String, appointment: Appointment?) {
         val firestore = FirebaseFirestore.getInstance()
         val appointmentId = appointment?.appointment_id
@@ -197,28 +224,45 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets a clickable link in the provided TextView.
+     *
+     * @param link The link to be displayed.
+     * @param textView The TextView in which the link is displayed.
+     */
     private fun setClickableLink(link: String, textView: TextView) {
         val text = if (link.isNotEmpty()) "Appointment Link: $link" else "Appointment Link: "
         val spannableString = SpannableString(text)
         if (link.isNotEmpty()) {
             val clickableSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
+                    // Open the link in the browser when clicked
                     openMeetLinkInBrowser(link)
                 }
             }
+            // Set the clickable span in the text
             spannableString.setSpan(clickableSpan, 16, text.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+        // Set the text with clickable link in the TextView
         textView.apply {
             movementMethod = LinkMovementMethod.getInstance()
             setText(spannableString, TextView.BufferType.SPANNABLE)
         }
     }
 
+    /**
+     * Overrides the `onPause` method of the superclass to handle backgrounding of the fragment.
+     */
     override fun onPause() {
         super.onPause()
         // App goes to the background
     }
 
+    /**
+     * Overrides the `onResume` method of the superclass to handle foregrounding of the fragment.
+     * Additionally, shows a toast message indicating the completion of the appointment call.
+     * Updates the appointment URL to an empty string in Firestore.
+     */
     override fun onResume() {
         super.onResume()
         // App comes back to the foreground
