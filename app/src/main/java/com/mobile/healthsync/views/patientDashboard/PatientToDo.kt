@@ -12,6 +12,9 @@ import com.google.firebase.firestore.firestore
 import com.mobile.healthsync.model.Prescription
 
 
+/**
+ * @input: patientId
+ */
 class PatientToDo : AppCompatActivity() {
     lateinit var sharedPreferences: SharedPreferences
 
@@ -19,22 +22,35 @@ class PatientToDo : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_to_do)
 
-        sharedPreferences = this.getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val value = sharedPreferences.getString("PatientID", "defaultValue").toString()
-        Log.d("PatientID", value)
-
-        val patient_id = 3
-
-        //TODO: to receive latest appointment id based on patient id and then fetch the prescription id from the given appointment id
+        sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        val patient_id = sharedPreferences.getString("PatientID", "123")
 
 
-        val fragmentManager = supportFragmentManager
-        val fragmentTransaction = fragmentManager.beginTransaction()
+        //TODO: to receive latest appointment_id based on patient_id and then fetch the prescription_id from the given appointment_id
 
-        // Replace the fragment_container with TodoFragment
-        val todoFragment = TodoFragment()
-        fragmentTransaction.replace(R.id.fragment_container, todoFragment)
-        fragmentTransaction.addToBackStack(null) // Add to back stack if needed
-        fragmentTransaction.commit()
+
+        val fragment = TodoFragment()
+
+        val bundle = Bundle()
+        bundle.putString("patient_id", patient_id.toString())
+        fragment.arguments = bundle
+
+        supportFragmentManager.beginTransaction().apply {
+            // Replace the contents of the fragment_container with the new fragment
+            replace(R.id.fragment_container, fragment)
+            // Optionally, add the transaction to the back stack
+            // addToBackStack(null)
+            // Commit the transaction
+            commit()
+        }
+
+//        val fragmentManager = supportFragmentManager
+//        val fragmentTransaction = fragmentManager.beginTransaction()
+//
+//        // Replace the fragment_container with TodoFragment
+//        val todoFragment = TodoFragment()
+//        fragmentTransaction.replace(R.id.fragment_container, todoFragment)
+//        fragmentTransaction.addToBackStack(null) // Add to back stack if needed
+//        fragmentTransaction.commit()
     }
 }

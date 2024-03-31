@@ -23,6 +23,7 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
+        val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
         // Get references to views
         val emailEditText: EditText = findViewById(R.id.editTextEmailAddress)
@@ -77,7 +78,7 @@ class LoginActivity : AppCompatActivity() {
                         UserType.DOCTOR -> {
                             val doctorId = documents.documents.firstOrNull()?.getLong("doctor_id") ?: -1L // Default to -1 if not found
                             // Store doctor_id in Shared Preferences
-                            val sharedPreferences = this.getSharedPreferences("AppPrefs", Context.MODE_PRIVATE)
+                            val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
                             sharedPreferences.edit().apply {
                                 putString("doctor_id", doctorId.toString()) // Convert to String and save
                                 apply()
@@ -89,6 +90,13 @@ class LoginActivity : AppCompatActivity() {
                         }
 
                         UserType.PATIENT -> {
+                            val patientId = documents.documents.firstOrNull()?.getLong("patient_id") ?: -1L // Default to -1 if not found
+                            // Store doctor_id in Shared Preferences
+                            val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+                            sharedPreferences.edit().apply {
+                                putString("patient_id", patientId.toString()) // Convert to String and save
+                                apply()
+                            }
                             generateAndSaveToken(email, userType)
                             startActivity(Intent(this, PatientDashboard::class.java))
                             Toast.makeText(this, "Patient login successful", Toast.LENGTH_SHORT).show()
