@@ -45,6 +45,7 @@ class PatientRepository(private val context: Context) {
 
     fun updatePatientData(documentID: String, patient: Patient?) {
         val patientID = patient?.patient_id.toString()
+//        val documentID = getDocumentID()
         db.collection("patients").document(documentID)
             .get()
             .addOnCompleteListener { task: Task<DocumentSnapshot> ->

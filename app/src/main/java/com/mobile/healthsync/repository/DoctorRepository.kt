@@ -163,29 +163,72 @@ class DoctorRepository(private val context: Context) {
 
     }
 
-    fun updateDoctorData(documentID: String, doctor: Doctor?) {
-//        val doctorId = doctor?.doctor_id.toString()
-        db.collection("doctors").document(documentID)
+    fun getDocumentIdByDoctorId(doctorIDKey: String, doctorIDValue: Int, callback: (String?) -> Unit) {
+        db.collection("doctors")
+            .whereEqualTo(doctorIDKey, doctorIDValue)
             .get()
-            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val document = task.result
-                    if (document.exists()) {
-                        // Document found, parse data and update with Patient object
-                        if (doctor != null) {
-                            db.collection("doctors").document(documentID).set(doctor)
-                            showToast("Doctor Info Update Success")
-                        }
+                    val documents = task.result
+                    if (!documents.isEmpty) {
+                        val document = documents.documents[0]
+                        callback(document.id)
                     } else {
-                        showToast("Doctor not found")
+                        // If no documents are found with the specified field value
+                        callback(null)
                     }
                 } else {
-                    showToast("Error fetching doctor data: ${task.exception?.message}")
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching document ID: $exceptionMessage")
+                    callback(null)
                 }
             }
     }
 
-    fun uploadImageToFirebaseStorage(oldImageURL: String, imageUri: Uri, documentID: String, callback: (String?) -> Unit) {
+
+    fun updateDoctorData(doctorIdValue: Int?, doctor: Doctor?) {
+        val doctorId = doctor?.doctor_id.toString()
+        db.collection("doctors")
+            .whereEqualTo("doctor_id", doctorIdValue)
+            .limit(1)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    for (document in task.result!!) {
+                        if (document["doctor_id"] == doctorIdValue) {
+                            // Update the specific document
+                            if (doctor != null) {
+                                db.collection("doctors").document(document.id).set(doctor)
+                            }
+                        }
+                    }
+                } else {
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching event data: $exceptionMessage")
+                }
+            }
+//        val doctorId = doctor?.doctor_id.toString()
+//        db.collection("doctors").document(documentID)
+//            .get()
+//            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+//                if (task.isSuccessful) {
+//                    val document = task.result
+//                    if (document.exists()) {
+//                        // Document found, parse data and update with Patient object
+//                        if (doctor != null) {
+//                            db.collection("doctors").document(documentID).set(doctor)
+//                            showToast("Doctor Info Update Success")
+//                        }
+//                    } else {
+//                        showToast("Doctor not found")
+//                    }
+//                } else {
+//                    showToast("Error fetching doctor data: ${task.exception?.message}")
+//                }
+//            }
+    }
+
+    fun uploadImageToFirebaseStorage(oldImageURL: String, imageUri: Uri, documentID: Int, callback: (String?) -> Unit) {
 
         // Delete old image to Firebase Storage
         if (oldImageURL != "null") {
@@ -220,24 +263,45 @@ class DoctorRepository(private val context: Context) {
         }
     }
 
-    private fun updateDoctorImg(documentID: String, photoURL: String?) {
-        db.collection("doctors").document(documentID)
+    private fun updateDoctorImg(doctorIdValue: Int, photoURL: String?) {
+        db.collection("doctors")
+            .whereEqualTo("doctor_id", doctorIdValue)
+            .limit(1)
             .get()
-            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+            .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    val document = task.result
-                    if (document.exists()) {
-                        if (!photoURL.isNullOrBlank()) {
-                            db.collection("doctors").document(documentID).update("doctor_info.photo", photoURL)
-                            showToast("Image updated")
+                    for (document in task.result!!) {
+                        if (document["doctor_id"] == doctorIdValue) {
+                            // Update the specific document
+                            if (!photoURL.isNullOrBlank()) {
+                                db.collection("doctors").document(document.id).update("doctor_info.photo", photoURL)
+                                showToast("Image updated")
+                            }
                         }
-                    } else {
-                        showToast("Doctor not found")
                     }
                 } else {
-                    showToast("Error fetching doctor: ${task.exception?.message}")
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching event data: $exceptionMessage")
                 }
             }
+//        db.collection("doctors")
+//            .document(documentID)
+//            .get()
+//            .addOnCompleteListener { task: Task<DocumentSnapshot> ->
+//                if (task.isSuccessful) {
+//                    val document = task.result
+//                    if (document.exists()) {
+//                        if (!photoURL.isNullOrBlank()) {
+//                            db.collection("doctors").document(documentID).update("doctor_info.photo", photoURL)
+//                            showToast("Image updated")
+//                        }
+//                    } else {
+//                        showToast("Doctor not found")
+//                    }
+//                } else {
+//                    showToast("Error fetching doctor: ${task.exception?.message}")
+//                }
+//            }
     }
 
 }

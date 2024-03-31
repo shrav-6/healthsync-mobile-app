@@ -5,19 +5,18 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
 import com.mobile.healthsync.BaseActivityForDoctor
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
-import kotlin.properties.Delegates
 
 
 class DoctorProfile : BaseActivityForDoctor() {
 
-    private var doctorDocumentId by Delegates.notNull<Int>()
+//    private var doctorDocumentId by Delegates.notNull<Int>()
+    private var doctorId: Int? = null
     private lateinit var doctorImg: String
     private var imageURL: String = ""
 
@@ -28,10 +27,10 @@ class DoctorProfile : BaseActivityForDoctor() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        doctorDocumentId = 897
+        doctorId = 897
 //        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
-        doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
+        doctorRepository.getDoctorProfileData(doctorId) { doctor ->
             if(doctor != null){
                 setDoctorProfileData(doctor)
                 doctorImg = doctor.doctor_info.photo.toString()
@@ -41,7 +40,7 @@ class DoctorProfile : BaseActivityForDoctor() {
         val editButton: Button = findViewById(R.id.editDoctor)
         editButton.setOnClickListener{
             val intent = Intent(this, EditDoctorProfile::class.java)
-            intent.putExtra("doctorId", doctorDocumentId);
+            intent.putExtra("doctorId", doctorId);
             startActivity(intent)
         }
 
@@ -96,9 +95,11 @@ class DoctorProfile : BaseActivityForDoctor() {
             imageView.setImageURI(imageUri)
 
             imageUri?.let {
-                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, "OXyUFwt5a5S9yUmclEd3") {it
-                    if (!it.isNullOrBlank()) {
-                        doctorImg = it
+                doctorId?.let { it1 ->
+                    doctorRepository.uploadImageToFirebaseStorage(imageURL, it, it1) {it
+                        if (!it.isNullOrBlank()) {
+                            doctorImg = it
+                        }
                     }
                 }
             }

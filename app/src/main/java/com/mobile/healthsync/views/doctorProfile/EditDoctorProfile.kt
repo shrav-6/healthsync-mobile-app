@@ -27,7 +27,7 @@ class EditDoctorProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_edit_doctor_profile)
 
-        val id = 897 //intent.getIntExtra("doctorId")
+        val id = intent.getIntExtra("doctorId", 897)
         var currentDoctorProfileData = Doctor()
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(id) { doctor ->
@@ -47,11 +47,12 @@ class EditDoctorProfile : AppCompatActivity() {
 
         // Save changes
         val saveButton: Button = findViewById(R.id.saveDoctorProfile)
+
         saveButton.setOnClickListener{
             Log.d("id", "$id")
             val updatedDoctorData = getUpdatedDoctorInfo(currentDoctorProfileData)
             if(id != null){
-                doctorRepository.updateDoctorData("updateDoctorData", updatedDoctorData)
+                doctorRepository.updateDoctorData(doctorIdValue = 897, updatedDoctorData)
             }
             val intent = Intent(this, DoctorProfile::class.java)
             // Giving time for firebase to update
