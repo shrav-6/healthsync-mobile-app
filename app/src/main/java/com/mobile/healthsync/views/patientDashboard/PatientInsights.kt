@@ -1,9 +1,11 @@
 package com.mobile.healthsync.views.patientDashboard
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
@@ -31,13 +33,22 @@ class PatientInsights : BaseActivity() {
         val repo = InsightsRepository(this)
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
-        val patientId = sharedPreferences.getString("patientId", "123")!!.toInt()
+        val patientId = sharedPreferences.getString("patient_id", "123")!!.toInt()
 
         //val repo = InsightsRepository(this)
         repo.getPrescriptionForInsights(patientId) { prescriptionRead ->
-            Log.d("after function", prescriptionRead.toString())
-            //create bar chart
-            createBarChart(prescriptionRead)
+            Log.d("insights: after function", prescriptionRead.toString())
+//            if(prescriptionRead == Prescription()) {
+//                Toast.makeText(this,"Patient does not have any prescriptions to view insights", Toast.LENGTH_LONG).show()
+//                Log.d("Error:", "Failed to retrieve appointment and prescription IDs")
+//                // go to patient dashboard once submitted
+//                val intent = Intent(this, PatientDashboard::class.java)
+//                intent.putExtra("from", "patient insights")
+//                startActivity(intent)
+//            } else {
+                //create bar chart
+                createBarChart(prescriptionRead)
+            //}
         }
 
         // Update the TextViews with the fetched data
