@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
+import com.mobile.healthsync.repository.PrescriptionRepository
 
 class NoActionReceiver : BroadcastReceiver() {
 
@@ -14,6 +15,8 @@ class NoActionReceiver : BroadcastReceiver() {
         if (prescriptionId != -1) {
             // Handle "No" action here
             Log.d(TAG, "NoActionReceiver: No button clicked for prescription ID $prescriptionId")
+
+            PrescriptionRepository.updatePatientMedicineIntake(prescriptionId, false)
 
             // Dismiss the notification
             dismissNotification(context, notificationId)

@@ -5,18 +5,24 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import androidx.core.app.NotificationManagerCompat
+import com.mobile.healthsync.repository.PrescriptionRepository
 
 class YesActionReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val notificationId = intent.getIntExtra("notificationId", -1)
         val prescriptionId = intent.getIntExtra("prescriptionId", -1)
-        if (prescriptionId != -1) {
+        if (notificationId != -1) {
             // Handle "Yes" action here
-            Log.d(TAG, "YesActionReceiver: Yes button clicked for prescription ID $prescriptionId")
+            Log.d(TAG, "YesActionReceiver: Yes button clicked for notification ID $notificationId")
 
-            // Dismiss the notification
-            dismissNotification(context, notificationId)
+            if (prescriptionId != -1) {
+                // Handle "Yes" action here
+                Log.d(TAG,"YesActionReceiver: Yes button clicked for prescription ID $prescriptionId")
+                PrescriptionRepository.updatePatientMedicineIntake(prescriptionId,true)
+                // Dismiss the notification
+                dismissNotification(context, notificationId)
+            }
         }
     }
 

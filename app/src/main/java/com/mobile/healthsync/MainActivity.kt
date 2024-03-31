@@ -9,7 +9,6 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.messaging.FirebaseMessaging
 import com.mobile.healthsync.services.AlarmScheduler
 import com.mobile.healthsync.services.AlarmScheduler2
-import com.mobile.healthsync.views.signUp.SignupActivity
 import com.mobile.healthsync.views.login.LoginActivity
 
 
@@ -18,7 +17,6 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-// Get the Firebase token
         // Get the Firebase token
         FirebaseMessaging.getInstance().getToken()
             .addOnCompleteListener { task: Task<String> ->

@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.patientDashboard
 
+//import com.mobile.healthsync.adapters.TodoAdapter
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,13 +16,9 @@ import com.google.firebase.Firebase
 import com.google.firebase.firestore.firestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.TodoAdapter
-import com.mobile.healthsync.model.DaySchedule
-import com.mobile.healthsync.model.Medicine
-//import com.mobile.healthsync.adapters.TodoAdapter
 import com.mobile.healthsync.model.Prescription
-import com.mobile.healthsync.model.Schedule
+import com.mobile.healthsync.model.Prescription.Medicine
 import com.mobile.healthsync.repository.PrescriptionRepository
-import com.mobile.healthsync.views.signUp.SignupActivity
 
 class TodoFragment : Fragment() , TodoAdapter.MedicinesUpdateListener {
 
