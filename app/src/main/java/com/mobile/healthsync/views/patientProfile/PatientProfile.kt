@@ -1,19 +1,19 @@
 package com.mobile.healthsync.views.patientProfile
 
-import com.mobile.healthsync.BaseActivity
+
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.Button
 import android.widget.TextView
-import com.squareup.picasso.Picasso
 import com.google.android.material.imageview.ShapeableImageView
-
-
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.repository.PatientRepository
+import com.squareup.picasso.Picasso
 
 /**
  * Line 32 can be deleted and in Line 33 documentID could be set to the Intent Parameter value
@@ -31,10 +31,15 @@ class PatientProfile : BaseActivity() {
 
         patientRepository = PatientRepository(this)
 
-        val testId = "00KDbESIgVNTIDzyAP04"
-        documentID = testId
+//        val testId = "00KDbESIgVNTIDzyAP04"
 
-        patientRepository.getPatientData(testId) { patient ->
+        // Retrieve doctor_id from Shared Preferences
+        val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        val patientDocumentId = sharedPreferences.getString("patient_documentid", "")
+
+        documentID = patientDocumentId.toString()
+
+        patientRepository.getPatientData(patientDocumentId) { patient ->
             if (patient != null) {
                 setPatientData(patient)
             }
@@ -43,7 +48,7 @@ class PatientProfile : BaseActivity() {
         val editButton: Button = findViewById(R.id.editPatient)
         editButton.setOnClickListener{
             val intent = Intent(this, EditPatientProfile::class.java)
-            intent.putExtra("patientID", testId);
+            intent.putExtra("patientID", patientDocumentId);
             startActivity(intent)
         }
 
@@ -93,10 +98,10 @@ class PatientProfile : BaseActivity() {
 
         // https://www.geeksforgeeks.org/how-to-use-picasso-image-loader-library-in-android/
 
+        imageURL = patient.patientDetails.photo.toString()
         if (patient.patientDetails.photo == "null") {
             imageView.setImageResource(R.drawable.user)
         } else {
-            imageURL = patient.patientDetails.photo.toString()
             Picasso.get().load(Uri.parse(patient.patientDetails.photo)).into(imageView)
         }
 

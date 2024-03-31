@@ -14,7 +14,9 @@ import com.mobile.healthsync.model.Availability
 import com.mobile.healthsync.model.Doctor
 import java.util.UUID
 
-
+/**
+ * Repository class for managing doctor data.
+ */
 class DoctorRepository(private val context: Context) {
     private val db: FirebaseFirestore
 
@@ -23,6 +25,10 @@ class DoctorRepository(private val context: Context) {
         db = FirebaseFirestore.getInstance()
     }
 
+    /**
+     * Retrieves doctor data from Firebase based on the provided doctor ID.
+     * @param doctorId The document ID of the doctor to retrieve.
+     */
     fun getDoctorData(doctorId: String?) {
         // Reference to the "doctors" collection
         db.collection("doctors").document(doctorId!!)
@@ -43,6 +49,11 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves a doctor from Firebase based on the provided doctor ID.
+     * @param doctor_id The ID of the doctor to retrieve.
+     * @param callback Callback function to handle the retrieved doctor data.
+     */
     fun getDoctor(doctor_id: Int, callback: (Doctor?) -> Unit) {
         db.collection("doctors")
             .whereEqualTo("doctor_id",doctor_id)
@@ -63,6 +74,11 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves the availability of a doctor from Firebase based on the provided doctor ID.
+     * @param doctor_id The ID of the doctor.
+     * @param callback Callback function to handle the retrieved availability data.
+     */
     fun getDoctorAvailability(doctor_id: Int, callback: (MutableMap<String,Availability>) -> Unit)
     {
         var availabilityMap = mutableMapOf<String,Availability>()
@@ -87,6 +103,10 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves all doctors from Firebase.
+     * @param callback Callback function to handle the retrieved all the doctors.
+     */
     fun getAllDoctors(callback: (MutableList<Doctor>) -> Unit) {
         // Reference to the "doctors" collection
         db.collection("doctors")
@@ -114,19 +134,29 @@ class DoctorRepository(private val context: Context) {
     }
 
 
+    /**
+     * Displays doctor data.
+     * @param doctor The doctor object.
+     */
     private fun displayDoctorData(doctor: Doctor) {
-        // Use the populated Doctor object as needed
-        // For example, you can access doctor's information like:
         val doctorName: String = doctor.doctor_info.name
         val doctorAge: Int = doctor.doctor_info.age
-        // ... other properties
     }
 
+    /**
+     * Displays a toast message.
+     * @param message The message to display.
+     */
     private fun showToast(message: String) {
         // Show a toast message (you can replace this with your preferred error handling mechanism)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
     }
 
+    /**
+     * Retrieves doctor profile data from Firebase based on the provided doctor ID.
+     * @param doctorId The document ID of the doctor to retrieve.
+     * @param callback Callback function to handle the retrieved doctor data.
+     */
     fun getDoctorProfileData(doctorId: String?, callback: (Doctor?) -> Unit) {
         db.collection("doctors").document(doctorId!!)
             .get()
@@ -146,6 +176,7 @@ class DoctorRepository(private val context: Context) {
                 }
             }
     }
+
 
     fun updateDoctorData(documentID: String, doctor: Doctor?) {
 //        val doctorId = doctor?.doctor_id.toString()
@@ -169,6 +200,13 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Uploads an image to Firebase Storage and updates the doctor's photo URL.
+     * @param oldImageURL The URL of the old image to be replaced.
+     * @param imageUri The URI of the new image to upload.
+     * @param documentID The document ID of the doctor.
+     * @param callback Callback function to handle the uploaded image URL.
+     */
     fun uploadImageToFirebaseStorage(oldImageURL: String, imageUri: Uri, documentID: String, callback: (String?) -> Unit) {
 
         // Delete old image to Firebase Storage
@@ -204,6 +242,11 @@ class DoctorRepository(private val context: Context) {
         }
     }
 
+    /**
+     * Updates the doctor's photo URL in Firebase.
+     * @param documentID The document ID of the doctor.
+     * @param photoURL The URL of the new photo.
+     */
     private fun updateDoctorImg(documentID: String, photoURL: String?) {
         db.collection("doctors").document(documentID)
             .get()
