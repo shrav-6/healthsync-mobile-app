@@ -129,6 +129,11 @@ class PatientAppointmentListActivity : BaseActivity() {
         setupListeners()
     }
 
+    override fun onResume() {
+        super.onResume()
+        loadAppointmentsAndDoctors() // Assuming this method loads your data and updates the adapter.
+    }
+
     private fun initializeViews() {
         tabLayout = findViewById(R.id.tabLayout)
         recyclerView = findViewById(R.id.recyclerView)
