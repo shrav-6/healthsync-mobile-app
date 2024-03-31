@@ -27,7 +27,7 @@ class DoctorProfile : BaseActivityForDoctor() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        doctorDocumentId = "QMW1ZsIEcyRjqyLip0dP"
+        doctorDocumentId = "OXyUFwt5a5S9yUmclEd3"
 //        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
