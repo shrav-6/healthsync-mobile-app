@@ -3,6 +3,7 @@ package com.mobile.healthsync.views.login
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.text.Editable
 import android.util.Log
 import android.widget.Button
 import android.widget.EditText
@@ -32,6 +33,8 @@ class LoginActivity : AppCompatActivity() {
         val doctorLoginButton: Button = findViewById(R.id.doctorLoginButton)
         val patientLoginButton: Button = findViewById(R.id.patientLoginButton)
 
+        emailEditText.text = Editable.Factory.getInstance().newEditable(sharedPreferences.getString("email","default@gmail.com"))
+        passwordEditText.text = Editable.Factory.getInstance().newEditable(sharedPreferences.getString("password","password"))
         // For doctor login
         doctorLoginButton.setOnClickListener {
             val email = emailEditText.text.toString()
@@ -77,11 +80,15 @@ class LoginActivity : AppCompatActivity() {
                     when(userType) {
                         UserType.DOCTOR -> {
                             val doctorId = documents.documents.firstOrNull()?.getLong("doctor_id") ?: -1L // Default to -1 if not found
+                            val email = documents.documents.firstOrNull()?.getString("email").toString()
+                            val password =  documents.documents.firstOrNull()?.getString("password").toString()
                             // Store doctor_id in Shared Preferences
                             val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
                             sharedPreferences.edit().apply {
                                 putString("doctor_id", doctorId.toString()) // Convert to String and save
                                 putBoolean("isDoctor", true)
+                                putString("email",email)
+                                putString("password",password)
                                 apply()
                             }
 
@@ -92,11 +99,23 @@ class LoginActivity : AppCompatActivity() {
 
                         UserType.PATIENT -> {
                             val patientId = documents.documents.firstOrNull()?.getLong("patient_id") ?: -1L // Default to -1 if not found
+                            val email = documents.documents.firstOrNull()?.getString("email").toString()
+                            val password =  documents.documents.firstOrNull()?.getString("password").toString()
+                            val patientDetails = documents.documents.firstOrNull()?.get("patient_details").toString()
+                            val nameIndex = patientDetails.indexOf("name=")
+                            val commaIndex = patientDetails.indexOf(",", startIndex = nameIndex)
+                            val patientName = patientDetails.substring(nameIndex + "name=".length, commaIndex)
+                            Log.d("patient_id in Login",patientId.toString())
+                            Log.d("patientName in Login",patientName.toString())
+
                             // Store doctor_id in Shared Preferences
                             val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
                             sharedPreferences.edit().apply {
                                 putString("patient_id", patientId.toString()) // Convert to String and save
+                                putString("patient_name", patientName.toString())
                                 putBoolean("isDoctor", false)
+                                putString("email",email)
+                                putString("password",password)
                                 apply()
                             }
                             generateAndSaveToken(email, userType)
