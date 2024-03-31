@@ -1,6 +1,5 @@
 package com.mobile.healthsync.fragments
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -31,9 +30,18 @@ import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.Prescription
 import com.mobile.healthsync.model.Reviews
 import com.mobile.healthsync.repository.PatientRepository
+import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
+import android.net.Uri
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import kotlin.random.Random
+import androidx.appcompat.app.AppCompatActivity
+
 
 /**
  * Fragment class responsible for displaying appointment details.
@@ -45,8 +53,22 @@ class AppointmentDetailsFragment : Fragment() {
     private lateinit var downloadButton: Button
     private lateinit var addPrescriptionButton: Button
     private lateinit var btnOpenReviewPopup: Button
+    private lateinit var videoCallButton: Button
+    private lateinit var selectedUrlTextView: TextView
+    private lateinit var cancelAppointmentButton: Button
     private lateinit var db: FirebaseFirestore
     private val TAG = "RatingAndReviewsActivity"
+    private val meetLinks = listOf(
+        "https://meet.google.com/opk-pbqh-pqv",
+        "https://meet.google.com/unq-ktip-voj",
+        "https://meet.google.com/vpe-cinr-pgf",
+        "https://meet.google.com/koz-wooa-dvf",
+        "https://meet.google.com/die-dpuo-ios",
+        "https://meet.google.com/eqv-ture-bfv",
+        "https://meet.google.com/fjr-ugxs-oii",
+        "https://meet.google.com/bif-hpvc-ezc"
+    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -63,6 +85,9 @@ class AppointmentDetailsFragment : Fragment() {
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
         btnOpenReviewPopup = view.findViewById(R.id.btnReview)
+        videoCallButton = view.findViewById(R.id.initiate_vc_button)
+        selectedUrlTextView = view.findViewById<TextView>(R.id.selectedUrlTextView)
+        cancelAppointmentButton = view.findViewById(R.id.cancel_appointment_button)
 
         // Get appointment and doctor data from arguments
         val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
@@ -97,6 +122,18 @@ class AppointmentDetailsFragment : Fragment() {
             showReviewPopup(it, appointment) // 'it' refers to the clicked button
         }
 
+        videoCallButton.setOnClickListener {
+            // Get appointment data from arguments
+            val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+
+            initiateVideoCall(appointment, selectedUrlTextView)
+        }
+
+        cancelAppointmentButton.setOnClickListener {
+            // Implement the logic to cancel the appointment
+            cancelAppointment(appointment)
+        }
+        
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
             view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
@@ -106,6 +143,102 @@ class AppointmentDetailsFragment : Fragment() {
             // Add more setText() calls for other appointment and doctor details TextViews as needed
         }
     }
+
+    private fun initiateVideoCall(appointment: Appointment?, textView: TextView) {
+        if (appointment != null) {
+            val appointmentUrl = appointment.appointment_url
+
+            if (appointmentUrl.isNullOrEmpty()) {
+                val meetLink = generateRandomMeetLink()
+                openMeetLinkInBrowser(meetLink)
+                saveAppointment(meetLink, appointment)
+                setClickableLink(meetLink, textView)
+            } else {
+                openMeetLinkInBrowser(appointmentUrl)
+                setClickableLink(appointmentUrl, textView)
+            }
+        } else {
+            Toast.makeText(requireContext(), "No appointment data available", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
+    private fun generateRandomMeetLink(): String {
+        val randomIndex = Random.nextInt(meetLinks.size)
+        return meetLinks[randomIndex]
+    }
+
+    private fun openMeetLinkInBrowser(meetLink: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(meetLink))
+        startActivity(browserIntent)
+    }
+
+    private fun saveAppointment(meetLink: String, appointment: Appointment?) {
+        val firestore = FirebaseFirestore.getInstance()
+        val appointmentId = appointment?.appointment_id
+
+        if (appointmentId != null) {
+            val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
+            appointmentRef.update("appointment_url", meetLink)
+                .addOnSuccessListener {
+                    Log.d("AppointmentDetailsFragment", "Appointment URL updated successfully")
+                }
+                .addOnFailureListener { e ->
+                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+                }
+        } else {
+            Log.e("AppointmentDetailsFragment", "No appointment ID available")
+        }
+    }
+
+    private fun setClickableLink(link: String, textView: TextView) {
+        val text = if (link.isNotEmpty()) "Appointment Link: $link" else "Appointment Link: "
+        val spannableString = SpannableString(text)
+        if (link.isNotEmpty()) {
+            val clickableSpan = object : ClickableSpan() {
+                override fun onClick(widget: View) {
+                    openMeetLinkInBrowser(link)
+                }
+            }
+            spannableString.setSpan(clickableSpan, 16, text.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
+        }
+        textView.apply {
+            movementMethod = LinkMovementMethod.getInstance()
+            setText(spannableString, TextView.BufferType.SPANNABLE)
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        // App goes to the background
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // App comes back to the foreground
+        // Show toast message saying "Appointment done"
+        Toast.makeText(requireContext(), "Appointment call is finished", Toast.LENGTH_SHORT).show()
+
+        // Update appointment_url to an empty string in Firestore
+        val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+        val appointmentId = appointment?.appointment_id
+        if (appointmentId != null && isResumed) { // Check if fragment is resumed
+            val firestore = FirebaseFirestore.getInstance()
+            val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
+            appointmentRef.update("appointment_url", "")
+                .addOnSuccessListener {
+                    Log.d("AppointmentDetailsFragment", "Appointment URL updated to empty string successfully")
+                    // Update text view with an empty string
+                    selectedUrlTextView.text = ""
+                }
+                .addOnFailureListener { e ->
+                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+                }
+        } else {
+            Log.e("AppointmentDetailsFragment", "No appointment ID available")
+        }
+    }
+
 
     /**
      * Shows a popup dialog for submitting reviews.
@@ -352,6 +485,112 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    private fun cancelAppointment(appointment: Appointment?) {
+        appointment?.let { appt ->
+            val db = FirebaseFirestore.getInstance()
+
+            // Step 1: Fetch payment record to retrieve the amount paid as a string
+            db.collection("payments")
+                .whereEqualTo("payment_id", appt.payment_id)
+                .get()
+                .addOnSuccessListener { payments ->
+                    if (payments.documents.isNotEmpty()) {
+                        val paymentDocument = payments.documents.first()
+                        val amountPaidString = paymentDocument.getString("amount_paid") ?: "$0.00"
+                        // Extract the numeric value from the amountPaidString
+                        val amountPaid = amountPaidString.drop(1).toDoubleOrNull() ?: 0.0
+
+                        // Proceed to delete the payment
+                        val paymentRef = paymentDocument.reference
+                        paymentRef.delete().addOnSuccessListener {
+                            Log.d(TAG, "Payment successfully deleted")
+
+                            // Step 2: Delete the appointment
+                            // Assuming appt.appointment_id is an Int and is available
+                            val appointmentId = appt.appointment_id
+
+                            // Step 2: Confirm the appointment exists before attempting to delete
+                            db.collection("appointments")
+                                .whereEqualTo("appointment_id", appointmentId)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    if (documents != null && !documents.isEmpty) {
+                                        // Assuming appointment_id uniquely identifies the document
+                                        val documentSnapshot = documents.documents[0]
+                                        val appointmentDocRef = db.collection("appointments").document(documentSnapshot.id)
+
+                                        // Proceed to delete the appointment
+                                        appointmentDocRef.delete().addOnSuccessListener {
+                                            Log.d(TAG, "Appointment successfully deleted")
+                                            // Continue with next steps, e.g., updating reward points
+                                        }.addOnFailureListener { e ->
+                                            Log.e(TAG, "Error deleting appointment document: ", e)
+                                        }
+                                    } else {
+                                        Log.d(TAG, "No appointment found with id: $appointmentId")
+                                    }
+                                }.addOnFailureListener { e ->
+                                    Log.e(TAG, "Error fetching appointment document: ", e)
+                                }
+
+                            // Step 3: Fetch patient to update reward points
+                                db.collection("patients").whereEqualTo("patient_id", appt.patient_id)
+                                    .get()
+                                    .addOnSuccessListener { patients ->
+                                        if (patients.documents.isNotEmpty()) {
+                                            val patientDocument = patients.documents.first()
+                                            val currentPoints = patientDocument.getDouble("reward_points") ?: 0.0
+                                            val newPoints = currentPoints + amountPaid
+
+                                            // Step 4: Update the reward points for the patient
+                                            patientDocument.reference
+                                                .update("reward_points", newPoints)
+                                                .addOnSuccessListener {
+                                                    Log.d(TAG, "Reward points updated to $newPoints")
+                                                    // Show confirmation message
+                                                    Toast.makeText(context, "Booking Cancelled Successfully. $newPoints reward points have been added to your account.", Toast.LENGTH_LONG).show()
+                                                    showBookingCancelledDialog(newPoints)
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.e(TAG, "Error updating reward points: ", e)
+                                                }
+                                        } else {
+                                            Log.d(TAG, "No such patient found")
+                                        }
+                                    }.addOnFailureListener { e ->
+                                        Log.e(TAG, "Error fetching patient: ", e)
+                                    }
+                        }.addOnFailureListener { e ->
+                            Log.w(TAG, "Error deleting payment: ", e)
+                        }
+                    } else {
+                        Log.d(TAG, "No such payment found")
+                    }
+                }.addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching payment record: ", e)
+                }
+        }
+    }
+
+    private fun showBookingCancelledDialog(newPoints: Double) {
+        activity?.let { act ->
+            AlertDialog.Builder(act).apply {
+                setTitle("Booking Cancelled Successfully")
+                setMessage("$newPoints reward points have been added to your account.")
+                setPositiveButton("Okay") { dialog, which ->
+                    // Instead of just dismissing the dialog, start the PatientAppointmentListActivity
+                    val intent = Intent(context, PatientAppointmentListActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Clears the activity stack up to PatientAppointmentListActivity
+                    startActivity(intent)
+                }
+                create().show()
+            }
+        }
+    }
+
+
+
+
     companion object {
         private const val APPOINTMENT_KEY = "appointment"
         private const val DOCTOR_KEY = "doctor"
@@ -372,4 +611,6 @@ class AppointmentDetailsFragment : Fragment() {
             return fragment
         }
     }
+
+
 }
