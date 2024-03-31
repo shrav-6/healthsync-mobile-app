@@ -111,6 +111,10 @@ dependencies {
     implementation("com.stripe:stripe-java:24.0.0")
     implementation ("com.google.android.material:material:1.11.0")
     implementation("com.itextpdf:itextpdf:5.5.13.3")
+    implementation ("com.google.android.material:material:1.4.0")
+    implementation ("de.hdodenhof:circleimageview:3.1.0")
+
+
 
     implementation("org.json:json:20210307")
 

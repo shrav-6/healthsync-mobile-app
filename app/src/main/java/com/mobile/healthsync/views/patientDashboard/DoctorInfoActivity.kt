@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.Spinner
 import android.widget.TextView
-import androidx.activity.ComponentActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AvailableSlotAdapter
 import com.mobile.healthsync.adapters.RatingsAdapter
@@ -20,7 +20,66 @@ import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.repository.ReviewRepository
 import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
 
-class DoctorInfoActivity : ComponentActivity() {
+class DoctorInfoActivity : BaseActivity() {
+
+//    val ratingsList = mutableListOf(
+//        Ratings(
+//            doctor_id = 1,
+//            stars = 4,
+//            comment = "Great experience with this doctor!"
+//        ),
+//        Ratings(
+//            doctor_id = 2,
+//            stars = 5,
+//            comment = "Highly recommended!"
+//        ),
+//        Ratings(
+//            doctor_id = 3,
+//            stars = 4,
+//            comment = "Very knowledgeable and helpful."
+//        ),
+//        Ratings(
+//            doctor_id = 1,
+//            stars = 3,
+//            comment = "Could have been better."
+//        ),
+//        // Add more ratings here
+//    )
+//
+//
+//
+//    val doctor = Doctor(
+//        doctor_id = 2,
+//        availability = mapOf(
+//            "Monday" to Availability(
+//                is_available = true,
+//                slots = listOf(
+//                    Slot(slot_id = 1, start_time = "10:00 AM", end_time = "12:00 PM"),
+//                    Slot(slot_id = 2, start_time = "03:00 PM", end_time = "05:00 PM")
+//                )
+//            ),
+//            "Wednesday" to Availability(
+//                is_available = true,
+//                slots = listOf(
+//                    Slot(slot_id = 1, start_time = "09:00 AM", end_time = "11:00 AM"),
+//                    Slot(slot_id = 2, start_time = "02:00 PM", end_time = "04:00 PM")
+//                )
+//            )
+//        ),
+//        doctor_info = Doctor.DoctorInfo(
+//            age = 40,
+//            avg_ratings = 4.8,
+//            consultation_fees = 120.0,
+//            gender = "Female",
+//            license_expiry = "2026-12-31",
+//            license_no = "MD654321",
+//            name = "Dr. Emily Smith",
+//            years_of_practice = 15
+//        ),
+//        email = "emily.smith@example.com",
+//        password = "password",
+//        doctor_speciality = "Dermatology"
+//    )
 
     private var doctorRepository: DoctorRepository
     private var reviewRepository: ReviewRepository = ReviewRepository()
@@ -34,6 +93,7 @@ class DoctorInfoActivity : ComponentActivity() {
 
         var patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
         var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
+
 
         doctorRepository.getDoctor(doctor_id, { doctor ->
             // Set doctor details to views
@@ -78,6 +138,7 @@ class DoctorInfoActivity : ComponentActivity() {
                 // Handle case when nothing is selected if needed
             }
         }
+
 
         reviewRepository.getReviews(doctor!!.doctor_id , { reviewlist ->
             val reviews = findViewById<RecyclerView>(R.id.infoReviews)

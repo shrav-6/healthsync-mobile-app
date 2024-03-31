@@ -15,7 +15,7 @@ import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
 class DoctorAdapter(
     private val doctors: MutableList<Doctor>,
     var patient_id: Int,
-    var activity: Activity
+    var activity: Activity,
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>()
 {
     inner class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
@@ -26,7 +26,7 @@ class DoctorAdapter(
             bookaptbtn.setOnClickListener(){
                 val intent  = Intent(activity, BookingInfoActivity::class.java)
                 intent.putExtra("doctor_id",doctors[adapterPosition].doctor_id)
-                intent.putExtra("patient_id",patient_id)
+                //intent.putExtra("patient_id",patient_id)
                 activity.startActivity(intent)
             }
         }
@@ -52,9 +52,10 @@ class DoctorAdapter(
         val tvConsultationFee = holder.itemView.findViewById<TextView>(R.id.tvConsultationFee)
 
         tvDoctorName.text = currDoctor.doctor_info.name
-        tvExperience.text = currDoctor.doctor_info.years_of_practice.toString()
+        tvExperience.text = "Years of Practice: ${currDoctor.doctor_info.years_of_practice.toString()}"
 
         tvConsultationFee.text = "${currDoctor.doctor_info.consultation_fees}$/consultation"
+
 //        tvDoctorName.text = currDoctor.email
 //        tvExperience.text = currDoctor.email
 //        tvSpeciality.text = currDoctor.email
