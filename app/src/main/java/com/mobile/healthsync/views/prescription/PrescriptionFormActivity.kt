@@ -13,9 +13,9 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.MedicineAdapter
 import com.mobile.healthsync.model.Appointment
-import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
-import com.mobile.healthsync.model.Prescription.Medicine
 import com.mobile.healthsync.model.Prescription
+import com.mobile.healthsync.model.Prescription.Medicine
+import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
 import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule.Schedule
 import com.mobile.healthsync.repository.PatientRepository
 import java.util.Random
