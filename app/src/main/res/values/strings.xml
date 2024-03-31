@@ -109,6 +109,17 @@
     <string name="reminder_notification_channel_id" translatable="false">channel2</string>
 
     <string name="edit_patient_profile">Edit patient profile</string>
+    <string name="appointment_detail">Appointment Detail</string>
+    <string name="doctor">Doctor:</string>
+    <string name="speciality">Speciality:</string>
+    <string name="date">Date:</string>
+    <string name="time">Time:</string>
+    <string name="appointment_url">Appointment URL:</string>
+    <string name="total_amounts">Total Amount:</string>
+    <string name="rate_and_review">Rate and Review</string>
+    <string name="download_prescription">Download Prescription</string>
+    <string name="add_prescription">Add Prescription</string>
+    <string name="cancel_appointment">Cancel Appointment</string>
     <string-array name="week_days">
         <item>Monday</item>
         <item>Tuesday</item>
