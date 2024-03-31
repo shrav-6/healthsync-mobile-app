@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.doctorProfile
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -15,7 +16,7 @@ import com.squareup.picasso.Picasso
 
 class DoctorProfile : BaseActivityForDoctor() {
 
-    private lateinit var doctorDocumentId: String
+    private lateinit var documentId: String
     private lateinit var doctorImg: String
     private var imageURL: String = ""
 
@@ -26,8 +27,12 @@ class DoctorProfile : BaseActivityForDoctor() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        doctorDocumentId = "OXyUFwt5a5S9yUmclEd3"
-//        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
+        // Retrieve doctor_id from Shared Preferences
+        val sharedPreferences = this.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        val doctorDocumentId = sharedPreferences.getString("doctor_documentid", "")
+
+        documentId = doctorDocumentId.toString()
+
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->
             if(doctor != null){
@@ -94,7 +99,7 @@ class DoctorProfile : BaseActivityForDoctor() {
             imageView.setImageURI(imageUri)
 
             imageUri?.let {
-                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, doctorDocumentId) {it
+                doctorRepository.uploadImageToFirebaseStorage(imageURL, it, documentId) {it
                     if (!it.isNullOrBlank()) {
                         doctorImg = it
                     }
