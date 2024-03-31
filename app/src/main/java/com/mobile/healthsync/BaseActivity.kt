@@ -1,8 +1,11 @@
 package com.mobile.healthsync
 
+import android.content.Context
 import android.content.Intent
 import android.view.MenuItem
+import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -11,6 +14,7 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.mobile.healthsync.views.events.EventsActivity
+import com.mobile.healthsync.views.login.LoginActivity
 import com.mobile.healthsync.views.maps.PermissionsActivity
 import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
@@ -24,6 +28,8 @@ open class BaseActivity : AppCompatActivity() {
     private lateinit var toggle: ActionBarDrawerToggle
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
+        val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+
         val fullView = layoutInflater.inflate(R.layout.activity_toolbar, null) as DrawerLayout
         val activityContainer = fullView.findViewById<FrameLayout>(R.id.activity_content)
         layoutInflater.inflate(layoutResID, activityContainer, true)
@@ -31,6 +37,16 @@ open class BaseActivity : AppCompatActivity() {
 
         val toolbar = findViewById<Toolbar>(R.id.toolbar)
         setSupportActionBar(toolbar)
+
+        //val navigationView = findViewById<EditText>(R.id.navigationView)
+        // Find the TextViews in the navigation header
+        val navigationHeaderView = findViewById<NavigationView>(R.id.navigationView).getHeaderView(0)
+        val nameOfPatientTextView = navigationHeaderView.findViewById<TextView>(R.id.name_of_patient)
+        val patientIdTextView = navigationHeaderView.findViewById<TextView>(R.id.patientId)
+
+        //nameOfPatientTextView.text = "Patient Name"
+        nameOfPatientTextView.text = sharedPreferences.getString("patient_name","Patient Name").toString()
+        patientIdTextView.text = sharedPreferences.getString("patient_id","123").toString()
 
 
         setupToolbar() // Call the setupToolbar method to initialize drawer navigation
@@ -79,8 +95,8 @@ open class BaseActivity : AppCompatActivity() {
                 }
                 R.id.logout -> {
                     Toast.makeText(applicationContext, "Logging out!", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(applicationContext, SignupActivity::class.java)//change to login activity later
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    val intent = Intent(applicationContext, LoginActivity::class.java)//change to login activity later
+                    //intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
                     startActivity(intent)
                     finish()
                 }
