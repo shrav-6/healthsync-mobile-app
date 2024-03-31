@@ -1,30 +1,29 @@
 package com.mobile.healthsync
 
+import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.PaymentAPI.ApiUtilities
+import com.mobile.healthsync.PaymentUtils.PUBLISH_KEY
 import com.stripe.android.PaymentConfiguration
 import com.stripe.android.paymentsheet.PaymentSheet
-import com.mobile.healthsync.PaymentUtils.PUBLISH_KEY
 import com.stripe.android.paymentsheet.PaymentSheetResult
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.google.firebase.firestore.FirebaseFirestore
 import java.text.DecimalFormat
 import java.util.Random
-import android.content.Intent
-import android.app.AlertDialog
 
 
 
 
-class CheckoutActivity : AppCompatActivity() {
+class CheckoutActivity : BaseActivity() {
 
     private lateinit var paymentSheet: PaymentSheet
     private lateinit var customerID: String
