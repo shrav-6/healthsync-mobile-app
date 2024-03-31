@@ -7,6 +7,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.StorageReference
 import com.mobile.healthsync.model.Patient
@@ -124,6 +125,31 @@ class PatientRepository(private val context: Context) {
                 callback("")
             }
         }
+    }
+
+    /**
+     * Retrieves patient data from Firebase based on the patient ID.
+     * @param patient_id The ID of the patient to retrieve.
+     * @param callback Callback function to handle the retrieved patient data.
+     */
+    fun getPatientWithPatientId(patient_id: Int, callback: (Patient?) -> Unit) {
+        db.collection("patients")
+            .whereEqualTo("patient_id",patient_id)
+            .get()
+            .addOnCompleteListener {
+                    task: Task<QuerySnapshot> ->
+                if(task.isSuccessful) {
+                    val documents = task.result
+                    if (documents != null && !documents.isEmpty) {
+                        val document = documents.documents[0]
+                        val patient = document.toObject(Patient::class.java)
+                        callback(patient)
+                    }
+                }
+                else {
+                    showToast("Patient not found")
+                }
+            }
     }
 
     /**
