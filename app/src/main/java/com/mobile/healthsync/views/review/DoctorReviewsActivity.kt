@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mobile.healthsync.BaseActivityForDoctor
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.ReviewsAdapter
 import com.mobile.healthsync.model.Patient
@@ -17,7 +18,7 @@ import com.mobile.healthsync.model.Reviews
  * Activity to display reviews for a specific doctor.
  * Author: Zeel Ravalani
  */
-class DoctorReviewsActivity : AppCompatActivity() {
+class DoctorReviewsActivity : BaseActivityForDoctor() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: ReviewsAdapter
@@ -58,6 +59,8 @@ class DoctorReviewsActivity : AppCompatActivity() {
 
                 for (document in result) {
                     val review = document.toObject(Reviews::class.java)
+                    Log.d("review.patientid","${review.patientId}")
+                    Log.d("review","${review}")
                     // Fetch patient details for each review
                     db.collection("patients")
                         .whereEqualTo("patient_id", review.patientId) // Assuming patientId is the ID of the patient
