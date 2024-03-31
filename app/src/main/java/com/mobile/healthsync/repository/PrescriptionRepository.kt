@@ -2,7 +2,7 @@ package com.mobile.healthsync.repository
 
 import android.util.Log
 import com.google.firebase.firestore.FirebaseFirestore
-import com.mobile.healthsync.model.Medicine
+import com.mobile.healthsync.model.Prescription.Medicine
 
 object PrescriptionRepository {
 

@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
+import com.mobile.healthsync.BaseActivityForDoctor
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
@@ -14,7 +15,7 @@ import com.squareup.picasso.Picasso
 import kotlin.properties.Delegates
 
 
-class DoctorProfile : AppCompatActivity() {
+class DoctorProfile : BaseActivityForDoctor() {
 
     private var doctorDocumentId by Delegates.notNull<Int>()
     private lateinit var doctorImg: String
