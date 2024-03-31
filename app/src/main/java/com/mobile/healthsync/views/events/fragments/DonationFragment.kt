@@ -11,6 +11,9 @@ import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.EventTypeAdapter
 import com.mobile.healthsync.repository.EventsRepository
 
+/**
+ * Fragment for displaying donation events.
+ */
 class DonationFragment : Fragment() {
     private lateinit var eventsRepository: EventsRepository
     override fun onCreateView(

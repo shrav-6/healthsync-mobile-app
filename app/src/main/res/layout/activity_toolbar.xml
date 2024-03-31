@@ -19,8 +19,9 @@
                 android:id="@+id/toolbar"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#FA9D5DAC"
+                android:background="@color/orchid"
                 app:title="HealthSync"
+                app:titleTextColor="@color/magnolia"
                 app:titleTextAppearance="@style/ToolbarTitleStyle"
                 app:navigationIcon="@drawable/icons8_nav" />
 
@@ -41,5 +42,4 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header"
         app:menu="@menu/nav_menu" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

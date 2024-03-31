@@ -9,6 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Event
 
+/**
+ * Activity for displaying detailed information about an event.
+ */
 class EventInfoActivity : AppCompatActivity() {
     private lateinit var backButton: Button
     private lateinit var icon: ImageView
@@ -79,7 +82,11 @@ class EventInfoActivity : AppCompatActivity() {
         }
     }
 
-    // https://www.geeksforgeeks.org/how-to-send-an-email-from-your-android-app/
+    /**
+     * Initiate email with event details for RSVP.
+     *
+     * R. Rishabh007 Follow, “How to send an email from an android application?,” GeeksforGeeks, 17-Jan-2020. [Online]. Available: https://www.geeksforgeeks.org/how-to-send-an-email-from-your-android-app/. [Accessed: 31-Mar-2024].
+     */
     private fun initiateEmail(eventName: String, eventOrganizer: String, scheduledTime: String) {
         val emailTo = "health.sync19@gmail.com"
         val emailSubject = "RSVP for Event: $eventName"

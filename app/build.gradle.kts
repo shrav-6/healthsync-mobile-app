@@ -108,12 +108,7 @@ dependencies {
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
     implementation ("com.squareup.moshi:moshi-kotlin:1.13.0")
-
-
-
-
-
-
+    
 
     //Glide
     implementation("com.github.bumptech.glide:glide:4.13.0")
@@ -127,24 +122,23 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.7.0")
     implementation("com.stripe:stripe-java:24.0.0")
     implementation ("com.google.android.material:material:1.11.0")
+
     implementation("com.itextpdf:itextpdf:5.5.13.3")
     implementation ("com.google.android.material:material:1.4.0")
     implementation ("de.hdodenhof:circleimageview:3.1.0")
 
-
-
     implementation("org.json:json:20210307")
 
-
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
-
 
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.android.gms:play-services-location:21.2.0")
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("com.karumi:dexter:6.2.3")
     implementation("com.github.mancj:MaterialSearchBar:0.8.5")
+    implementation ("com.google.android.gms:play-services-auth:21.0.0")
 
     testImplementation ("org.mockito:mockito-core:3.12.4")
     androidTestImplementation ("org.mockito:mockito-core:3.12.4")
 }
+

@@ -6,6 +6,10 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 
+/**
+ * ViewHolder class for holding views of an event item in a RecyclerView.
+ * @param itemView The view of the event item.
+ */
 class EventViewHolder (itemView: View) : RecyclerView.ViewHolder(itemView) {
     // Initialize views from event item layout
     val eventTitle: TextView = itemView.findViewById(R.id.eventTitle)

@@ -1,6 +1,5 @@
 package com.mobile.healthsync.views.patientProfile
 
-import com.mobile.healthsync.BaseActivity
 import android.content.Intent
 import android.icu.text.SimpleDateFormat
 import android.net.Uri
@@ -11,6 +10,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
 import com.google.android.material.imageview.ShapeableImageView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.repository.PatientRepository
@@ -18,6 +18,11 @@ import com.squareup.picasso.Picasso
 import java.util.Calendar
 import java.util.Locale
 
+/**
+ * Activity for editing patient profile information.
+ * Allows the patient to modify their profile data including personal information, gender, age, height, weight,
+ * allergies, and profile picture.
+ */
 class EditPatientProfile : BaseActivity() {
 
     private lateinit var patientRepository: PatientRepository
@@ -41,15 +46,6 @@ class EditPatientProfile : BaseActivity() {
                 currentPatientInfo = setPatientInfoOnDisplay(patient)
             }
         }
-
-//        val bloodTypeSelection: Spinner = findViewById(R.id.pickPatientBloodType)
-//        val arrayAdapter2 = ArrayAdapter.createFromResource(
-//            this, R.array.bloodType_array, android.R.layout.simple_spinner_item
-//        ).also { adapter ->
-//            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-//            bloodTypeSelection.adapter = adapter
-//        }
-//         bloodTypeSelection.setSelection(arrayAdapter2.getPosition(patientInfo.patientDetails))
 
         val saveButton: Button = findViewById(R.id.savePatientProfile)
         saveButton.setOnClickListener{

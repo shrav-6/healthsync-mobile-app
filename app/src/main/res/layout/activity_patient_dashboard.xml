@@ -5,11 +5,8 @@
     android:id="@+id/rootLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/gray"
-    android:clickable="true"
-    android:focusable="true"
-    android:onClick="onRootLayoutClick">
-    <!-- Include the parent layout -->
+    android:background="@color/white"
+    tools:context=".views.patientDashboard.PatientDashboard">
 
     <android.widget.SearchView
         android:id="@+id/svSearchBox"
@@ -18,7 +15,7 @@
         android:layout_marginStart="4dp"
         android:layout_marginTop="2dp"
         android:layout_marginEnd="4dp"
-        android:background="@drawable/rounded_corner_input"
+        android:background="@drawable/rounded_edittext"
         android:elevation="4dp"
         android:padding="8dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -36,8 +33,4 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/svSearchBox" />
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
