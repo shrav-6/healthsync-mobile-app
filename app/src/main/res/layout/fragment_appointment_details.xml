@@ -89,10 +89,10 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
-        android:text="View Prescription" />
+        android:text="Add Review" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/download_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/button"
@@ -102,6 +102,16 @@
         android:layout_marginBottom="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
-        android:text="Add Review" />
+        android:text="Download Prescription" />
+
+    <Button
+        android:id="@+id/add_prescription_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/download_button"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:text="Add Prescription" />
 
 </RelativeLayout>

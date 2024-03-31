@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools">
 
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+<uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -17,9 +18,21 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+        <!-- Define file provider -->
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
         <activity
-            android:name=".MyApplication"
-            android:label="@string/app_name"
+            android:name=".views.prescription.PrescriptionFormActivity"
+            android:exported="false" />
+        <activity
+            android:name=".views.patientDashboard.PatientInsights"
             android:exported="false" />
         <activity
             android:name=".views.patientDashboard.PatientAppointmentDetailsActivity"
@@ -33,14 +46,6 @@
         <activity
             android:name=".views.maps.PermissionsActivity"
             android:exported="false" />
-        <activity
-            android:name=".views.login.LoginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-    </activity>/>
         <activity
             android:name=".views.events.EventInfoActivity"
             android:exported="false" />
@@ -63,6 +68,9 @@
             android:name=".views.patientDashboard.PatientDashboard"
             android:exported="false" />
         <activity
+            android:name=".views.doctorDashboard.DoctorDashboard"
+            android:exported="false" />
+        <activity
             android:name=".views.doctorProfile.DoctorProfile"
             android:exported="false" />
         <activity
@@ -78,6 +86,10 @@
             android:name=".views.patientDashboard.PatientToDo"
             android:exported="false" />
         <activity
+            android:name=".views.login.LoginActivity"
+            android:exported="false"
+            android:theme="@style/AppTheme" />
+        <activity
             android:name=".views.signUp.SignupActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
@@ -87,16 +99,11 @@
             android:theme="@style/AppTheme" />
         <activity
             android:name=".MainActivity"
-            android:exported="false"
-            android:theme="@style/AppTheme">
-
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
-        <activity
-            android:name=".views.doctorDashboard.DoctorDashboard"
-            android:exported="false"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme"/>
-
     </application>
-
 </manifest>

@@ -17,13 +17,12 @@ import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BookingInfoActivity : AppCompatActivity(),OnDateSetListener {
+class BookingInfoActivity : AppCompatActivity(), DatePickerDialog.OnDateSetListener {
 
     private val SUCCESS :Int = 1
     private val FAILURE :Int = 0
