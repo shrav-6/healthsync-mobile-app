@@ -72,8 +72,8 @@
                 android:layout_height="wrap_content"
                 android:text="Redeem Points"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_corner_bg"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_corner_input"/>
 
             <TextView
                 android:id="@+id/tvTotalAmount"
@@ -90,8 +90,8 @@
                 android:layout_height="wrap_content"
                 android:text="Proceed to Pay"
                 android:layout_marginTop="16dp"
-                android:background="@drawable/rounded_corner_bg"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
-        </LinearLayout>
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_corner_input"/>
+                 </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>

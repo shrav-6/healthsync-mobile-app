@@ -5,7 +5,7 @@
     android:layout_height="wrap_content"
     android:layout_margin="32dp"
     android:padding="2dp"
-    android:background="@drawable/rounded_edittext">
+    android:background="@drawable/rounded_corner_bg">
 
     <TextView
         android:id="@+id/tvHeading"
@@ -14,7 +14,7 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="12dp"
         android:text="Appointment Detail"
-        android:textColor="@color/orchid"
+        android:textColor="@color/black"
         android:textSize="32sp"
         android:textStyle="bold"
         android:paddingTop="15dp"/>
@@ -25,7 +25,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@id/tvHeading"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginTop="40dp"
         android:text="Doctor: "
         android:textColor="@color/black"
         android:textSize="18sp"
@@ -81,13 +81,14 @@
 
     <Button
         android:id="@+id/btnReview"
-        android:layout_width="match_parent"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_below="@id/textPayment"
         android:background="@drawable/rounded_corner_input"
         android:textColor="@color/white"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="60dp"
+        android:layout_marginBottom="18dp"
+        android:layout_marginTop="30dp"
         android:layout_marginEnd="16dp"
         android:text="Rate and Review" />
 
@@ -99,7 +100,6 @@
         android:layout_marginStart="16dp"
         android:background="@drawable/rounded_corner_input"
         android:textColor="@color/white"
-        android:layout_marginBottom="32dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:text="Download Prescription" />
@@ -112,18 +112,21 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginBottom="22dp"
         android:text="Add Prescription"
         android:textColor="@color/white"
         android:background="@drawable/rounded_corner_input"/>
 
     <Button
         android:id="@+id/initiate_vc_button"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_width="90dp"
+        android:layout_height="80dp"
         android:layout_below="@id/add_prescription_button"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="12dp"
         android:layout_marginEnd="16dp"
-        android:text="Initiate Video Call" />
+        android:layout_marginBottom="22dp"
+        android:background="@drawable/videocalling"
+        android:textColor="@color/white" />
 
 </RelativeLayout>
