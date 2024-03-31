@@ -21,7 +21,7 @@ class PatientDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_dashboard)
 
-        this.patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+        this.patient_id = intent.extras?.getInt("patient_id", 251) ?: 251
 
         doctorRepository = DoctorRepository(this)
         doctorRepository.getAllDoctors { retrievedDoctorsList ->
