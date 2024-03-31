@@ -10,9 +10,16 @@
     <!-- https://www.flaticon.com/free-icon/city_2802966?term=city&page=1&position=7&origin=search&related_id=2802966- ,
     last accessed 20/03/2024 -->
     <item
-        android:id="@+id/appointments"
+        android:id="@+id/reviews"
         android:icon="@drawable/icons8_appointment"
-        android:title="Upcoming Appointment"/>
+        android:title="My Reviews"/>
+    <!-- https://www.flaticon.com/free-icon/management_1891093?term=city&page=1&position=55&origin=search&related_id=1891093,
+    last accessed 20/03/2024-->
+
+<!--    <item-->
+<!--        android:id="@+id/events"-->
+<!--        android:icon="@drawable/icons8_appointment"-->
+<!--        android:title="Events"/>-->
     <!-- https://www.flaticon.com/free-icon/management_1891093?term=city&page=1&position=55&origin=search&related_id=1891093,
     last accessed 20/03/2024-->
 
