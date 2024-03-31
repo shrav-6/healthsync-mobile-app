@@ -196,6 +196,40 @@ class PatientAppointmentListActivity : BaseActivity() {
 
     }
 
+     override fun onResume() {
+        super.onResume()
+        loadAppointmentsAndDoctors() // Assuming this method loads your data and updates the adapter.
+    }
+
+    private fun loadAppointmentsAndDoctors() {
+        appointmentRepository.getAppointments(patient_id) { retrievedAppointmentsList ->
+            appointments = retrievedAppointmentsList
+            updateRecyclerView()
+        }
+
+        doctorRepository.getAllDoctors { retrievedDoctorsList ->
+            doctorsList = retrievedDoctorsList
+            updateRecyclerView()
+        }
+    }
+
+
+
+    private fun updateRecyclerView() {
+        appointmentAdapter = PatientAppointmentListAdapter(
+            appointments,
+            doctorsList
+        ) { appointment, doctor ->
+            val intent = Intent(this, PatientAppointmentDetailsActivity::class.java).apply {
+                putExtra(PatientAppointmentDetailsActivity.APPOINTMENT_KEY, appointment as Parcelable)
+                putExtra(PatientAppointmentDetailsActivity.DOCTOR_KEY, doctor as Parcelable)
+            }
+            startActivity(intent)
+        }
+        recyclerView.adapter = appointmentAdapter
+    }
+
+
     private fun updateDates() {
         // Clear existing tabs
         tabLayout.removeAllTabs()
@@ -231,4 +265,6 @@ class PatientAppointmentListActivity : BaseActivity() {
         }
         return filteredList
     }
+
+    
 }

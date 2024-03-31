@@ -1,6 +1,7 @@
 package com.mobile.healthsync.fragments
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
@@ -31,6 +32,7 @@ import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.Prescription
 import com.mobile.healthsync.model.Reviews
 import com.mobile.healthsync.repository.PatientRepository
+import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
@@ -45,6 +47,7 @@ class AppointmentDetailsFragment : Fragment() {
     private lateinit var downloadButton: Button
     private lateinit var addPrescriptionButton: Button
     private lateinit var btnOpenReviewPopup: Button
+    private lateinit var cancelAppointmentButton: Button
     private lateinit var db: FirebaseFirestore
     private val TAG = "RatingAndReviewsActivity"
 
@@ -63,6 +66,7 @@ class AppointmentDetailsFragment : Fragment() {
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
         btnOpenReviewPopup = view.findViewById(R.id.btnReview)
+        cancelAppointmentButton = view.findViewById(R.id.cancel_appointment_button)
 
         // Get appointment and doctor data from arguments
         val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
@@ -96,6 +100,12 @@ class AppointmentDetailsFragment : Fragment() {
 
             showReviewPopup(it, appointment) // 'it' refers to the clicked button
         }
+
+        cancelAppointmentButton.setOnClickListener {
+            // Implement the logic to cancel the appointment
+            cancelAppointment(appointment)
+        }
+
 
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
@@ -352,6 +362,112 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    private fun cancelAppointment(appointment: Appointment?) {
+        appointment?.let { appt ->
+            val db = FirebaseFirestore.getInstance()
+
+            // Step 1: Fetch payment record to retrieve the amount paid as a string
+            db.collection("payments")
+                .whereEqualTo("payment_id", appt.payment_id)
+                .get()
+                .addOnSuccessListener { payments ->
+                    if (payments.documents.isNotEmpty()) {
+                        val paymentDocument = payments.documents.first()
+                        val amountPaidString = paymentDocument.getString("amount_paid") ?: "$0.00"
+                        // Extract the numeric value from the amountPaidString
+                        val amountPaid = amountPaidString.drop(1).toDoubleOrNull() ?: 0.0
+
+                        // Proceed to delete the payment
+                        val paymentRef = paymentDocument.reference
+                        paymentRef.delete().addOnSuccessListener {
+                            Log.d(TAG, "Payment successfully deleted")
+
+                            // Step 2: Delete the appointment
+                            // Assuming appt.appointment_id is an Int and is available
+                            val appointmentId = appt.appointment_id
+
+                            // Step 2: Confirm the appointment exists before attempting to delete
+                            db.collection("appointments")
+                                .whereEqualTo("appointment_id", appointmentId)
+                                .get()
+                                .addOnSuccessListener { documents ->
+                                    if (documents != null && !documents.isEmpty) {
+                                        // Assuming appointment_id uniquely identifies the document
+                                        val documentSnapshot = documents.documents[0]
+                                        val appointmentDocRef = db.collection("appointments").document(documentSnapshot.id)
+
+                                        // Proceed to delete the appointment
+                                        appointmentDocRef.delete().addOnSuccessListener {
+                                            Log.d(TAG, "Appointment successfully deleted")
+                                            // Continue with next steps, e.g., updating reward points
+                                        }.addOnFailureListener { e ->
+                                            Log.e(TAG, "Error deleting appointment document: ", e)
+                                        }
+                                    } else {
+                                        Log.d(TAG, "No appointment found with id: $appointmentId")
+                                    }
+                                }.addOnFailureListener { e ->
+                                    Log.e(TAG, "Error fetching appointment document: ", e)
+                                }
+
+                            // Step 3: Fetch patient to update reward points
+                                db.collection("patients").whereEqualTo("patient_id", appt.patient_id)
+                                    .get()
+                                    .addOnSuccessListener { patients ->
+                                        if (patients.documents.isNotEmpty()) {
+                                            val patientDocument = patients.documents.first()
+                                            val currentPoints = patientDocument.getDouble("reward_points") ?: 0.0
+                                            val newPoints = currentPoints + amountPaid
+
+                                            // Step 4: Update the reward points for the patient
+                                            patientDocument.reference
+                                                .update("reward_points", newPoints)
+                                                .addOnSuccessListener {
+                                                    Log.d(TAG, "Reward points updated to $newPoints")
+                                                    // Show confirmation message
+                                                    Toast.makeText(context, "Booking Cancelled Successfully. $newPoints reward points have been added to your account.", Toast.LENGTH_LONG).show()
+                                                    showBookingCancelledDialog(newPoints)
+                                                }
+                                                .addOnFailureListener { e ->
+                                                    Log.e(TAG, "Error updating reward points: ", e)
+                                                }
+                                        } else {
+                                            Log.d(TAG, "No such patient found")
+                                        }
+                                    }.addOnFailureListener { e ->
+                                        Log.e(TAG, "Error fetching patient: ", e)
+                                    }
+                        }.addOnFailureListener { e ->
+                            Log.w(TAG, "Error deleting payment: ", e)
+                        }
+                    } else {
+                        Log.d(TAG, "No such payment found")
+                    }
+                }.addOnFailureListener { e ->
+                    Log.e(TAG, "Error fetching payment record: ", e)
+                }
+        }
+    }
+
+    private fun showBookingCancelledDialog(newPoints: Double) {
+        activity?.let { act ->
+            AlertDialog.Builder(act).apply {
+                setTitle("Booking Cancelled Successfully")
+                setMessage("$newPoints reward points have been added to your account.")
+                setPositiveButton("Okay") { dialog, which ->
+                    // Instead of just dismissing the dialog, start the PatientAppointmentListActivity
+                    val intent = Intent(context, PatientAppointmentListActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_CLEAR_TOP // Clears the activity stack up to PatientAppointmentListActivity
+                    startActivity(intent)
+                }
+                create().show()
+            }
+        }
+    }
+
+
+
+
     companion object {
         private const val APPOINTMENT_KEY = "appointment"
         private const val DOCTOR_KEY = "doctor"
@@ -372,4 +488,6 @@ class AppointmentDetailsFragment : Fragment() {
             return fragment
         }
     }
+
+
 }
