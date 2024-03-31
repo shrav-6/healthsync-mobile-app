@@ -5,10 +5,10 @@ import android.os.Bundle
 import android.os.Parcelable
 import android.util.Log
 import android.widget.Button
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.tabs.TabLayout
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.PatientAppointmentListAdapter
 import com.mobile.healthsync.model.Appointment
@@ -20,7 +20,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class PatientAppointmentListActivity : AppCompatActivity() {
+class PatientAppointmentListActivity : BaseActivity() {
 
 
     //    listOf(

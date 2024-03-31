@@ -1,21 +1,16 @@
 package com.mobile.healthsync.views.patientDashboard
 
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.mobile.healthsync.R
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.firestore
-import com.mobile.healthsync.model.Prescription
+import android.os.Bundle
+import com.mobile.healthsync.BaseActivity
+import com.mobile.healthsync.R
 
 
 /**
  * @input: patientId
  */
-class PatientToDo : AppCompatActivity() {
+class PatientToDo : BaseActivity() {
     lateinit var sharedPreferences: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
