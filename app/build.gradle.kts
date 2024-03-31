@@ -68,7 +68,7 @@ dependencies {
 
     implementation("com.squareup.picasso:picasso:2.71828")
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+
     implementation("com.google.firebase:firebase-firestore")
     implementation ("com.sun.mail:android-mail:1.6.7")
     implementation ("com.sun.mail:android-activation:1.6.7")
@@ -93,7 +93,6 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
-    implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     implementation("com.google.firebase:firebase-database-ktx:20.3.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.9.0")
