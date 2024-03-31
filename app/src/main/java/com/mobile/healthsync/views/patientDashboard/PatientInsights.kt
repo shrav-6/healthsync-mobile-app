@@ -1,17 +1,8 @@
 package com.mobile.healthsync.views.patientDashboard
 
-import android.R.attr
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import com.mobile.healthsync.R
-import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule
-
-import android.R.attr.name
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.graphics.Typeface
+import android.os.Bundle
 import android.util.Log
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import com.github.mikephil.charting.charts.BarChart
@@ -23,26 +14,16 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.highlight.Highlight
 import com.github.mikephil.charting.listener.OnChartValueSelectedListener
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.android.gms.tasks.Task
-import com.google.firebase.Firebase
-import com.google.firebase.firestore.firestore
-
-import com.mobile.healthsync.model.Prescription.Medicine
-
+import com.mobile.healthsync.BaseActivity
+import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Prescription
-import com.mobile.healthsync.model.Prescription.Medicine.DaySchedule.Schedule
-import kotlinx.coroutines.tasks.await
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.Query
-import com.google.firebase.firestore.QuerySnapshot
-import com.mobile.healthsync.adapters.EventTypeAdapter
+import com.mobile.healthsync.model.Prescription.Medicine
 import com.mobile.healthsync.repository.InsightsRepository
 
 /**
  * @input: patientId
  */
-class PatientInsights : AppCompatActivity() {
+class PatientInsights : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_insights)

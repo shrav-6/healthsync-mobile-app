@@ -12,9 +12,6 @@ import com.mobile.healthsync.services.AlarmScheduler2
 import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.login.LoginActivity
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
-import com.mobile.healthsync.views.patientDashboard.PatientInsights
-import com.mobile.healthsync.views.patientDashboard.PatientToDo
-import com.mobile.healthsync.views.signUp.SignupActivity
 
 
 class MainActivity : ComponentActivity() {

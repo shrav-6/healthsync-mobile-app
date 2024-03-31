@@ -7,13 +7,14 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.imageview.ShapeableImageView
+import com.mobile.healthsync.BaseActivityForDoctor
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
 
-class DoctorProfile : AppCompatActivity() {
+class DoctorProfile : BaseActivityForDoctor() {
 
     private lateinit var doctorDocumentId: String
     private lateinit var doctorImg: String
@@ -26,7 +27,7 @@ class DoctorProfile : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_profile)
 
-        doctorDocumentId = "QMW1ZsIEcyRjqyLip0dP"
+        doctorDocumentId = "OXyUFwt5a5S9yUmclEd3"
 //        doctorDocumentId = "QYAeqE6iI7FLxjR0bbNA"
         doctorRepository = DoctorRepository(this)
         doctorRepository.getDoctorProfileData(doctorDocumentId) { doctor ->

@@ -1,17 +1,20 @@
 package com.mobile.healthsync.views.patientDashboard
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.mobile.healthsync.BaseActivity
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.DoctorAdapter
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 
-class PatientDashboard : AppCompatActivity() {
+class PatientDashboard : BaseActivity() {
 
     private  lateinit var doctorAdapter: DoctorAdapter
     private  lateinit var doctorRepository: DoctorRepository
@@ -21,7 +24,11 @@ class PatientDashboard : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_patient_dashboard)
 
-        this.patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+        val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+
+        this.patient_id = sharedPreferences.getString("patient_id", "251")?.toInt() ?: 251
+
+        //this.patient_id = intent.extras?.getInt("patient_id", 251) ?: 251
 
         doctorRepository = DoctorRepository(this)
         doctorRepository.getAllDoctors { retrievedDoctorsList ->
@@ -51,7 +58,12 @@ class PatientDashboard : AppCompatActivity() {
             }
         })
     }
-
+    fun onRootLayoutClick(view: View) {
+        // This method will be called when the root layout is clicked
+        // Implement any logic you want to execute when the root layout is clicked
+        // For example, you can show a toast message
+        Toast.makeText(this, "Root layout clicked", Toast.LENGTH_SHORT).show()
+    }
     private fun filterDoctorsList(query: String?): MutableList<Doctor>{
         // Implement your logic to filter the original list based on the query
         var filteredList: MutableList<Doctor> = mutableListOf()

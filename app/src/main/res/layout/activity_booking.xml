@@ -3,48 +3,64 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".views.patientBooking.BookingInfoActivity">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="300dp"
         android:layout_height="600dp"
         android:layout_gravity="center"
         android:layout_marginTop="60dp"
         android:orientation="vertical">
 
-        <LinearLayout
-            android:id="@+id/linearLayout"
+        <androidx.cardview.widget.CardView
             android:layout_width="200dp"
             android:layout_height="50dp"
+            android:id="@+id/linearLayout"
+            app:cardCornerRadius="5dp"
             android:layout_gravity="center"
-            android:layout_marginTop="100dp"
-            android:orientation="horizontal">
+            android:layout_marginTop="80dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
 
-            <EditText
-                android:id="@+id/editdate"
-                android:layout_width="160dp"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:text="11-02-2024"
-                android:textSize="25sp" />
+            <LinearLayout
+                android:layout_width="200dp"
+                android:layout_height="50dp"
+                android:orientation="horizontal">
 
-            <Button
-                android:id="@+id/searchdate"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
-                android:layout_gravity="center"
-                android:background="@drawable/search" />
+                <EditText
+                    android:id="@+id/editdate"
+                    android:layout_width="160dp"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:background="@null"
+                    android:text="11-02-2024"
+                    android:textSize="18sp" />
 
-        </LinearLayout>
+                <Button
+                    android:id="@+id/searchdate"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:layout_gravity="center"
+                    android:background="@drawable/search" />
 
+            </LinearLayout>
+
+        </androidx.cardview.widget.CardView>
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/slots"
             android:layout_width="280dp"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:layout_marginTop="30dp"/>
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout"
+            app:layout_constraintBottom_toTopOf="@id/bookbutton"/>
 
         <Button
             android:id="@+id/bookbutton"
@@ -53,8 +69,12 @@
             android:layout_marginTop="30dp"
             android:layout_gravity="center"
             android:text="BOOK"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:layout_marginBottom="50dp"
             android:background="@drawable/rounded_corner_bg"/>
 
-    </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </LinearLayout>
