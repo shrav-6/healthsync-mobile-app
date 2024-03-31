@@ -159,12 +159,16 @@ class PatientAppointmentListActivity : BaseActivity() {
             } ?: PatientAppointmentListAdapter(emptyList(), emptyList()) { _, _ -> }
 
             recyclerView.adapter = appointmentAdapter
+
+            updateDates()
+
+            val todayDate = queryDateFormat.format(Calendar.getInstance().time)
+            val filteredAppointments = filterAppointmentsByDate(appointments, todayDate)
+            appointmentAdapter.updateList(filteredAppointments)
         }
 
         Log.d("DoctorList", " ${doctorsList}")
 
-
-        updateDates()
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
