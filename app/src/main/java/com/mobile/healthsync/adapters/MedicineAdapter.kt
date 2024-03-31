@@ -9,9 +9,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Prescription.Medicine
 
+/**
+ * Adapter class for displaying medicines in a RecyclerView.
+ * Author: Zeel Ravalani
+ */
 class MedicineAdapter(private var medicines: HashMap<String, Medicine>) :
     RecyclerView.Adapter<MedicineAdapter.MedicineViewHolder>() {
 
+    /**
+     * ViewHolder class for holding medicine item views.
+     * Author: Zeel Ravalani
+     */
     class MedicineViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val medicineName: TextView = itemView.findViewById(R.id.medicineNameTextView)
         val medicineDosage: TextView = itemView.findViewById(R.id.medicineDosageTextView)
@@ -54,12 +62,20 @@ class MedicineAdapter(private var medicines: HashMap<String, Medicine>) :
         return medicines.size
     }
 
+    /**
+     * Updates the data in the adapter with new medicines.
+     * @param newMedicines The new list of medicines.
+     * Author: Zeel Ravalani
+     */
     fun updateData(newMedicines: HashMap<String, Medicine>) {
         medicines = newMedicines
         notifyDataSetChanged()
     }
 
-    // Function to update RecyclerView adapter with new medicine list
+    /**
+     * Updates the RecyclerView adapter with the current medicine list.
+     * Author: Zeel Ravalani
+     */
     private fun updateMedicineAdapter() {
         updateData(medicines)
     }
