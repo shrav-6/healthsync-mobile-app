@@ -12,6 +12,7 @@ data class Appointment(var appointment_id: Int = -1,
                        var start_time: String = "",
                        var end_time: String = "",
                        var payment_id:Int = -1,
+                       var appointment_url: String = "",
                        var appointment_status : Boolean = false) : Parcelable {
 
 }

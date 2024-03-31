@@ -115,10 +115,5 @@ dependencies {
     implementation("com.google.android.libraries.places:places:3.4.0")
     implementation("com.karumi:dexter:6.2.3")
     implementation("com.github.mancj:MaterialSearchBar:0.8.5")
-    // https://mvnrepository.com/artifact/io.agora.rtc/full-sdk
-    implementation ("io.agora.rtc:full-sdk:4.3.0")
-    implementation ("io.agora.rtm:rtm-sdk:1.5.3")
-    implementation ("com.google.firebase:firebase-analytics:21.6.1")
-    implementation ("com.google.firebase:firebase-auth:22.3.1")
     implementation ("com.google.android.gms:play-services-auth:21.0.0")
 }

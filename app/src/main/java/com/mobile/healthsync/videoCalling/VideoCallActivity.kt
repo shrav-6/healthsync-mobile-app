@@ -1,92 +1,88 @@
 package com.mobile.healthsync.videoCalling
 
-import androidx.appcompat.app.AppCompatActivity
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
-import com.mobile.healthsync.R
-import java.util.*
+import android.text.Spannable
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.view.View
-import io.agora.rtc.RtcEngine
-import io.agora.rtc.video.VideoCanvas
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-
-import android.Manifest
-import android.content.pm.PackageManager
-import android.view.SurfaceView
-import android.widget.FrameLayout
+import android.widget.Button
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
+import com.mobile.healthsync.R
+import kotlin.random.Random
+import android.widget.Toast
 
 class VideoCallActivity : AppCompatActivity() {
 
-    private lateinit var mRtcEngine: RtcEngine
-    private var mIsInCall = false
+    private val meetLinks = listOf(
+        "https://meet.google.com/opk-pbqh-pqv",
+        "https://meet.google.com/unq-ktip-voj",
+        "https://meet.google.com/vpe-cinr-pgf",
+        "https://meet.google.com/koz-wooa-dvf",
+        "https://meet.google.com/die-dpuo-ios",
+        "https://meet.google.com/eqv-ture-bfv",
+        "https://meet.google.com/fjr-ugxs-oii",
+        "https://meet.google.com/bif-hpvc-ezc"
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_video_call)
 
-        // Initialize Agora RTC Engine
-        initializeAgoraEngine()
+        val meetButton = findViewById<Button>(R.id.meetButton)
+        val selectedUrlTextView = findViewById<TextView>(R.id.selectedUrlTextView)
 
-        // Setup UI components
-        setupUI()
-    }
-
-    private fun initializeAgoraEngine() {
-        val appID = "YOUR_AGORA_APP_ID"
-        try {
-            mRtcEngine = RtcEngine.create(baseContext, appID, mRtcEventHandler)
-        } catch (e: Exception) {
-            e.printStackTrace()
+        meetButton.setOnClickListener {
+            val meetLink = generateRandomMeetLink()
+            openMeetLinkInBrowser(meetLink)
+            saveAppointment(meetLink)
+            setClickableLink(meetLink, selectedUrlTextView)
         }
     }
 
-    private fun setupUI() {
-        // Setup buttons
-        findViewById<View>(R.id.start_end_call_button).setOnClickListener {
-            toggleCall()
-        }
-
-        findViewById<View>(R.id.switch_camera_button).setOnClickListener {
-            switchCamera()
-        }
-
-        findViewById<View>(R.id.audio_toggle_button).setOnClickListener {
-            toggleAudio()
-        }
+    override fun onPause() {
+        super.onPause()
+        // App goes to the background
+        // You can perform any actions here when the app goes to the background
     }
 
-    private fun toggleCall() {
-        if (mIsInCall) {
-            mRtcEngine.leaveChannel()
-            mIsInCall = false
-        } else {
-            val channelName = intent.getStringExtra("CHANNEL_NAME")
-            mRtcEngine.joinChannel(null, channelName, "Extra Optional Data", 0)
-            mIsInCall = true
-        }
+    override fun onResume() {
+        super.onResume()
+        // App comes back to the foreground
+        // Show toast message saying "Appointment done"
+        Toast.makeText(this, "Appointment done", Toast.LENGTH_SHORT).show()
     }
 
-    private fun switchCamera() {
-        mRtcEngine.switchCamera()
+    private fun generateRandomMeetLink(): String {
+        val randomIndex = Random.nextInt(meetLinks.size)
+        return meetLinks[randomIndex]
     }
 
-    private fun toggleAudio() {
-        // Assuming isMuted is a boolean indicating whether audio is currently muted or not
-        val isMuted = true // Set to the appropriate value
-        mRtcEngine.muteLocalAudioStream(isMuted)
+    private fun openMeetLinkInBrowser(meetLink: String) {
+        val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(meetLink))
+        startActivity(browserIntent)
     }
 
-    private val mRtcEventHandler = object : io.agora.rtc.IRtcEngineEventHandler() {
-        override fun onJoinChannelSuccess(channel: String?, uid: Int, elapsed: Int) {
-            // Handle join channel success event
-        }
+    private fun saveAppointment(meetLink: String) {
+        println("Appointment saved: $meetLink")
+    }
 
-        override fun onFirstRemoteVideoDecoded(uid: Int, width: Int, height: Int, elapsed: Int) {
-            // Handle first remote video decoded event
+    private fun setClickableLink(link: String, textView: TextView) {
+        val text = "Appointment Link: $link"
+        val spannableString = SpannableString(text)
+        val clickableSpan = object : ClickableSpan() {
+            override fun onClick(widget: View) {
+                openMeetLinkInBrowser(link)
+            }
         }
-
-        override fun onUserOffline(uid: Int, reason: Int) {
-            // Handle user offline event
+        spannableString.setSpan(clickableSpan, 16, text.length, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        textView.apply {
+            movementMethod = LinkMovementMethod.getInstance()
+            setText(spannableString, TextView.BufferType.SPANNABLE)
         }
     }
 }
+
