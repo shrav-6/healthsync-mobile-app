@@ -145,4 +145,6 @@ dependencies {
     implementation("com.karumi:dexter:6.2.3")
     implementation("com.github.mancj:MaterialSearchBar:0.8.5")
 
+    testImplementation ("org.mockito:mockito-core:3.12.4")
+    androidTestImplementation ("org.mockito:mockito-core:3.12.4")
 }

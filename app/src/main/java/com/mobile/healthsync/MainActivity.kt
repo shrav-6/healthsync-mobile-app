@@ -18,6 +18,11 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+//        val intent = Intent(
+//                this@MainActivity,
+//                DoctorProfile::class.java
+//            )
+//        startActivity(intent)
 
         val from = intent.getStringExtra("from")
         if(from == "patient to do") {
