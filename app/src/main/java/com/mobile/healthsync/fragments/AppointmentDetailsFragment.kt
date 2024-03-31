@@ -1,14 +1,19 @@
 package com.mobile.healthsync.fragments
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.os.Environment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import android.widget.EditText
+import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -24,16 +29,24 @@ import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Patient
 import com.mobile.healthsync.model.Prescription
+import com.mobile.healthsync.model.Reviews
 import com.mobile.healthsync.repository.PatientRepository
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
 
-
+/**
+ * Fragment class responsible for displaying appointment details.
+ * Allows users to download prescription PDF, add prescriptions, and submit reviews.
+ * Author: Dev Patel
+ */
 class AppointmentDetailsFragment : Fragment() {
 
     private lateinit var downloadButton: Button
     private lateinit var addPrescriptionButton: Button
+    private lateinit var btnOpenReviewPopup: Button
+    private lateinit var db: FirebaseFirestore
+    private val TAG = "RatingAndReviewsActivity"
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +62,7 @@ class AppointmentDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
+        btnOpenReviewPopup = view.findViewById(R.id.btnReview)
 
         // Get appointment and doctor data from arguments
         val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
@@ -75,6 +89,13 @@ class AppointmentDetailsFragment : Fragment() {
             startActivity(intent)
         }
 
+        btnOpenReviewPopup.setOnClickListener {
+
+            // Get appointment data from arguments
+            val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+
+            showReviewPopup(it, appointment) // 'it' refers to the clicked button
+        }
 
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
@@ -86,6 +107,64 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    /**
+     * Shows a popup dialog for submitting reviews.
+     * @param view The view from which the popup dialog is triggered.
+     * @param appointment The appointment for which the review is being submitted.
+     * Author: Zeel Ravalani
+     */
+    fun showReviewPopup(view: View, appointment: Appointment?) {
+        val dialogBuilder = AlertDialog.Builder(requireContext())
+        val inflater = LayoutInflater.from(requireContext())
+        val dialogView = inflater.inflate(R.layout.review_popup, null)
+        dialogBuilder.setView(dialogView)
+
+        val etComment = dialogView.findViewById<EditText>(R.id.etComment)
+        val ratingBar = dialogView.findViewById<RatingBar>(R.id.ratingBar)
+        val btnSubmit = dialogView.findViewById<Button>(R.id.btnSubmit)
+
+        val alertDialog = dialogBuilder.create()
+        alertDialog.show()
+
+        btnSubmit.setOnClickListener {
+            val comment = etComment.text.toString()
+            val stars = ratingBar.rating.toDouble()
+            if (appointment != null) {
+                val review =  Reviews(comment, appointment.doctor_id, appointment.patient_id, stars)
+                saveReviewToFirebase(review)
+            }
+
+            alertDialog.dismiss()
+        }
+    }
+
+    /**
+     * Saves the review to Firebase Firestore.
+     * @param review The review object to be saved.
+     * Author: Zeel Ravalani
+     */
+    private fun saveReviewToFirebase(review: Reviews) {
+        // Initialize Firebase Firestore
+        db = FirebaseFirestore.getInstance()
+        db.collection("reviews").add(review)
+            .addOnSuccessListener { documentReference ->
+                // Review saved successfully
+                Log.d(TAG, "Review saved successfully with ID: ${documentReference.id}")
+                Toast.makeText(requireContext(), "Review submitted successfully", Toast.LENGTH_SHORT).show()
+            }
+            .addOnFailureListener { e ->
+                // Handle errors
+                Log.e(TAG, "Error saving review", e)
+                Toast.makeText(requireContext(), "Failed to submit review", Toast.LENGTH_SHORT).show()
+            }
+    }
+
+    /**
+     * Downloads the prescription PDF for the given appointment.
+     * @param appointment The appointment for which the prescription is being downloaded.
+     * @param doctor The doctor associated with the appointment.
+     * Author: Zeel Ravalani
+     */
     private fun downloadPrescriptionPdf(appointment: Appointment, doctor: Doctor) {
         val firestore = FirebaseFirestore.getInstance()
         println("appointment_id: " + appointment.appointment_id)
@@ -123,6 +202,13 @@ class AppointmentDetailsFragment : Fragment() {
             }
     }
 
+    /**
+     * Generates the prescription PDF for the given prescription.
+     * @param prescription The prescription object.
+     * @param patientId The ID of the patient associated with the prescription.
+     * @param doctor The doctor associated with the prescription.
+     * Author: Zeel Ravalani
+     */
     private fun generatePrescriptionPdf(prescription: Prescription, patientId: Int, doctor: Doctor) {
         println("generatePrescriptionPdf: $prescription")
         val doctorName = "Dr. " + doctor.doctor_info.name
@@ -177,6 +263,12 @@ class AppointmentDetailsFragment : Fragment() {
 
     }
 
+    /**
+     * Adds prescription details to the PDF document.
+     * @param document The PDF document.
+     * @param prescription The prescription object.
+     * Author: Zeel Ravalani
+     */
     private fun addPrescriptionDetails(document: Document, prescription: Prescription) {
         println("addPrescriptionDetails: $prescription")
         // First, check if medicines is not null
@@ -224,6 +316,15 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    /**
+     * Adds doctor and patient details to the PDF document.
+     * @param document The PDF document.
+     * @param doctorName The name of the doctor.
+     * @param doctorSpeciality The specialty of the doctor.
+     * @param doctorEmail The email of the doctor.
+     * @param patient The patient associated with the prescription.
+     * Author: Zeel Ravalani
+     */
     private fun addDoctorLetterhead(
         document: Document,
         doctorName: String,
@@ -255,6 +356,13 @@ class AppointmentDetailsFragment : Fragment() {
         private const val APPOINTMENT_KEY = "appointment"
         private const val DOCTOR_KEY = "doctor"
 
+        /**
+         * Creates a new instance of AppointmentDetailsFragment.
+         * @param appointment The appointment object.
+         * @param doctor The doctor object.
+         * @return A new instance of AppointmentDetailsFragment.
+         * Author: Dev Patel
+         */
         fun newInstance(appointment: Appointment, doctor: Doctor): AppointmentDetailsFragment {
             val fragment = AppointmentDetailsFragment()
             val args = Bundle()
