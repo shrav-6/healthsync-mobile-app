@@ -24,9 +24,10 @@ class BookSlotAdapter(val slotList : List<Slot>, val activity : Activity): Recyc
                 if(isValid(slotList[adapterPosition])) {
                     if(::selectedSlot.isInitialized)
                     {
-                        selectedSlotCard.setCardBackgroundColor(itemView.resources.getColor(android.R.color.white))
+                        selectedSlotCard.setBackgroundColor(itemView.resources.getColor(android.R.color.white))
                     }
-                    slotcard.setCardBackgroundColor(itemView.resources.getColor(R.color.teal_200))
+                    slotcard.setBackgroundColor(itemView.resources.getColor(R.color.pastelBlue))
+
                     selectedSlotCard = slotcard
                     selectedSlot = slotList[adapterPosition]
                 }

@@ -1,6 +1,8 @@
 package com.mobile.healthsync.fragments
 
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -12,7 +14,9 @@ import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -92,6 +96,8 @@ class AppointmentDetailsFragment : Fragment() {
 
         downloadButton.setOnClickListener {
             if (appointment != null && doctor != null) {
+                Log.d("println", "dn bttion  :   sdjhv")
+
                 downloadPrescriptionPdf(appointment, doctor)
             }
         }
@@ -283,6 +289,31 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    /*override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, continue with downloading the PDF
+                // Retrieve appointment and doctor data again
+                val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+                val doctor: Doctor? = arguments?.getParcelable(DOCTOR_KEY)
+                if (appointment != null && doctor != null) {
+                    downloadPrescriptionPdf(appointment, doctor)
+                }
+            } else {
+                // Permission denied, show a message or handle it accordingly
+                Toast.makeText(
+                    requireContext(),
+                    "Permission denied, cannot download prescription",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }*/
 
     /**
      * Shows a popup dialog for submitting reviews.
@@ -336,6 +367,24 @@ class AppointmentDetailsFragment : Fragment() {
             }
     }
 
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission granted, proceed with PDF download
+                // Your existing PDF download logic goes here
+                // ...
+                Toast.makeText(requireContext(), "Downloading prescription PDF...", Toast.LENGTH_SHORT).show()
+            } else {
+                // Permission denied, show a message
+                Toast.makeText(
+                    requireContext(),
+                    "Permission denied, cannot download prescription",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     /**
      * Downloads the prescription PDF for the given appointment.
      * @param appointment The appointment for which the prescription is being downloaded.
@@ -344,22 +393,27 @@ class AppointmentDetailsFragment : Fragment() {
      */
     private fun downloadPrescriptionPdf(appointment: Appointment, doctor: Doctor) {
         val firestore = FirebaseFirestore.getInstance()
-        println("appointment_id: " + appointment.appointment_id)
+        Log.d("println", "${appointment.appointment_id}  :   sdjhv")
         val appointmentId = appointment.appointment_id
         val prescriptionRef = firestore.collection("prescriptions")
 
             .whereEqualTo("appointment_id", appointmentId)
             .get()
             .addOnSuccessListener { querySnapshot ->
+                Log.d("println", "${appointment.appointment_id}  :   addOnSuccessListener")
                 println("addOnSuccessListener: " + appointmentId)
+                Log.d("println", "${querySnapshot.documents.size}  :   addOnSuccessListener")
                 for (document in querySnapshot.documents) {
+                    Log.d("println", "${appointment.appointment_id}  :   in for")
                     println("for: " + appointmentId)
                     val prescription = document.toObject(Prescription::class.java)
                     if (prescription != null) {
+                        Log.d("println", "${appointment.appointment_id}  :  downloadPrescriptionPdf")
                         println("downloadPrescriptionPdf: $prescription")
-                        generatePrescriptionPdf(prescription, appointment.patient_id, doctor)
+
+                        // Check permissions before downloading the PDF
+                            generatePrescriptionPdf(prescription, appointment.patient_id, doctor)
                     } else {
-                        println("else: " + appointmentId)
                         Toast.makeText(
                             requireContext(),
                             "Prescription not found for the given appointment ID",
@@ -379,6 +433,23 @@ class AppointmentDetailsFragment : Fragment() {
             }
     }
 
+    private fun checkPermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // Function to request required permissions
+    /*private fun requestPermissions() {
+        requestPermissions(
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            PERMISSION_REQUEST_CODE
+        )
+    }*/
+
+
+
     /**
      * Generates the prescription PDF for the given prescription.
      * @param prescription The prescription object.
@@ -394,12 +465,11 @@ class AppointmentDetailsFragment : Fragment() {
 
         val patientRepository = PatientRepository(requireContext())
 
-        patientRepository.getPatientData(patientId.toString()) { patient ->
+        patientRepository.getPatientWithPatientId(patientId) { patient ->
             if (patient != null) {
-
-
+                Log.d("println", "${patient.patientDetails.name}  :   sdjhv")
                 val pdfFile = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                     "prescription.pdf"
                 )
                 // Initialize Document with A4 page size
@@ -427,9 +497,10 @@ class AppointmentDetailsFragment : Fragment() {
 
                 // Open the downloaded PDF
                 val pdfUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.fileprovider", pdfFile)
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(pdfUri, "application/pdf")
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(pdfUri, "application/pdf")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
                 startActivity(intent)
 
             } else {
@@ -439,6 +510,7 @@ class AppointmentDetailsFragment : Fragment() {
         }
 
     }
+
 
     /**
      * Adds prescription details to the PDF document.
@@ -638,6 +710,7 @@ class AppointmentDetailsFragment : Fragment() {
     companion object {
         private const val APPOINTMENT_KEY = "appointment"
         private const val DOCTOR_KEY = "doctor"
+        //private const val PERMISSION_REQUEST_CODE = 100
 
         /**
          * Creates a new instance of AppointmentDetailsFragment.

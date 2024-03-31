@@ -2,8 +2,10 @@ package com.mobile.healthsync
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.MenuItem
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
@@ -12,14 +14,17 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.mobile.healthsync.repository.DoctorRepository
 import com.mobile.healthsync.views.doctorDashboard.DoctorDashboard
 import com.mobile.healthsync.views.doctorDashboard.DoctorReviewsActivity
 import com.mobile.healthsync.views.doctorProfile.DoctorProfile
 import com.mobile.healthsync.views.login.LoginActivity
+import com.squareup.picasso.Picasso
 
 open class BaseActivityForDoctor : AppCompatActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var doctorRepository: DoctorRepository
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
@@ -38,11 +43,21 @@ open class BaseActivityForDoctor : AppCompatActivity() {
         val navigationHeaderView = findViewById<NavigationView>(R.id.navigationView1).getHeaderView(0)
         val nameOfDoctorTextView = navigationHeaderView.findViewById<TextView>(R.id.name_of_doctor)
         val doctorIdTextView = navigationHeaderView.findViewById<TextView>(R.id.doctorId)
+        val photo = navigationHeaderView.findViewById<ImageView>(R.id.profileImage)
 
         //nameOfPatientTextView.text = "Patient Name"
         nameOfDoctorTextView.text = sharedPreferences.getString("doctor_name","Doctor Name").toString()
         doctorIdTextView.text = sharedPreferences.getString("doctor_id","123").toString()
 
+        doctorRepository = DoctorRepository(this)
+
+        doctorRepository.getPhotoForDoctor(sharedPreferences.getString("doctor_documentid", "").toString()) {
+            if (it == "null") {
+                photo.setImageResource(R.drawable.user)
+            } else {
+                Picasso.get().load(Uri.parse(it)).into(photo)
+            }
+        }
 
         setupToolbar() // Call the setupToolbar method to initialize drawer navigation
     }

@@ -30,7 +30,7 @@
     <item
         android:id="@+id/RSVP"
         android:icon="@drawable/icons8_rsvp"
-        android:title="RSVP"/>
+        android:title="Events"/>
     <item
         android:id="@+id/profile"
         android:icon="@drawable/icons8_user"

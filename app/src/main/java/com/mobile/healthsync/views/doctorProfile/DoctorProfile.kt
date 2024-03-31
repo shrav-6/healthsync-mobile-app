@@ -13,7 +13,11 @@ import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.repository.DoctorRepository
 import com.squareup.picasso.Picasso
 
-
+/**
+ * Activity to display and manage the profile of a doctor.
+ * This activity allows the doctor to view their profile information,
+ * edit their profile, and upload a profile image.
+ */
 class DoctorProfile : BaseActivityForDoctor() {
 
     private lateinit var documentId: String

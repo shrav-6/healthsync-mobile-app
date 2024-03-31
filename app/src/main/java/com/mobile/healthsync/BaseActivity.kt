@@ -2,9 +2,10 @@ package com.mobile.healthsync
 
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.view.MenuItem
-import android.widget.EditText
 import android.widget.FrameLayout
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.LayoutRes
@@ -13,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.mobile.healthsync.repository.PatientRepository
 import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.login.LoginActivity
 import com.mobile.healthsync.views.maps.PermissionsActivity
@@ -21,11 +23,12 @@ import com.mobile.healthsync.views.patientDashboard.PatientDashboard
 import com.mobile.healthsync.views.patientDashboard.PatientInsights
 import com.mobile.healthsync.views.patientDashboard.PatientToDo
 import com.mobile.healthsync.views.patientProfile.PatientProfile
-import com.mobile.healthsync.views.signUp.SignupActivity
+import com.squareup.picasso.Picasso
 
 open class BaseActivity : AppCompatActivity() {
 
     private lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var patientRepository: PatientRepository
 
     override fun setContentView(@LayoutRes layoutResID: Int) {
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
@@ -43,11 +46,21 @@ open class BaseActivity : AppCompatActivity() {
         val navigationHeaderView = findViewById<NavigationView>(R.id.navigationView).getHeaderView(0)
         val nameOfPatientTextView = navigationHeaderView.findViewById<TextView>(R.id.name_of_patient)
         val patientIdTextView = navigationHeaderView.findViewById<TextView>(R.id.patientId)
+        val photo = navigationHeaderView.findViewById<ImageView>(R.id.profileImage)
 
         //nameOfPatientTextView.text = "Patient Name"
         nameOfPatientTextView.text = sharedPreferences.getString("patient_name","Patient Name").toString()
         patientIdTextView.text = sharedPreferences.getString("patient_id","123").toString()
 
+        patientRepository = PatientRepository(this)
+
+        patientRepository.getPhotoForPatient(sharedPreferences.getString("patient_documentid", "").toString()) {
+            if (it == "null") {
+                photo.setImageResource(R.drawable.user)
+            } else {
+                Picasso.get().load(Uri.parse(it)).into(photo)
+            }
+        }
 
         setupToolbar() // Call the setupToolbar method to initialize drawer navigation
     }
