@@ -67,8 +67,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Redeem Points"
-                android:layout_marginTop="16dp"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+                android:layout_marginTop="16dp"/>
 
             <TextView
                 android:id="@+id/tvTotalAmount"
@@ -83,8 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Proceed to Pay"
-                android:layout_marginTop="16dp"
-                style="@style/Widget.MaterialComponents.Button.UnelevatedButton"/>
+                android:layout_marginTop="16dp"/>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
