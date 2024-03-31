@@ -32,12 +32,14 @@
             <!-- Doctor Profile Image -->
 
             <!-- Doctor Name -->
+
             <com.google.android.material.imageview.ShapeableImageView
                 android:id="@+id/doctorProfileImage"
                 android:layout_width="200dp"
                 android:layout_height="200dp"
                 android:padding="5dp"
                 android:scaleType="centerCrop"
+                android:layout_marginTop="80dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -58,13 +60,14 @@
 
             <EditText
                 android:id="@+id/editDoctorName"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your text here"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDoctorName" />
+                app:layout_constraintTop_toBottomOf="@+id/labelDoctorName"
+                android:background="@drawable/rounded_edittext"/>
 
             <!-- Doctor Specialization -->
             <TextView
@@ -82,13 +85,14 @@
 
             <EditText
                 android:id="@+id/editDoctorSpecialization"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your text here"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDoctorSpecialization" />
+                app:layout_constraintTop_toBottomOf="@+id/labelDoctorSpecialization"
+                android:background="@drawable/rounded_edittext"/>
 
             <!-- Doctor Email -->
             <TextView
@@ -129,13 +133,14 @@
 
             <EditText
                 android:id="@+id/editDoctorAge"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your text here"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDoctorAge" />
+                app:layout_constraintTop_toBottomOf="@+id/labelDoctorAge"
+                android:background="@drawable/rounded_edittext"/>
 
             <!-- Doctor Gender -->
             <TextView
@@ -176,13 +181,14 @@
 
             <EditText
                 android:id="@+id/editDoctorFee"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your text here"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDoctorAge" />
+                app:layout_constraintTop_toBottomOf="@+id/labelDoctorAge"
+                android:background="@drawable/rounded_edittext"/>
 
             <!-- Doctor Experience -->
             <TextView
@@ -200,13 +206,14 @@
 
             <EditText
                 android:id="@+id/editDoctorExperience"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:hint="Enter your text here"
                 android:textSize="20sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/labelDoctorExperience" />
+                app:layout_constraintTop_toBottomOf="@+id/labelDoctorExperience"
+                android:background="@drawable/rounded_edittext"/>
 
             <!-- Doctor Availability -->
             <TextView
