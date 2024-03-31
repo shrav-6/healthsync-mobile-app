@@ -10,9 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
+import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.maps.PermissionsActivity
 import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
 import com.mobile.healthsync.views.patientDashboard.PatientDashboard
+import com.mobile.healthsync.views.patientDashboard.PatientInsights
+import com.mobile.healthsync.views.patientDashboard.PatientToDo
 import com.mobile.healthsync.views.patientProfile.PatientProfile
 import com.mobile.healthsync.views.signUp.SignupActivity
 
@@ -62,15 +65,15 @@ open class BaseActivity : AppCompatActivity() {
                 R.id.appointments -> {
                     startActivity(Intent(this, PatientAppointmentListActivity::class.java))
                 }
-                /*R.id.TODO -> {
-                    startActivity(Intent(this, PatientDashboard::class.java))
-                }*/
-                /*R.id.RSVP -> {
-                    startActivity(Intent(this, PatientProfile::class.java))
-                }*/
-                /*R.id.Insights -> {
-                    startActivity(Intent(this, PatientProfile::class.java))
-                }*/
+                R.id.TODO -> {
+                    startActivity(Intent(this, PatientToDo::class.java))
+                }
+                R.id.RSVP -> {
+                    startActivity(Intent(this, EventsActivity::class.java))
+                }
+                R.id.Insights -> {
+                    startActivity(Intent(this, PatientInsights::class.java))
+                }
                 R.id.profile -> {
                     startActivity(Intent(this, PatientProfile::class.java))
                 }
