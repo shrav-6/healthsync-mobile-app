@@ -32,7 +32,7 @@
         android:layout_below="@id/textDoctorName"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:text="Specialty: "
+        android:text="Speciality: "
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -69,11 +69,22 @@
         android:textSize="16sp"
         android:textStyle="bold" />
 
+    <TextView
+        android:id="@+id/selectedUrlTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/textPayment"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="16dp"
+        android:text="Appointment URL: "
+        android:textSize="16sp"
+        android:textStyle="bold" />
+
     <Button
         android:id="@+id/btnReview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/textPayment"
+        android:layout_below="@id/selectedUrlTextView"
         android:layout_marginStart="16dp"
         android:layout_marginTop="60dp"
         android:layout_marginEnd="16dp"
