@@ -17,6 +17,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:targetApi="31">
+
         <!-- Define file provider -->
         <provider
             android:name="androidx.core.content.FileProvider"
@@ -27,9 +28,10 @@
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/file_paths" />
         </provider>
-        <activity
-            android:name=".views.review.DoctorReviewsActivity"
-            android:exported="false" />
+
+<!--        <activity-->
+<!--            android:name=".views."-->
+<!--            android:exported="false" />-->
         <activity
             android:name=".views.prescription.PrescriptionFormActivity"
             android:exported="false" />
@@ -90,6 +92,9 @@
             android:name=".views.patientDashboard.PatientToDo"
             android:exported="false" />
         <activity
+            android:name=".views.doctorDashboard.DoctorReviewsActivity"
+            android:exported="false" />
+        <activity
             android:name=".views.login.LoginActivity"
             android:exported="false"
             android:theme="@style/AppTheme" />
@@ -120,4 +125,5 @@
             </intent-filter>
         </activity>
     </application>
+
 </manifest>

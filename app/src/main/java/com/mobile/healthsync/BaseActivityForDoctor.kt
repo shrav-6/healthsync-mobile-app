@@ -13,12 +13,9 @@ import androidx.appcompat.widget.Toolbar
 import androidx.drawerlayout.widget.DrawerLayout
 import com.google.android.material.navigation.NavigationView
 import com.mobile.healthsync.views.doctorDashboard.DoctorDashboard
+import com.mobile.healthsync.views.doctorDashboard.DoctorReviewsActivity
 import com.mobile.healthsync.views.doctorProfile.DoctorProfile
-import com.mobile.healthsync.views.events.EventsActivity
 import com.mobile.healthsync.views.login.LoginActivity
-import com.mobile.healthsync.views.patientDashboard.PatientDashboard
-import com.mobile.healthsync.views.patientProfile.PatientProfile
-import com.mobile.healthsync.views.review.DoctorReviewsActivity
 
 open class BaseActivityForDoctor : AppCompatActivity() {
 
@@ -76,9 +73,6 @@ open class BaseActivityForDoctor : AppCompatActivity() {
                 R.id.reviews -> {
                     startActivity(Intent(this, DoctorReviewsActivity::class.java))
                 }
-//                R.id.events -> {
-//                    startActivity(Intent(this, EventsActivity::class.java))
-//                }
                 R.id.profile -> {
                     startActivity(Intent(this, DoctorProfile::class.java))
                 }
