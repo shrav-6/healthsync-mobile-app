@@ -20,7 +20,6 @@ data class Prescription(
     var medicines: HashMap<String, Medicine>? = hashMapOf(),
 ) : Serializable
 {
-
     data class Medicine(
         @PropertyName("name")
         @set:PropertyName("name")
@@ -42,8 +41,6 @@ data class Prescription(
         @get:PropertyName("schedule")
         var schedule: DaySchedule = DaySchedule(),
     ) : Serializable {
-
-
         data class DaySchedule(
             @PropertyName("morning")
             @set:PropertyName("morning")

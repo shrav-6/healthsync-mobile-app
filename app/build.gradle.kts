@@ -48,11 +48,10 @@ android {
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
+            excludes += "META-INF/NOTICE.md"
+            excludes+="META-INF/LICENSE.md"
         }
     }
-//    viewBinding{
-//        enabled=true
-//    }
 }
 
 dependencies {
@@ -65,11 +64,16 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
+    implementation ("com.google.firebase:firebase-database")
 
     implementation("com.squareup.picasso:picasso:2.71828")
 
-    implementation(platform("com.google.firebase:firebase-bom:32.7.2"))
+
     implementation("com.google.firebase:firebase-firestore")
+    implementation ("com.sun.mail:android-mail:1.6.7")
+    implementation ("com.sun.mail:android-activation:1.6.7")
+    implementation ("com.google.firebase:firebase-messaging")
+
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("com.google.android.material:material:1.11.0")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
@@ -89,6 +93,7 @@ dependencies {
     implementation("com.google.firebase:firebase-messaging-ktx:23.4.1")
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
+    implementation("com.google.firebase:firebase-database-ktx:20.3.1")
     testImplementation("junit:junit:4.13.2")
     testImplementation("org.mockito:mockito-core:4.9.0")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -97,6 +102,18 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4")
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
+    implementation ("com.squareup.moshi:moshi:1.12.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
+    implementation ("com.squareup.moshi:moshi-kotlin:1.13.0")
+
+
+
+
+
+
 
     //Glide
     implementation("com.github.bumptech.glide:glide:4.13.0")
