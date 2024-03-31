@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.firestore.FirebaseFirestore
+import com.mobile.healthsync.BaseActivityForDoctor
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.AppointmentAdapter
 import com.mobile.healthsync.model.Appointment
@@ -19,7 +20,7 @@ import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DoctorDashboard : AppCompatActivity() {
+class DoctorDashboard : BaseActivityForDoctor() {
     private lateinit var calendarView: LinearLayout
     private lateinit var appointmentsRecyclerView: RecyclerView
     private lateinit var adapter: AppointmentAdapter
