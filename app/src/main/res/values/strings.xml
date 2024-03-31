@@ -105,6 +105,7 @@
     <string name="email_address">Email Address</string>
     <string name="patient_login">Patient Login</string>
     <string name="sign_up">Sign Up</string>
+    <string name="edit_patient_profile">Edit patient profile</string>
     <string-array name="week_days">
         <item>Monday</item>
         <item>Tuesday</item>

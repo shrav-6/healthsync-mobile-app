@@ -18,7 +18,6 @@ import com.mobile.healthsync.model.Slot
 import com.mobile.healthsync.repository.AppointmentRepository
 import com.mobile.healthsync.repository.DoctorRepository
 import com.wdullaer.materialdatetimepicker.date.DatePickerDialog
-import com.wdullaer.materialdatetimepicker.date.DatePickerDialog.OnDateSetListener
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
