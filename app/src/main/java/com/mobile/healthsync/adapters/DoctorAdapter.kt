@@ -6,14 +6,14 @@ import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Doctor
-import com.mobile.healthsync.views.patientBooking.BookingInfoActivity
 import com.squareup.picasso.Picasso
+import com.mobile.healthsync.views.patientDashboard.DoctorInfoActivity
+
 
 class DoctorAdapter(
     private val doctors: MutableList<Doctor>,
@@ -21,15 +21,34 @@ class DoctorAdapter(
     var activity: Activity,
 ) : RecyclerView.Adapter<DoctorAdapter.DoctorViewHolder>()
 {
-    inner class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
-    {
-        var bookaptbtn: Button = itemView.findViewById(R.id.bookAppointmentButton)
-        init {
+//    inner class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+//    {
+//        var bookaptbtn: Button = itemView.findViewById(R.id.bookAppointmentButton)
+//        init {
+//
+//            bookaptbtn.setOnClickListener(){
+//                val intent  = Intent(activity, BookingInfoActivity::class.java)
+//                intent.putExtra("doctor_id",doctors[adapterPosition].doctor_id)
+//                //intent.putExtra("patient_id",patient_id)
+//                activity.startActivity(intent)
+//            }
+//        }
+//
+//    }
 
-            bookaptbtn.setOnClickListener(){
-                val intent  = Intent(activity, BookingInfoActivity::class.java)
-                intent.putExtra("doctor_id",doctors[adapterPosition].doctor_id)
-                //intent.putExtra("patient_id",patient_id)
+    inner class DoctorViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView), View.OnClickListener {
+        init {
+            // Set click listener on the entire item view
+            itemView.setOnClickListener(this)
+        }
+
+        override fun onClick(view: View) {
+            // Handle item click event
+            val position = adapterPosition
+            if (position != RecyclerView.NO_POSITION) {
+                val intent = Intent(activity, DoctorInfoActivity::class.java)
+                intent.putExtra("doctor_id", doctors[position].doctor_id)
+                //intent.putExtra("patient_id", patient_id)
                 activity.startActivity(intent)
             }
         }

@@ -1,5 +1,6 @@
 package com.mobile.healthsync.views.patientDashboard
 
+import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -94,7 +95,9 @@ class DoctorInfoActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_info)
 
-        var patient_id = intent.extras?.getInt("patient_id", -1) ?: -1
+        val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
+
+        var patient_id = sharedPreferences.getString("patient_id", "251")?.toInt() ?: 251
         var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
 
 

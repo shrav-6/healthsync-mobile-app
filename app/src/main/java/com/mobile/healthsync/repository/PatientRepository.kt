@@ -124,6 +124,26 @@ class PatientRepository(private val context: Context) {
             }
     }
 
+    fun getPhotoForPatient(documentID: String, callback: (String?) -> Unit) {
+        db.collection("patients")
+            .document(documentID)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document.exists()) {
+                        val imageURL = document.toObject(Patient::class.java)?.patientDetails?.photo
+                        callback(imageURL)
+                    }
+                    callback("null")
+                } else {
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching event data: $exceptionMessage")
+                    callback("null")
+                }
+            }
+    }
+
     private fun showToast(message: String) {
         // Show a toast message (you can replace this with your preferred error handling mechanism)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
