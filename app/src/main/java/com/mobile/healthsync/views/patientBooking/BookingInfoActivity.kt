@@ -6,7 +6,6 @@ import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.BaseActivity
@@ -23,7 +22,7 @@ import java.util.Calendar
 import java.util.Date
 import java.util.Locale
 
-class BookingInfoActivity : BaseActivity(),OnDateSetListener {
+class BookingInfoActivity : BaseActivity(), DatePickerDialog.OnDateSetListener {
 
     private val SUCCESS :Int = 1
     private val FAILURE :Int = 0

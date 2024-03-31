@@ -2,8 +2,9 @@ package com.mobile.healthsync.views.patientDashboard
 
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.SearchView
-import androidx.appcompat.app.AppCompatActivity
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.mobile.healthsync.BaseActivity
@@ -52,7 +53,12 @@ class PatientDashboard : BaseActivity() {
             }
         })
     }
-
+    fun onRootLayoutClick(view: View) {
+        // This method will be called when the root layout is clicked
+        // Implement any logic you want to execute when the root layout is clicked
+        // For example, you can show a toast message
+        Toast.makeText(this, "Root layout clicked", Toast.LENGTH_SHORT).show()
+    }
     private fun filterDoctorsList(query: String?): MutableList<Doctor>{
         // Implement your logic to filter the original list based on the query
         var filteredList: MutableList<Doctor> = mutableListOf()

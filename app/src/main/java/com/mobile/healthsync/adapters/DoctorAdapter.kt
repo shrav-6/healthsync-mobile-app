@@ -52,7 +52,7 @@ class DoctorAdapter(
         val tvConsultationFee = holder.itemView.findViewById<TextView>(R.id.tvConsultationFee)
 
         tvDoctorName.text = currDoctor.doctor_info.name
-        tvExperience.text = currDoctor.doctor_info.years_of_practice.toString()
+        tvExperience.text = "Years of Practice: ${currDoctor.doctor_info.years_of_practice.toString()}"
 
         tvConsultationFee.text = "${currDoctor.doctor_info.consultation_fees}$/consultation"
 //        tvDoctorName.text = currDoctor.email
