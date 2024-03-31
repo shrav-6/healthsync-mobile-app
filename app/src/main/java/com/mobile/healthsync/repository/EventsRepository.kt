@@ -5,6 +5,11 @@ import android.widget.Toast
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.model.Event
 
+/**
+ * Repository class responsible for handling operations related to events in Firestore.
+ *
+ * @param context The context of the application.
+ */
 class EventsRepository(private val context: Context) {
 
     private val db: FirebaseFirestore
@@ -14,6 +19,13 @@ class EventsRepository(private val context: Context) {
         db = FirebaseFirestore.getInstance()
     }
 
+    /**
+     * Retrieves events from Firestore collection based on a specific field value.
+     *
+     * @param fieldName The name of the field to filter events.
+     * @param fieldValue The value to match for the specified field.
+     * @param callback Callback function to handle the retrieved list of events.
+     */
     fun getEventsBySpecificField(fieldName: String, fieldValue: String, callback: (List<Event>) -> Unit) {
         db.collection("events")
             .whereEqualTo(fieldName, fieldValue)
@@ -34,6 +46,11 @@ class EventsRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Retrieves all events from Firestore collection.
+     *
+     * @param callback Callback function to handle the retrieved list of events.
+     */
     fun getAllEvents(callback: (List<Event>) -> Unit) {
         db.collection("events")
             .get()
@@ -50,6 +67,11 @@ class EventsRepository(private val context: Context) {
             }
     }
 
+    /**
+     * Displays a toast message with the provided message.
+     *
+     * @param message The message to display in the toast.
+     */
     private fun showToast(message: String) {
         // Show a toast message (you can replace this with your preferred error handling mechanism)
         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()

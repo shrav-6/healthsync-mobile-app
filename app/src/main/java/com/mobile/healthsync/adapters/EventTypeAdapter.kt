@@ -9,13 +9,24 @@ import com.mobile.healthsync.model.Event
 import com.mobile.healthsync.views.events.EventInfoActivity
 import com.mobile.healthsync.views.events.EventViewHolder
 
+/**
+ * Adapter for populating RecyclerView with Event items.
+ *
+ * @param events List of events to be displayed.
+ */
 class EventTypeAdapter(private val events: List<Event>) : RecyclerView.Adapter<EventViewHolder>() {
 
+    /**
+     * Called when RecyclerView needs a new ViewHolder of the given type to represent an item.
+     */
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): EventViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.activity_event_view_holder, parent, false)
         return EventViewHolder(view)
     }
 
+    /**
+     * Called by RecyclerView to display the data at the specified position.
+     */
     override fun onBindViewHolder(holder: EventViewHolder, position: Int) {
         val currentEvent = events[position]
 
@@ -46,6 +57,9 @@ class EventTypeAdapter(private val events: List<Event>) : RecyclerView.Adapter<E
         }
     }
 
+    /**
+     * Returns the total number of items in the data set held by the adapter.
+     */
     override fun getItemCount(): Int {
         return events.size
     }

@@ -8,6 +8,9 @@ import com.google.android.material.tabs.TabLayoutMediator
 import com.mobile.healthsync.R
 import com.mobile.healthsync.adapters.EventsAdapter
 
+/**
+ * Activity for displaying various events using ViewPager2 and TabLayout.
+ */
 class EventsActivity : AppCompatActivity() {
     private val eventsTabs = arrayOf("Info Sessions", "Donations", "Fundraiser", "Volunteer")
     override fun onCreate(savedInstanceState: Bundle?) {
