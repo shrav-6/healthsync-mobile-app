@@ -1,17 +1,30 @@
 package com.mobile.healthsync.model
 
+import android.os.Parcelable
 import com.google.firebase.firestore.PropertyName
+import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
-
+/**
+ * Data class representing a Doctor entity.
+ *
+ * @param doctor_id The unique identifier of the doctor.
+ * @param availability The availability schedule of the doctor.
+ * @param doctor_info Information about the doctor.
+ * @param email The email of the doctor.
+ * @param password The password of the doctor.
+ * @param doctor_speciality The specialty of the doctor.
+ * @param token The authentication token of the doctor.
+ */
+@Parcelize
 data class Doctor(
-    @get:PropertyName("availability")
-    @set:PropertyName("availability")
-    var availability: Map<String, Map<String, String>>? = null,
-
     @get:PropertyName("doctor_id")
     @set:PropertyName("doctor_id")
-    var doctor_id: List<Any> = emptyList(),
+    var doctor_id: Int = -1,
+
+    @get:PropertyName("availability")
+    @set:PropertyName("availability")
+    var availability: Map<String,Availability>? = null,
 
     @get:PropertyName("doctor_info")
     @set:PropertyName("doctor_info")
@@ -25,9 +38,29 @@ data class Doctor(
     @set:PropertyName("password")
     var password: String = "",
 
-    var doctor_speciality: String = "General Medicine"
-) : Serializable {
+    @get:PropertyName("doctor_speciality")
+    @set:PropertyName("doctor_speciality")
+    var doctor_speciality: String = "General Medicine",
 
+    @get:PropertyName("token")
+    @set:PropertyName("token")
+    var token: String = ""
+
+) : Serializable, Parcelable {
+
+    /**
+     * Data class representing additional information about the doctor.
+     *
+     * @param age The age of the doctor.
+     * @param avg_ratings The average ratings of the doctor.
+     * @param consultation_fees The consultation fees of the doctor.
+     * @param gender The gender of the doctor.
+     * @param license_expiry The expiry date of the doctor's license.
+     * @param license_no The license number of the doctor.
+     * @param name The name of the doctor.
+     * @param photo The photo URL of the doctor.
+     * @param years_of_practice The years of practice of the doctor.
+     */
     data class DoctorInfo(
         @get:PropertyName("age")
         @set:PropertyName("age")
@@ -65,4 +98,6 @@ data class Doctor(
         @set:PropertyName("years_of_practice")
         var years_of_practice: Int = 0
     ) : Serializable
+
+
 }

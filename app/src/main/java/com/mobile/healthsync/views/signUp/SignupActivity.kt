@@ -2,26 +2,38 @@ package com.mobile.healthsync.views.signUp
 
 import android.annotation.SuppressLint
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
-import android.util.Log
-import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.appcompat.app.AppCompatActivity
 import com.mobile.healthsync.R
+import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Patient
-import com.mobile.healthsync.model.PatientDetails
-import com.mobile.healthsync.uploadToDatabase
+import com.mobile.healthsync.model.Patient.PatientDetails
+import com.mobile.healthsync.views.patientDashboard.PatientToDo
+import android.content.Context
+import android.widget.Toast
+import com.mobile.healthsync.repository.SignupRepository
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
+import java.util.UUID
+import com.mobile.healthsync.views.login.LoginActivity
+
 
 class SignupActivity : AppCompatActivity() {
     private lateinit var imageViewProfile: ImageView
+    lateinit var sharedPreferences: SharedPreferences
 
     @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_signup)
+        sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
         // for gender options spinner
         val spinner: Spinner = findViewById(R.id.gender_spinner)
@@ -69,19 +81,34 @@ class SignupActivity : AppCompatActivity() {
             val newPatient = Patient(
                 email = email,
                 password = password,
-                patientCreated = "2/26/2024",
-                patientDetails = PatientDetails(age = age,
+                patientCreated = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                patient_id = (Math.abs(UUID.randomUUID().mostSignificantBits) xor UUID.randomUUID().leastSignificantBits).toInt(),
+                patientUpdated = LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy")),
+                rewardPoints = 0,
+                token = "",
+                patientDetails = PatientDetails(
+                    age = age.toInt(),
                     allergies = allergies,
                     gender = gender,
-                    height = height,
+                    height = height.toInt(),
                     name = name,
-                    photo = "null"
+                    photo = "null",
+                    weight = weight.toInt()
                 )
             )
 
             // upload in database
-            val dbObj = uploadToDatabase()
-            dbObj.createPatient(newPatient)
+//            val dbObj = uploadToDatabase()
+//            dbObj.createPatient(newPatient, sharedPreferences)
+            val repo = SignupRepository(this)
+            repo.createPatient(newPatient, sharedPreferences)
+
+            //for testing to-do
+            Log.d("after patient signup","going to patient todo activity")
+            Toast.makeText(this, "Patient Registered", Toast.LENGTH_LONG)
+            intent = Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+
         }
 
         registerDoctorButton.setOnClickListener {
@@ -89,6 +116,4 @@ class SignupActivity : AppCompatActivity() {
             startActivity(intent)
         }
     }
-
-
 }

@@ -1,10 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <resources>
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
     </style>
+    <style name="PaymentTheme" parent="Theme.Material3.Light.NoActionBar"/>
+
     <string-array name="gender_array">
         <item>Male</item>
         <item>Female</item>
         <item>Others</item>
     </string-array>
+
+    <style name="circleImageDoctorProfile" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+        <item name="android:background">@drawable/circular_profile_img</item>
+    </style>
+
+    <string-array name="bloodType_array">
+        <item> O+ </item>
+        <item> O- </item>
+        <item> A+ </item>
+        <item> A- </item>
+        <item> B+ </item>
+        <item> B- </item>
+        <item> AB+ </item>
+        <item> AB- </item>
+    </string-array>
+
+    <style name="circleImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+
 </resources>

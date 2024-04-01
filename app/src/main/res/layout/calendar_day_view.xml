@@ -1,0 +1,31 @@
+<!-- res/layout/calendar_day_view.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:clickable="true"
+    android:focusable="true"
+    android:padding="8dp"
+    android:gravity="center"
+    android:background="@drawable/day_view_selector">
+
+    <TextView
+        android:id="@+id/dayLabelTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+        android:text="Sun"
+        android:textColor="@color/orchid"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/dateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:paddingBottom="15dp"
+        android:text="01"
+        android:textColor="@color/orchid"
+        android:textStyle="bold"/>
+</LinearLayout>

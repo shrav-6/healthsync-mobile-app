@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@style/PaymentTheme"
+    style="@style/PaymentTheme"
+    android:background="@color/white"
+    android:padding="16dp"
+    tools:context=".CheckoutActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="@drawable/rounded_edittext"
+        android:layout_marginTop="32dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="23dp"
+            android:orientation="vertical"
+            android:paddingBottom="16dp">
+
+            <TextView
+                android:id="@+id/tvAppointmentDetails"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Appointment Details: "
+                android:textColor="@color/orchid"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_marginTop="16dp"/>
+
+            <TextView
+                android:id="@+id/tvDoctorName"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Doctor: [Placeholder]"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvDateTime"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Date &amp; Time: [Placeholder]"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvConsultationFee"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Consultation Fee: [Placeholder]"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:id="@+id/tvTotalPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Points: [Placeholder]"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/btnRedeemPoints"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Redeem Points"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_corner_input"/>
+
+            <TextView
+                android:id="@+id/tvTotalAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Total Amount: [Placeholder]"
+                android:textColor="@color/orchid"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
+                android:layout_marginTop="8dp"/>
+
+            <Button
+                android:id="@+id/buttonPay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Proceed to Pay"
+                android:layout_marginTop="16dp"
+                android:textColor="@color/white"
+                android:background="@drawable/rounded_corner_input"/>
+                 </LinearLayout>
+    </ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>

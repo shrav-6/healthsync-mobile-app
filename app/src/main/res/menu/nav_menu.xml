@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <item
+        android:id="@+id/dashboard"
+        android:icon="@drawable/icons8_dashboard1"
+        android:title="My DashBoard"/>
+    <!-- https://www.flaticon.com/free-icon/city_2802966?term=city&page=1&position=7&origin=search&related_id=2802966- ,
+    last accessed 20/03/2024 -->
+    <item
+        android:id="@+id/appointments"
+        android:icon="@drawable/icons8_appointment"
+        android:title="Upcoming Appointment"/>
+    <!-- https://www.flaticon.com/free-icon/management_1891093?term=city&page=1&position=55&origin=search&related_id=1891093,
+    last accessed 20/03/2024-->
+    <item
+        android:id="@+id/pharmacies"
+        android:icon="@drawable/icons8_pharmacy1"
+        android:title="Nearby Pharmacies"/>
+    <item
+        android:id="@+id/TODO"
+        android:icon="@drawable/icons8_logout"
+        android:title="TO-DO"/>
+    <item
+        android:id="@+id/Insights"
+        android:icon="@drawable/icons8_insights"
+        android:title="Insights"/>
+    <item
+        android:id="@+id/RSVP"
+        android:icon="@drawable/icons8_rsvp"
+        android:title="Events"/>
+    <item
+        android:id="@+id/profile"
+        android:icon="@drawable/icons8_user"
+        android:title="My Profile"/>
+
+
+
+    <item
+        android:id="@+id/logout"
+        android:icon="@drawable/icons8_todo_list"
+        android:title="Logout"/>
+            <!-- https://www.flaticon.com/free-icon/logout_9650243?term=logout&page=1&position=94&origin=search&related_id=9650243,
+            last accessed 20/03/2024 -->
+
+</menu>
