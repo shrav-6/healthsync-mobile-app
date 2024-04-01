@@ -34,6 +34,7 @@ import com.itextpdf.text.Paragraph
 import com.itextpdf.text.pdf.PdfPTable
 import com.itextpdf.text.pdf.PdfWriter
 import com.mobile.healthsync.R
+import com.mobile.healthsync.R.id.initiate_vc_button
 import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Doctor
 import com.mobile.healthsync.model.Patient
@@ -90,7 +91,7 @@ class AppointmentDetailsFragment : Fragment() {
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
         btnOpenReviewPopup = view.findViewById(R.id.btnReview)
-        videoCallButton = view.findViewById(R.id.initiate_vc_button)
+        videoCallButton = view.findViewById(initiate_vc_button)
         selectedUrlTextView = view.findViewById(R.id.selectedUrlTextView)
         cancelAppointmentButton = view.findViewById(R.id.cancel_appointment_button)
 
@@ -165,7 +166,7 @@ class AppointmentDetailsFragment : Fragment() {
             view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
             view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
-            view.findViewById<TextView>(R.id.selectedUrlTextView).text = "Appointment URL: ${appointment.appointment_url}"
+            setClickableLink("${appointment.appointment_url}", view.findViewById<TextView>(R.id.selectedUrlTextView))
         }
     }
 
