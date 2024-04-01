@@ -1,7 +1,7 @@
 package com.mobile.healthsync.fragments
 
-import android.content.Context
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
@@ -43,10 +43,6 @@ import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivi
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
-import android.net.Uri
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import kotlin.random.Random
 
 /**
@@ -164,7 +160,7 @@ class AppointmentDetailsFragment : Fragment() {
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
             view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
-            view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
+            view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
             view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
             // Add more setText() calls for other appointment and doctor details TextViews as needed
