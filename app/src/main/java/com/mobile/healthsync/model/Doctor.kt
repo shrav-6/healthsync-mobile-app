@@ -5,6 +5,17 @@ import com.google.firebase.firestore.PropertyName
 import kotlinx.android.parcel.Parcelize
 import java.io.Serializable
 
+/**
+ * Data class representing a Doctor entity.
+ *
+ * @param doctor_id The unique identifier of the doctor.
+ * @param availability The availability schedule of the doctor.
+ * @param doctor_info Information about the doctor.
+ * @param email The email of the doctor.
+ * @param password The password of the doctor.
+ * @param doctor_speciality The specialty of the doctor.
+ * @param token The authentication token of the doctor.
+ */
 @Parcelize
 data class Doctor(
     @get:PropertyName("doctor_id")
@@ -37,6 +48,19 @@ data class Doctor(
 
 ) : Serializable, Parcelable {
 
+    /**
+     * Data class representing additional information about the doctor.
+     *
+     * @param age The age of the doctor.
+     * @param avg_ratings The average ratings of the doctor.
+     * @param consultation_fees The consultation fees of the doctor.
+     * @param gender The gender of the doctor.
+     * @param license_expiry The expiry date of the doctor's license.
+     * @param license_no The license number of the doctor.
+     * @param name The name of the doctor.
+     * @param photo The photo URL of the doctor.
+     * @param years_of_practice The years of practice of the doctor.
+     */
     data class DoctorInfo(
         @get:PropertyName("age")
         @set:PropertyName("age")

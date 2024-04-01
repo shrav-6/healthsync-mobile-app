@@ -26,81 +26,28 @@ import com.squareup.picasso.Picasso
 
 class DoctorInfoActivity : BaseActivity() {
 
-//    val ratingsList = mutableListOf(
-//        Ratings(
-//            doctor_id = 1,
-//            stars = 4,
-//            comment = "Great experience with this doctor!"
-//        ),
-//        Ratings(
-//            doctor_id = 2,
-//            stars = 5,
-//            comment = "Highly recommended!"
-//        ),
-//        Ratings(
-//            doctor_id = 3,
-//            stars = 4,
-//            comment = "Very knowledgeable and helpful."
-//        ),
-//        Ratings(
-//            doctor_id = 1,
-//            stars = 3,
-//            comment = "Could have been better."
-//        ),
-//        // Add more ratings here
-//    )
-//
-//
-//
-//    val doctor = Doctor(
-//        doctor_id = 2,
-//        availability = mapOf(
-//            "Monday" to Availability(
-//                is_available = true,
-//                slots = listOf(
-//                    Slot(slot_id = 1, start_time = "10:00 AM", end_time = "12:00 PM"),
-//                    Slot(slot_id = 2, start_time = "03:00 PM", end_time = "05:00 PM")
-//                )
-//            ),
-//            "Wednesday" to Availability(
-//                is_available = true,
-//                slots = listOf(
-//                    Slot(slot_id = 1, start_time = "09:00 AM", end_time = "11:00 AM"),
-//                    Slot(slot_id = 2, start_time = "02:00 PM", end_time = "04:00 PM")
-//                )
-//            )
-//        ),
-//        doctor_info = Doctor.DoctorInfo(
-//            age = 40,
-//            avg_ratings = 4.8,
-//            consultation_fees = 120.0,
-//            gender = "Female",
-//            license_expiry = "2026-12-31",
-//            license_no = "MD654321",
-//            name = "Dr. Emily Smith",
-//            years_of_practice = 15
-//        ),
-//        email = "emily.smith@example.com",
-//        password = "password",
-//        doctor_speciality = "Dermatology"
-//    )
-
+    // Repository instances for doctor and review data
     private var doctorRepository: DoctorRepository
     private var reviewRepository: ReviewRepository = ReviewRepository()
 
+    // Initializing doctor repository
     init {
         doctorRepository = DoctorRepository(this)
     }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_doctor_info)
 
+        // Shared preferences to retrieve patient id
         val sharedPreferences = getSharedPreferences("preferences", Context.MODE_PRIVATE)
 
+        // Retrieving patient id from shared preferences, default is 251
         var patient_id = sharedPreferences.getString("patient_id", "251")?.toInt() ?: 251
+        // Retrieving doctor id from intent extras
         var doctor_id = intent.extras?.getInt("doctor_id", -1) ?: -1
 
-
+        // Fetching doctor details from repository
         doctorRepository.getDoctor(doctor_id, { doctor ->
             // Set doctor details to views
             fillDocotorDetails(doctor)
@@ -112,33 +59,40 @@ class DoctorInfoActivity : BaseActivity() {
         }
     }
 
+    // Function to populate doctor details on the UI
     private fun fillDocotorDetails(doctor: Doctor?) {
 
+        // ImageView for doctor image
         val doctorImage: ImageView = findViewById(R.id.doctorImage)
-        // Getting image from firebase
+        // Loading doctor image from URI using Picasso library
         if (doctor?.doctor_info?.photo == "null") {
             doctorImage.setImageResource(R.drawable.user)
         } else {
             Picasso.get().load(Uri.parse(doctor?.doctor_info?.photo)).into(doctorImage)
         }
 
+        // Setting doctor name, specialization, and experience to TextViews
         findViewById<TextView>(R.id.infodoctoctorName).text = doctor?.doctor_info?.name
         findViewById<TextView>(R.id.infoSpecialization).text = "Specialization:  ${doctor?.doctor_speciality}"
         findViewById<TextView>(R.id.infoExperience).text = "Experience: ${doctor?.doctor_info?.years_of_practice} years"
 
+        // RecyclerView for displaying available slots
         val availableslots = findViewById<RecyclerView>(R.id.infoAvailableSlots)
         availableslots.layoutManager = GridLayoutManager(this, 3)
         val availabity_map = doctor?.availability
 
+        // Spinner for selecting weekdays
         val spinner : Spinner = findViewById(R.id.weekday)
         val spinnerAdapter : ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this, R.array.week_days,android.R.layout.simple_spinner_item)
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
         spinner.adapter = spinnerAdapter
 
+        // Handling spinner item selection
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val selected_day = parent?.getItemAtPosition(position).toString()
                 val availability = availabity_map?.get(selected_day)
+                // Updating available slots based on selected day
                 if(availability != null && availability?.is_available!!)
                 {
                     availableslots.adapter = AvailableSlotAdapter(availability.slots)
@@ -154,7 +108,7 @@ class DoctorInfoActivity : BaseActivity() {
             }
         }
 
-
+        // RecyclerView for displaying doctor reviews and ratings
         reviewRepository.getReviews(doctor!!.doctor_id , { reviewlist ->
             val reviews = findViewById<RecyclerView>(R.id.infoReviews)
             reviews.adapter = RatingsAdapter(reviewlist)
@@ -163,6 +117,7 @@ class DoctorInfoActivity : BaseActivity() {
 
     }
 
+    // Function to handle booking appointment action
     private fun bookAppointment(doctor_id: Int, patient_id: Int) {
         val intent  = Intent(this, BookingInfoActivity::class.java)
         intent.putExtra("doctor_id",doctor_id)

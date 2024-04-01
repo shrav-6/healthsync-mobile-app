@@ -85,9 +85,6 @@
             android:name=".CheckoutActivity"
             android:exported="false" />
         <activity
-            android:name=".views.patientBooking.TestActivity"
-            android:exported="false" />
-        <activity
             android:name=".views.patientDashboard.DoctorInfoActivity"
             android:exported="false" />
         <activity

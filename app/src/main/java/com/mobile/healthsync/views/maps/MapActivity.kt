@@ -16,7 +16,6 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.RelativeLayout
 import android.widget.Toast
-import androidx.appcompat.app.AppCompatActivity
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -28,7 +27,6 @@ import com.google.android.gms.location.LocationSettingsResponse
 import com.google.android.gms.location.SettingsClient
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.MapView
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
@@ -65,27 +63,35 @@ import java.net.URL
 
 class MapActivity : BaseActivity(), OnMapReadyCallback {
 
+    // Google Map object
     private lateinit var mMap : GoogleMap
+    // Fused Location Provider Client for getting device location
     private lateinit var mFusedLocationProviderClient : FusedLocationProviderClient
+    // Google Places Client for Places API
     private lateinit var placesClient : PlacesClient
+    // List of autocomplete predictions
     private lateinit var predictionlist : List<AutocompletePrediction>
 
-
+    // Last known location of the device
     private lateinit var mLastKnownlocation : Location
+    // Location callback for handling location updates
     private lateinit var locationCallback : LocationCallback
 
+    // UI components
     private lateinit var materialSearchBar : MaterialSearchBar
     private lateinit var mapView : View
     private lateinit var btnFind : Button
 
+    // Constants for zoom levels
     private val DEFAULT_ZOOM : Float = 18f
     private val MARKER_ZOOM : Float = 14f
 
+    // AsyncTask for fetching places from Google Places API
     inner class PlaceTask() : AsyncTask<String,Integer,String>() {
         override fun doInBackground(vararg strings: String?): String {
             var data : String = ""
             try {
-                 data = downloadUrl(strings[0])
+                data = downloadUrl(strings[0])
             }
             catch (e : IOException) {
                 e.printStackTrace()
@@ -121,6 +127,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
+    // AsyncTask for parsing the JSON response from Google Places API
     inner class ParserTask() : AsyncTask<String,Integer, List<HashMap<String,String>>>() {
         override fun doInBackground(vararg strings: String?): List<HashMap<String, String>> {
             val jsonParser : JsonParser = JsonParser()
@@ -151,9 +158,9 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             val cameraUpdate = CameraUpdateFactory.newLatLngZoom(mMap.cameraPosition.target, MARKER_ZOOM)
             mMap.animateCamera(cameraUpdate)
         }
-
     }
 
+    // Function to add a marker on the map
     private fun addMarker(position: LatLng): Marker {
         //Add simple marker
         val marker = mMap?.addMarker(MarkerOptions()
@@ -178,9 +185,10 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         placesClient = Places.createClient(this@MapActivity)
         val token : AutocompleteSessionToken = AutocompleteSessionToken.newInstance()
 
+        // Listener for search bar actions
         materialSearchBar.setOnSearchActionListener( object : MaterialSearchBar.OnSearchActionListener {
             override fun onSearchStateChanged(enabled: Boolean) {
-
+                // Empty implementation
             }
             override fun onSearchConfirmed(text: CharSequence?) {
                 startSearch(text.toString(),true, null,true)
@@ -195,6 +203,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             }
         })
 
+        // Listener for text changes in the search bar
         materialSearchBar.addTextChangeListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
                 // Empty implementation
@@ -228,7 +237,6 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                             Log.i("mytag","prediction fetching task unsuccessful")
                         }
                     }
-
                 })
             }
 
@@ -237,6 +245,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             }
         })
 
+        // Listener for click events on search suggestions
         materialSearchBar.setSuggestionsClickListener(object : SuggestionsAdapter.OnItemViewClickListener{
             override fun OnItemClickListener(position: Int, v: View?) {
                 if(position >= predictionlist.size) {
@@ -274,7 +283,6 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latlng,DEFAULT_ZOOM))
                             }
                         }
-
                     }).addOnFailureListener( object : OnFailureListener{
                         override fun onFailure(ex: Exception) {
                             if(ex is ApiException) {
@@ -285,7 +293,6 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                                 Log.i("mytag", "status code: " + statusCode)
                             }
                         }
-
                     })
                 }
             }
@@ -293,24 +300,23 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
             override fun OnItemDeleteListener(position: Int, v: View?) {
                 //Empty implementation
             }
-
         })
 
-
+        // Listener for the find button click event
         btnFind.setOnClickListener{
             val url : String = "https://maps.googleapis.com/maps/api/place/nearbysearch/json" + //Url
-            "?location=" + mLastKnownlocation.latitude + "," + mLastKnownlocation.longitude + //latitude and longitude
-            "&radius=3000" + // Nearby radius
-            "&types=" + "pharmacy" + //Place type
-            "&sensor=true" + //Sensor
-            "&key=" + resources.getString(R.string.google_map_api_key); //gMaps key
+                    "?location=" + mLastKnownlocation.latitude + "," + mLastKnownlocation.longitude + //latitude and longitude
+                    "&radius=3000" + // Nearby radius
+                    "&types=" + "pharmacy" + //Place type
+                    "&sensor=true" + //Sensor
+                    "&key=" + resources.getString(R.string.google_map_api_key); //gMaps key
 
             //Execute place task method to download json data
             PlaceTask().execute(url)
-
         }
     }
 
+    // Function called when the map is ready to be used
     @SuppressLint("MissingPermission")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -368,6 +374,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         })
     }
 
+    // Handle activity result, particularly for location settings resolution
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode ==  51){
@@ -377,6 +384,7 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
         }
     }
 
+    // Get device's last known location
     @SuppressLint("MissingPermission")
     private fun getDeviceLocation() {
         mFusedLocationProviderClient.getLastLocation()
@@ -411,8 +419,6 @@ class MapActivity : BaseActivity(), OnMapReadyCallback {
                         Toast.makeText(this@MapActivity, "unalbe to get last location",Toast.LENGTH_SHORT).show()
                     }
                 }
-
             })
     }
-
 }
