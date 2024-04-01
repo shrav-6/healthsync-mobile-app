@@ -1,6 +1,7 @@
 package com.mobile.healthsync.fragments
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -69,7 +70,8 @@ class AppointmentDetailsFragment : Fragment() {
         "https://meet.google.com/fjr-ugxs-oii",
         "https://meet.google.com/bif-hpvc-ezc"
     )
-
+    private var isAppointmentUrlSet = false
+    private var onResumeCount = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -81,13 +83,14 @@ class AppointmentDetailsFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_appointment_details, container, false)
     }
 
+    @SuppressLint("CutPasteId")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         downloadButton = view.findViewById(R.id.download_button)
         addPrescriptionButton = view.findViewById(R.id.add_prescription_button)
         btnOpenReviewPopup = view.findViewById(R.id.btnReview)
         videoCallButton = view.findViewById(R.id.initiate_vc_button)
-        selectedUrlTextView = view.findViewById<TextView>(R.id.selectedUrlTextView)
+        selectedUrlTextView = view.findViewById(R.id.selectedUrlTextView)
         cancelAppointmentButton = view.findViewById(R.id.cancel_appointment_button)
 
         // Get appointment and doctor data from arguments
@@ -96,7 +99,6 @@ class AppointmentDetailsFragment : Fragment() {
 
         downloadButton.setOnClickListener {
             if (appointment != null && doctor != null) {
-                Log.d("println", "dn bttion  :   sdjhv")
 
                 downloadPrescriptionPdf(appointment, doctor)
             }
@@ -143,7 +145,7 @@ class AppointmentDetailsFragment : Fragment() {
             view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
             view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
-            // Add more setText() calls for other appointment and doctor details TextViews as needed
+            view.findViewById<TextView>(R.id.selectedUrlTextView).text = "Appointment URL: ${appointment.appointment_url}}"
         }
     }
 
@@ -159,24 +161,29 @@ class AppointmentDetailsFragment : Fragment() {
         if (appointment != null) {
             val appointmentUrl = appointment.appointment_url
 
-            if (appointmentUrl.isNullOrEmpty()) {
-                // Generate random meet link if URL is not provided
-                val meetLink = generateRandomMeetLink()
-                // Open meet link in browser
-                openMeetLinkInBrowser(meetLink)
-                // Save meet link to Firestore and update UI
-                saveAppointment(meetLink, appointment)
-                // Set the meet link as a clickable link in the TextView
-                setClickableLink(meetLink, textView)
+            if (!isAppointmentUrlSet) { // Check if the URL is not set yet
+                if (appointmentUrl.isNullOrEmpty()) {
+                    Log.d("AppointmentDetailsFragment", "Appointment URL is being updated for the first time")
+                    // Generate random meet link if URL is not provided
+                    val meetLink = generateRandomMeetLink()
+                    // Open meet link in browser
+                    openMeetLinkInBrowser(meetLink)
+                    // Save meet link to Firestore and update UI
+                    saveAppointment(meetLink, appointment)
+                    // Set the meet link as a clickable link in the TextView
+                    setClickableLink(meetLink, textView)
+                    isAppointmentUrlSet = true // Set the flag indicating URL is set
+                } else {
+                    Log.d("AppointmentDetailsFragment", "Appointment URL present. Opening meeting link directly.")
+                    // Open provided meet link in browser
+                    openMeetLinkInBrowser(appointmentUrl)
+                    // Set the meet link as a clickable link in the TextView
+                    setClickableLink(appointmentUrl, textView)
+                    isAppointmentUrlSet = true // Set the flag indicating URL is set
+                }
             } else {
-                // Open provided meet link in browser
-                openMeetLinkInBrowser(appointmentUrl)
-                // Set the meet link as a clickable link in the TextView
-                setClickableLink(appointmentUrl, textView)
+                Log.d("AppointmentDetailsFragment", "Appointment URL already set. Skipping.")
             }
-        } else {
-            // Show error message if no appointment data is available
-            Toast.makeText(requireContext(), "No appointment data available", Toast.LENGTH_SHORT).show()
         }
     }
 
@@ -206,23 +213,65 @@ class AppointmentDetailsFragment : Fragment() {
      * @param meetLink The meet link to be saved.
      * @param appointment The appointment data.
      */
+    /**
+     * Saves the generated meet link to Firestore as the appointment URL.
+     *
+     * @param meetLink The meet link to be saved.
+     * @param appointment The appointment data.
+     */
     private fun saveAppointment(meetLink: String, appointment: Appointment?) {
-        val firestore = FirebaseFirestore.getInstance()
+        val db = FirebaseFirestore.getInstance()
         val appointmentId = appointment?.appointment_id
 
         if (appointmentId != null) {
-            val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
-            appointmentRef.update("appointment_url", meetLink)
-                .addOnSuccessListener {
-                    Log.d("AppointmentDetailsFragment", "Appointment URL updated successfully")
-                }
-                .addOnFailureListener { e ->
-                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
-                }
+            Log.d("appointment_id",appointmentId.toString())
+            val appointmentRef = db.collection("appointments").whereEqualTo("appointment_id",appointmentId.toLong())
+            appointmentRef.limit(1)
+                .get()
+                .addOnCompleteListener { appointmentTask ->
+                    if (appointmentTask.isSuccessful) {
+                        val querySnapshot = appointmentTask.result
+                        if (querySnapshot != null && !querySnapshot.isEmpty) {
+                            val document = querySnapshot.documents[0]
+                            val documentId = document.id
+
+                            Log.d("documentId",documentId)
+
+                            db.collection("appointments").document(documentId)
+                                .update("appointment_url", meetLink)
+                                .addOnSuccessListener {
+                                    Log.d("AppointmentDetailsFragment", "Appointment URL updated successfully")
+                                    // Reset isAppointmentUrlSet if the URL is set to ""
+                                    if (meetLink.isEmpty()) {
+                                        isAppointmentUrlSet = false
+                                    }
+                                }
+                                .addOnFailureListener { e ->
+                                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+                                }
+                        }
+                        }
+                    }
+//                    else {
+//                        Log.d("error while saving appointment url","in update url")
+//                    }
+
+//            appointmentRef.update("appointment_url", meetLink)
+//                .addOnSuccessListener {
+//                    Log.d("AppointmentDetailsFragment", "Appointment URL updated successfully")
+//                    // Reset isAppointmentUrlSet if the URL is set to ""
+//                    if (meetLink.isEmpty()) {
+//                        isAppointmentUrlSet = false
+//                    }
+//                }
+//                .addOnFailureListener { e ->
+//                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+//                }
         } else {
             Log.e("AppointmentDetailsFragment", "No appointment ID available")
         }
     }
+
 
     /**
      * Sets a clickable link in the provided TextView.
@@ -231,7 +280,7 @@ class AppointmentDetailsFragment : Fragment() {
      * @param textView The TextView in which the link is displayed.
      */
     private fun setClickableLink(link: String, textView: TextView) {
-        val text = if (link.isNotEmpty()) "Appointment Link: $link" else "Appointment Link: "
+        val text = if (link.isNotEmpty()) "Appointment Link: $link" else "Appointment Link: N.A."
         val spannableString = SpannableString(text)
         if (link.isNotEmpty()) {
             val clickableSpan = object : ClickableSpan() {
@@ -255,6 +304,7 @@ class AppointmentDetailsFragment : Fragment() {
      */
     override fun onPause() {
         super.onPause()
+        onResumeCount++
         // App goes to the background
     }
 
@@ -265,28 +315,43 @@ class AppointmentDetailsFragment : Fragment() {
      */
     override fun onResume() {
         super.onResume()
-        // App comes back to the foreground
-        // Show toast message saying "Appointment done"
-        Toast.makeText(requireContext(), "Appointment call is finished", Toast.LENGTH_SHORT).show()
+        onResumeCount++
+        if (onResumeCount > 1) {
+            // App comes back to the foreground (not the first time)
+            // Show toast message saying "Appointment done"
+            Toast.makeText(requireContext(), "Appointment call is finished", Toast.LENGTH_SHORT).show()
 
-        // Update appointment_url to an empty string in Firestore
-        val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
-        val appointmentId = appointment?.appointment_id
-        if (appointmentId != null && isResumed) { // Check if fragment is resumed
-            val firestore = FirebaseFirestore.getInstance()
-            val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
-            appointmentRef.update("appointment_url", "")
-                .addOnSuccessListener {
-                    Log.d("AppointmentDetailsFragment", "Appointment URL updated to empty string successfully")
-                    // Update text view with an empty string
-                    selectedUrlTextView.text = ""
-                }
-                .addOnFailureListener { e ->
-                    Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
-                }
-        } else {
-            Log.e("AppointmentDetailsFragment", "No appointment ID available")
+            // Update appointment_url to an empty string in Firestore
+            val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+            val appointmentId = appointment?.appointment_id
+            if (appointmentId != null && isResumed) { // Check if fragment is resumed
+                val firestore = FirebaseFirestore.getInstance()
+                val appointmentRef = firestore.collection("appointments").document(appointmentId.toString())
+                appointmentRef.update("appointment_url", "")
+                    .addOnSuccessListener {
+                        Log.d("AppointmentDetailsFragment", "Appointment URL updated to empty string successfully")
+                        // Save meet link to Firestore and update UI
+                        saveAppointment("", appointment)
+                        // Update text view with an empty string
+                        view?.findViewById<TextView>(R.id.selectedUrlTextView)?.text = "Appointment URL: N.A."
+                    }
+                    .addOnFailureListener { e ->
+                        Log.e("AppointmentDetailsFragment", "Error updating appointment URL: $e")
+                    }
+            } else {
+                Log.e("AppointmentDetailsFragment", "No appointment ID available")
+            }
         }
+    }
+
+    /**
+     * Resets the flags tracking whether the appointment URL is set and if the fragment has been resumed once.
+     * This method is called when the fragment is being destroyed.
+     */
+    override fun onDestroy() {
+        super.onDestroy()
+        isAppointmentUrlSet = false
+        onResumeCount = 0
     }
 
     /*override fun onRequestPermissionsResult(
