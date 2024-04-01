@@ -1,10 +1,15 @@
 package com.mobile.healthsync.fragments
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -38,10 +43,6 @@ import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivi
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
-import android.net.Uri
-import android.text.SpannableString
-import android.text.method.LinkMovementMethod
-import android.text.style.ClickableSpan
 import kotlin.random.Random
 
 /**
@@ -94,6 +95,25 @@ class AppointmentDetailsFragment : Fragment() {
         val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
         val doctor: Doctor? = arguments?.getParcelable(DOCTOR_KEY)
 
+        val sharedPreferences = requireContext().getSharedPreferences("preferences", Context.MODE_PRIVATE)
+        val isDoctor = sharedPreferences.getBoolean("isDoctor", false)
+
+        if (isDoctor) {
+
+            addPrescriptionButton.visibility = View.VISIBLE
+            downloadButton.visibility = View.VISIBLE
+            videoCallButton.visibility = View.VISIBLE
+            btnOpenReviewPopup.visibility = View.GONE
+            cancelAppointmentButton.visibility = View.GONE
+
+        } else {
+            btnOpenReviewPopup.visibility = View.VISIBLE
+            cancelAppointmentButton.visibility = View.VISIBLE
+            downloadButton.visibility = View.VISIBLE
+            videoCallButton.visibility = View.GONE
+            addPrescriptionButton.visibility = View.GONE
+        }
+
         downloadButton.setOnClickListener {
             if (appointment != null && doctor != null) {
                 Log.d("println", "dn bttion  :   sdjhv")
@@ -140,7 +160,7 @@ class AppointmentDetailsFragment : Fragment() {
         // Update UI with appointment and doctor data
         if (appointment != null && doctor != null) {
             view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
-            view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
+            view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
             view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
             // Add more setText() calls for other appointment and doctor details TextViews as needed
