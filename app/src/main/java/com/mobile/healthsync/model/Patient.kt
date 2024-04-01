@@ -3,6 +3,17 @@ package com.mobile.healthsync.model;
 import com.google.firebase.firestore.PropertyName
 import java.io.Serializable
 
+/**
+ * Data class representing a Patient.
+ * @property email The email of the patient.
+ * @property password The password of the patient.
+ * @property patientCreated The creation date of the patient.
+ * @property patientDetails The details of the patient.
+ * @property patient_id The ID of the patient.
+ * @property patientUpdated The last update date of the patient.
+ * @property rewardPoints The reward points of the patient.
+ * @property token The token associated with the patient.
+ */
 data class Patient(
     @get:PropertyName("email")
     @set:PropertyName("email")
@@ -37,6 +48,17 @@ data class Patient(
     var token: String = ""
 
 ) : Serializable {
+
+    /**
+     * Data class representing details of a patient.
+     * @property age The age of the patient.
+     * @property allergies The allergies of the patient.
+     * @property gender The gender of the patient.
+     * @property height The height of the patient.
+     * @property weight The weight of the patient.
+     * @property name The name of the patient.
+     * @property photo The photo of the patient.
+     */
     data class PatientDetails(
         @get:PropertyName("age")
         @set:PropertyName("age")
