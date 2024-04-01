@@ -19,11 +19,11 @@
                 android:id="@+id/toolbar1"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:background="#FA9D5DAC"
+                android:background="@color/orchid"
                 app:title="HealthSync"
+                app:titleTextColor="@color/magnolia"
                 app:titleTextAppearance="@style/ToolbarTitleStyle"
                 app:navigationIcon="@drawable/icons8_nav" />
-
         </com.google.android.material.appbar.AppBarLayout>
 
         <FrameLayout
@@ -31,7 +31,6 @@
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1" />
-
     </LinearLayout>
 
     <com.google.android.material.navigation.NavigationView
@@ -41,5 +40,4 @@
         android:layout_gravity="start"
         app:headerLayout="@layout/navigation_header1"
         app:menu="@menu/nav_menu1" />
-
 </androidx.drawerlayout.widget.DrawerLayout>

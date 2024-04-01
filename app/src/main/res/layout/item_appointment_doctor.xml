@@ -12,15 +12,16 @@
     <!-- Appointment Start Time -->
     <TextView
         android:id="@+id/appointmentStartTimeTextView"
-        android:layout_width="66dp"
+        android:layout_width="70dp"
         android:layout_height="64dp"
         android:maxLines="2"
         android:gravity="center"
+        android:background="@drawable/rounded_corner_bg"
+        android:textColor="@color/orchid"
         android:layout_marginEnd="16dp"
         android:textSize="12sp"
         android:textStyle="bold"
         tools:text="09:00\nAM" />
-
 
 
     <!-- Patient Details CardView -->
@@ -30,13 +31,14 @@
         android:layout_weight="1"
         app:cardCornerRadius="8dp"
         app:cardElevation="4dp"
-        app:cardBackgroundColor ="@color/light_gray">
+        app:cardBackgroundColor ="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="8dp">
+            android:padding="8dp"
+            android:background="@drawable/rounded_corner_bg">
 
             <!-- Profile Image and Patient Name Container -->
             <LinearLayout
@@ -67,7 +69,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="16sp"
-                        tools:text="Patient Name" />
+                        tools:text="Patient Name"
+                        android:textColor="@color/orchid"/>
 
                     <!-- Appointment Time -->
                     <TextView
@@ -76,6 +79,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:layout_marginTop="4dp"
+                        android:textColor="@color/black"
                         tools:text="08:15 - 08:45" />
                 </LinearLayout>
             </LinearLayout>

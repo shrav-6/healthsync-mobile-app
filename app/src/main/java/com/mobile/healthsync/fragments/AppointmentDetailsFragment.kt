@@ -1,7 +1,9 @@
 package com.mobile.healthsync.fragments
 
 import android.content.Context
+import android.Manifest
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
@@ -17,7 +19,9 @@ import android.widget.EditText
 import android.widget.RatingBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import com.google.firebase.firestore.FirebaseFirestore
@@ -39,8 +43,11 @@ import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivi
 import com.mobile.healthsync.views.prescription.PrescriptionFormActivity
 import java.io.File
 import java.io.FileOutputStream
+import android.net.Uri
+import android.text.SpannableString
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import kotlin.random.Random
-
 
 /**
  * Fragment class responsible for displaying appointment details.
@@ -113,6 +120,8 @@ class AppointmentDetailsFragment : Fragment() {
 
         downloadButton.setOnClickListener {
             if (appointment != null && doctor != null) {
+                Log.d("println", "dn bttion  :   sdjhv")
+
                 downloadPrescriptionPdf(appointment, doctor)
             }
         }
@@ -157,40 +166,70 @@ class AppointmentDetailsFragment : Fragment() {
             view.findViewById<TextView>(R.id.textDate).text = "Date: ${appointment.date}"
             view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time} - ${appointment.end_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
-            view.findViewById<TextView>(R.id.textSpecialty).text = "Specialty: ${doctor.doctor_speciality}"
+            view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
             // Add more setText() calls for other appointment and doctor details TextViews as needed
         }
     }
 
+    /**
+     * Initiates a video call with the provided appointment data.
+     * If the appointment has a URL, opens it in the browser; otherwise, generates a random URL,
+     * saves it to Firestore, and updates the UI.
+     *
+     * @param appointment The appointment data.
+     * @param textView The TextView to display the clickable link.
+     */
     private fun initiateVideoCall(appointment: Appointment?, textView: TextView) {
         if (appointment != null) {
             val appointmentUrl = appointment.appointment_url
 
             if (appointmentUrl.isNullOrEmpty()) {
+                // Generate random meet link if URL is not provided
                 val meetLink = generateRandomMeetLink()
+                // Open meet link in browser
                 openMeetLinkInBrowser(meetLink)
+                // Save meet link to Firestore and update UI
                 saveAppointment(meetLink, appointment)
+                // Set the meet link as a clickable link in the TextView
                 setClickableLink(meetLink, textView)
             } else {
+                // Open provided meet link in browser
                 openMeetLinkInBrowser(appointmentUrl)
+                // Set the meet link as a clickable link in the TextView
                 setClickableLink(appointmentUrl, textView)
             }
         } else {
+            // Show error message if no appointment data is available
             Toast.makeText(requireContext(), "No appointment data available", Toast.LENGTH_SHORT).show()
         }
     }
 
-
+    /**
+     * Generates a random meet link from a predefined list.
+     *
+     * @return A randomly selected meet link.
+     */
     private fun generateRandomMeetLink(): String {
         val randomIndex = Random.nextInt(meetLinks.size)
         return meetLinks[randomIndex]
     }
 
+    /**
+     * Opens the provided meet link in the default browser.
+     *
+     * @param meetLink The meet link to be opened.
+     */
     private fun openMeetLinkInBrowser(meetLink: String) {
         val browserIntent = Intent(Intent.ACTION_VIEW, Uri.parse(meetLink))
         startActivity(browserIntent)
     }
 
+    /**
+     * Saves the generated meet link to Firestore as the appointment URL.
+     *
+     * @param meetLink The meet link to be saved.
+     * @param appointment The appointment data.
+     */
     private fun saveAppointment(meetLink: String, appointment: Appointment?) {
         val firestore = FirebaseFirestore.getInstance()
         val appointmentId = appointment?.appointment_id
@@ -209,28 +248,45 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    /**
+     * Sets a clickable link in the provided TextView.
+     *
+     * @param link The link to be displayed.
+     * @param textView The TextView in which the link is displayed.
+     */
     private fun setClickableLink(link: String, textView: TextView) {
         val text = if (link.isNotEmpty()) "Appointment Link: $link" else "Appointment Link: "
         val spannableString = SpannableString(text)
         if (link.isNotEmpty()) {
             val clickableSpan = object : ClickableSpan() {
                 override fun onClick(widget: View) {
+                    // Open the link in the browser when clicked
                     openMeetLinkInBrowser(link)
                 }
             }
+            // Set the clickable span in the text
             spannableString.setSpan(clickableSpan, 16, text.length, SpannableString.SPAN_EXCLUSIVE_EXCLUSIVE)
         }
+        // Set the text with clickable link in the TextView
         textView.apply {
             movementMethod = LinkMovementMethod.getInstance()
             setText(spannableString, TextView.BufferType.SPANNABLE)
         }
     }
 
+    /**
+     * Overrides the `onPause` method of the superclass to handle backgrounding of the fragment.
+     */
     override fun onPause() {
         super.onPause()
         // App goes to the background
     }
 
+    /**
+     * Overrides the `onResume` method of the superclass to handle foregrounding of the fragment.
+     * Additionally, shows a toast message indicating the completion of the appointment call.
+     * Updates the appointment URL to an empty string in Firestore.
+     */
     override fun onResume() {
         super.onResume()
         // App comes back to the foreground
@@ -257,6 +313,31 @@ class AppointmentDetailsFragment : Fragment() {
         }
     }
 
+    /*override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == PERMISSION_REQUEST_CODE) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // Permission granted, continue with downloading the PDF
+                // Retrieve appointment and doctor data again
+                val appointment: Appointment? = arguments?.getParcelable(APPOINTMENT_KEY)
+                val doctor: Doctor? = arguments?.getParcelable(DOCTOR_KEY)
+                if (appointment != null && doctor != null) {
+                    downloadPrescriptionPdf(appointment, doctor)
+                }
+            } else {
+                // Permission denied, show a message or handle it accordingly
+                Toast.makeText(
+                    requireContext(),
+                    "Permission denied, cannot download prescription",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }*/
 
     /**
      * Shows a popup dialog for submitting reviews.
@@ -310,6 +391,24 @@ class AppointmentDetailsFragment : Fragment() {
             }
     }
 
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted: Boolean ->
+            if (isGranted) {
+                // Permission granted, proceed with PDF download
+                // Your existing PDF download logic goes here
+                // ...
+                Toast.makeText(requireContext(), "Downloading prescription PDF...", Toast.LENGTH_SHORT).show()
+            } else {
+                // Permission denied, show a message
+                Toast.makeText(
+                    requireContext(),
+                    "Permission denied, cannot download prescription",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+
     /**
      * Downloads the prescription PDF for the given appointment.
      * @param appointment The appointment for which the prescription is being downloaded.
@@ -318,22 +417,27 @@ class AppointmentDetailsFragment : Fragment() {
      */
     private fun downloadPrescriptionPdf(appointment: Appointment, doctor: Doctor) {
         val firestore = FirebaseFirestore.getInstance()
-        println("appointment_id: " + appointment.appointment_id)
+        Log.d("println", "${appointment.appointment_id}  :   sdjhv")
         val appointmentId = appointment.appointment_id
         val prescriptionRef = firestore.collection("prescriptions")
 
             .whereEqualTo("appointment_id", appointmentId)
             .get()
             .addOnSuccessListener { querySnapshot ->
+                Log.d("println", "${appointment.appointment_id}  :   addOnSuccessListener")
                 println("addOnSuccessListener: " + appointmentId)
+                Log.d("println", "${querySnapshot.documents.size}  :   addOnSuccessListener")
                 for (document in querySnapshot.documents) {
+                    Log.d("println", "${appointment.appointment_id}  :   in for")
                     println("for: " + appointmentId)
                     val prescription = document.toObject(Prescription::class.java)
                     if (prescription != null) {
+                        Log.d("println", "${appointment.appointment_id}  :  downloadPrescriptionPdf")
                         println("downloadPrescriptionPdf: $prescription")
-                        generatePrescriptionPdf(prescription, appointment.patient_id, doctor)
+
+                        // Check permissions before downloading the PDF
+                            generatePrescriptionPdf(prescription, appointment.patient_id, doctor)
                     } else {
-                        println("else: " + appointmentId)
                         Toast.makeText(
                             requireContext(),
                             "Prescription not found for the given appointment ID",
@@ -353,6 +457,23 @@ class AppointmentDetailsFragment : Fragment() {
             }
     }
 
+    private fun checkPermissions(): Boolean {
+        return ContextCompat.checkSelfPermission(
+            requireContext(),
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    // Function to request required permissions
+    /*private fun requestPermissions() {
+        requestPermissions(
+            arrayOf(Manifest.permission.WRITE_EXTERNAL_STORAGE),
+            PERMISSION_REQUEST_CODE
+        )
+    }*/
+
+
+
     /**
      * Generates the prescription PDF for the given prescription.
      * @param prescription The prescription object.
@@ -368,12 +489,11 @@ class AppointmentDetailsFragment : Fragment() {
 
         val patientRepository = PatientRepository(requireContext())
 
-        patientRepository.getPatientData(patientId.toString()) { patient ->
+        patientRepository.getPatientWithPatientId(patientId) { patient ->
             if (patient != null) {
-
-
+                Log.d("println", "${patient.patientDetails.name}  :   sdjhv")
                 val pdfFile = File(
-                    Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS),
+                    requireContext().getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS),
                     "prescription.pdf"
                 )
                 // Initialize Document with A4 page size
@@ -401,9 +521,10 @@ class AppointmentDetailsFragment : Fragment() {
 
                 // Open the downloaded PDF
                 val pdfUri = FileProvider.getUriForFile(requireContext(), "${requireContext().packageName}.fileprovider", pdfFile)
-                val intent = Intent(Intent.ACTION_VIEW)
-                intent.setDataAndType(pdfUri, "application/pdf")
-                intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                val intent = Intent(Intent.ACTION_VIEW).apply {
+                    setDataAndType(pdfUri, "application/pdf")
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
                 startActivity(intent)
 
             } else {
@@ -413,6 +534,7 @@ class AppointmentDetailsFragment : Fragment() {
         }
 
     }
+
 
     /**
      * Adds prescription details to the PDF document.
@@ -612,6 +734,7 @@ class AppointmentDetailsFragment : Fragment() {
     companion object {
         private const val APPOINTMENT_KEY = "appointment"
         private const val DOCTOR_KEY = "doctor"
+        //private const val PERMISSION_REQUEST_CODE = 100
 
         /**
          * Creates a new instance of AppointmentDetailsFragment.

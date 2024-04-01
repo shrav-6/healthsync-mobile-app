@@ -14,7 +14,7 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:padding="16dp"
-        android:background="@color/light_gray">
+        android:background="@color/white">
 
         <!-- Calendar Header -->
         <LinearLayout
@@ -22,7 +22,9 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:padding="20dp"
-            android:gravity="center_vertical">
+            android:gravity="center_vertical"
+            android:background="@drawable/rounded_corner_bg">
+
             <TextView
                 android:id="@+id/calendarHeaderTextView"
                 android:layout_width="wrap_content"

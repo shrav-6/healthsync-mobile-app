@@ -267,4 +267,24 @@ class DoctorRepository(private val context: Context) {
             }
     }
 
+    fun getPhotoForDoctor(documentID: String, callback: (String?) -> Unit) {
+        db.collection("doctor")
+            .document(documentID)
+            .get()
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document.exists()) {
+                        val imageURL = document.toObject(Doctor::class.java)?.doctor_info?.photo
+                        callback(imageURL)
+                    }
+                    callback("null")
+                } else {
+                    val exceptionMessage = task.exception?.message ?: "Unknown error"
+                    showToast("Error fetching event data: $exceptionMessage")
+                    callback("null")
+                }
+            }
+    }
+
 }
