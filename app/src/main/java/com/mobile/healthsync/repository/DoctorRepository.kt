@@ -268,7 +268,7 @@ class DoctorRepository(private val context: Context) {
     }
 
     fun getPhotoForDoctor(documentID: String, callback: (String?) -> Unit) {
-        db.collection("doctor")
+        db.collection("doctors")
             .document(documentID)
             .get()
             .addOnCompleteListener { task ->

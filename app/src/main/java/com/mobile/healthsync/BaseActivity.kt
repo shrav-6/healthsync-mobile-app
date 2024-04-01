@@ -54,7 +54,7 @@ open class BaseActivity : AppCompatActivity() {
 
         patientRepository = PatientRepository(this)
 
-        patientRepository.getPhotoForPatient(sharedPreferences.getString("patient_documentid", "").toString()) {
+        patientRepository.getPhotoForPatient(sharedPreferences.getString("patient_documentid", "4KaJpGyjKdahNA12laVd").toString()) {
             if (it == "null") {
                 photo.setImageResource(R.drawable.user)
             } else {
