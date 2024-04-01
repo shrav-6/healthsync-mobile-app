@@ -51,7 +51,7 @@ open class BaseActivityForDoctor : AppCompatActivity() {
 
         doctorRepository = DoctorRepository(this)
 
-        doctorRepository.getPhotoForDoctor(sharedPreferences.getString("doctor_documentid", "").toString()) {
+        doctorRepository.getPhotoForDoctor(sharedPreferences.getString("doctor_documentid", "OXyUFwt5a5S9yUmclEd3").toString()) {
             if (it == "null") {
                 photo.setImageResource(R.drawable.user)
             } else {

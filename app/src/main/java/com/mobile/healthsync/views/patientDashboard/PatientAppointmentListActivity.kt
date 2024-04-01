@@ -138,6 +138,8 @@ class PatientAppointmentListActivity : BaseActivity() {
 
         this.patient_id = sharedPreferences.getString("patient_id", "251")?.toInt() ?: 251
 
+        Log.d("PatientSharedPreferences","${this.patient_id}")
+
         appointmentRepository.getAppointments(patient_id) { retrievedAppointmentsList ->
             // Assuming appointmentsList is a mutable variable accessible in this scope
             appointments = retrievedAppointmentsList
