@@ -165,7 +165,7 @@ class AppointmentDetailsFragment : Fragment() {
             view.findViewById<TextView>(R.id.textTime).text = "Time: ${appointment.start_time}"
             view.findViewById<TextView>(R.id.textDoctorName).text = "Doctor: ${doctor.doctor_info.name}"
             view.findViewById<TextView>(R.id.textSpecialty).text = "Speciality: ${doctor.doctor_speciality}"
-            view.findViewById<TextView>(R.id.selectedUrlTextView).text = "Appointment URL: ${appointment.appointment_url}}"
+            view.findViewById<TextView>(R.id.selectedUrlTextView).text = "Appointment URL: ${appointment.appointment_url}"
         }
     }
 
