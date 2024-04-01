@@ -1,5 +1,6 @@
 package com.mobile.healthsync.adapters
 
+import android.content.Context
 import android.content.Intent
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,12 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mobile.healthsync.R
 import com.mobile.healthsync.model.Appointment
 import com.mobile.healthsync.model.Patient
+import com.mobile.healthsync.views.login.LoginActivity
 import com.mobile.healthsync.views.patientDashboard.PatientAppointmentListActivity
 
 class AppointmentAdapter(private var appointments: List<Appointment>, private var selectedDate: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -34,8 +37,9 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
 
         init {
             // Set the click listener on the patientNameTextView to redirect to PatientAppointmentListActivity
-            patientNameTextView.setOnClickListener {
-                val context = it.context
+            patientNameTextView.setOnClickListener { view ->
+                val context = view.context
+                //val context = it.context
                 val intent = Intent(context, PatientAppointmentListActivity::class.java)
                 context.startActivity(intent)
 
@@ -88,6 +92,14 @@ class AppointmentAdapter(private var appointments: List<Appointment>, private va
             appointmentHolder.appointmentStartTimeTextView.text = getTimeSlotFromId(appointment.slot_id).substring(0, 8)
 
             val patientId = appointment.patient_id
+
+            val context = holder.itemView.context
+
+            val sharedPreferences = context.getSharedPreferences("preferences", Context.MODE_PRIVATE)
+            sharedPreferences.edit().apply {
+                putString("patient_id", patientId.toString()) // Convert to String and save
+                apply()
+            }
 
             // Fetch patient details from Firestore
             val db = FirebaseFirestore.getInstance()
